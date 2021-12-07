@@ -1,1 +1,50 @@
+.efek * {
+  box-sizing: border-box;
+  transition: all 0.35s ease;
+}
 
+.efek {
+  padding: 0.5em 0.8em;
+  color: rgba(255, 255, 255, 0.5);
+  position: relative;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.efek::before,
+.efek::after {
+  content: "";
+  height: 14px;
+  width: 14px;
+  position: absolute;
+  transition: all 0.35s ease;
+  opacity: 0;
+}
+
+.efek::before {
+  content: "";
+  left: 0;
+  top: 0;
+  border-top: 3px solid #0000ff;
+  border-left: 3px solid #0000ff;
+  transform: translate(-100%, 50%);
+}
+
+.efek::after {
+  content: "";
+  right: 0;
+  bottom: 0;
+  border-bottom: 3px solid #0000ff;
+  border-right: 3px solid #0000ff;
+  transform: translate(100%, -50%);
+}
+
+.efek:hover:before,
+.efek:hover:after {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+.efek:hover {
+  color: #3da35d;
+}

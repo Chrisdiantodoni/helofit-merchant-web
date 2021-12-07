@@ -31,16 +31,16 @@ class App extends React.Component {
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='text-center mx-auto me-1'>
-                <Nav.Link href='#home' className='text-dark fs-6'>
+                <Nav.Link href='#home' className='efek text-dark fs-6'>
                   Beranda
                 </Nav.Link>
-                <Nav.Link href='#link' className='text-dark fs-6'>
+                <Nav.Link href='#link' className='efek text-dark fs-6'>
                   Layanan
                 </Nav.Link>
-                <Nav.Link href='#link' className='text-dark fs-6'>
+                <Nav.Link href='#link' className='efek text-dark fs-6'>
                   Tentang
                 </Nav.Link>
-                <Nav.Link href='#link' className='text-dark fs-6'>
+                <Nav.Link href='#link' className='efek text-dark fs-6'>
                   Kontak
                 </Nav.Link>
               </Nav>
