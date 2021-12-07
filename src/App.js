@@ -45,8 +45,13 @@ class App extends React.Component {
                 </Nav.Link>
               </Nav>
               <Nav className='ms-auto me-5'>
-                <Navbar.Brand href='#' className='mt-1'>
-                  <BsCart3 />
+                <Navbar.Brand
+                  href='#'
+                  className='mt-1'
+                  data-toggle='tooltip'
+                  data-placement='bottom'
+                  title='Keranjang'>
+                  <BsCart3 className='icon' />
                 </Navbar.Brand>
                 <Nav.Link href='#login'>
                   <Button variant='primary' className='rounded-3'>

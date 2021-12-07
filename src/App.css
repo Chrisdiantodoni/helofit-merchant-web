@@ -4,10 +4,7 @@
 }
 
 .efek {
-  padding: 0.5em 0.8em;
-  color: rgba(255, 255, 255, 0.5);
   position: relative;
-  text-decoration: none;
   font-size: 20px;
 }
 
@@ -25,8 +22,8 @@
   content: "";
   left: 0;
   top: 0;
-  border-top: 3px solid #0000ff;
-  border-left: 3px solid #0000ff;
+  border-top: 3px solid #0275d8;
+  border-left: 3px solid #0275d8;
   transform: translate(-100%, 50%);
 }
 
@@ -34,8 +31,8 @@
   content: "";
   right: 0;
   bottom: 0;
-  border-bottom: 3px solid #0000ff;
-  border-right: 3px solid #0000ff;
+  border-bottom: 3px solid #0275d8;
+  border-right: 3px solid #0275d8;
   transform: translate(100%, -50%);
 }
 
@@ -45,6 +42,17 @@
   opacity: 1;
 }
 
-.efek:hover {
-  color: #3da35d;
+.icon {
+  transition: all 0.35s ease;
+  opacity: 1;
+}
+
+.icon:hover:before,
+.icon:hover:after {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+.icon:hover {
+  color: #0275d8;
 }
