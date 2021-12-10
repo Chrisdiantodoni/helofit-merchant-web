@@ -1,7 +1,6 @@
-import "../App.css";
 import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Card, Button, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import React, { Component } from "react";
 import "./Beranda_2.css";
 export default class Beranda_2 extends Component {
