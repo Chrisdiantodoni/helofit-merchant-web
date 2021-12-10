@@ -11,50 +11,6 @@ export default class Beranda extends Component {
   render() {
     return (
       <div>
-        <Navbar bg='light' expand='lg'>
-          <Container>
-            <Navbar.Brand href='#home'>
-              <img
-                className='img-fluid logo d-inline-block mx-auto'
-                src={logo}
-                width='150px'
-                height='20px'
-              />
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls='basic-navbar-nav' />
-            <Navbar.Collapse id='basic-navbar-nav'>
-              <Nav className='text-center mx-auto me-1'>
-                <Nav.Link href='#home' className='efek text-dark fs-6'>
-                  Beranda
-                </Nav.Link>
-                <Nav.Link href='#link' className='efek text-dark fs-6'>
-                  Layanan
-                </Nav.Link>
-                <Nav.Link href='#link' className='efek text-dark fs-6'>
-                  Tentang
-                </Nav.Link>
-                <Nav.Link href='#link' className='efek text-dark fs-6'>
-                  Kontak
-                </Nav.Link>
-              </Nav>
-              <Nav className='ms-auto me-5'>
-                <Navbar.Brand
-                  href='#'
-                  className='mt-1'
-                  data-toggle='tooltip'
-                  data-placement='bottom'
-                  title='Keranjang'>
-                  <BsCart3 className='icon' />
-                </Navbar.Brand>
-                <Nav.Link href='#login'>
-                  <Button variant='primary' className='rounded-3'>
-                    Masuk
-                  </Button>
-                </Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
         <Container className='text-center pe-5 me-5'>
           <h1 className='pt-5 text-dark'>Creative Digital Agency</h1>
           <p className='text-muted'>

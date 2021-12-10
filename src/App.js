@@ -8,7 +8,7 @@ import { BsCart3 } from "react-icons/bs";
 import Beranda from "./Komposisi/Beranda";
 import {
   BrowserRouter as Router,
-  Link,
+  NavLink,
   Route,
   Redirect,
   withRouter,
@@ -21,6 +21,10 @@ class App extends React.Component {
         path: "/",
         exact: true,
         render: () => <Beranda />,
+      },
+      {
+        path: "/layanan",
+        render: () => <div>Halaman Layanan</div>,
       },
     ];
     return (
@@ -38,17 +42,38 @@ class App extends React.Component {
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='text-center mx-auto me-1'>
-                <Nav.Link className='efek text-dark fs-6'>
-                  <Link to='/'>Beranda</Link>
+                <Nav.Link className='efek fs-6'>
+                  <NavLink
+                    to='/'
+                    className='text-decoration-none'
+                    exact
+                    activeStyle={{ fontWeight: "bold", color: "blue" }}>
+                    Beranda
+                  </NavLink>
                 </Nav.Link>
-                <Nav.Link href='#link' className='efek text-dark fs-6'>
-                  Layanan
+                <Nav.Link className='efek fs-6'>
+                  <NavLink
+                    to='/layanan'
+                    className='text-decoration-none'
+                    activeClassName='aktif'>
+                    Layanan
+                  </NavLink>
                 </Nav.Link>
-                <Nav.Link href='#link' className='efek text-dark fs-6'>
-                  Tentang
+                <Nav.Link className='efek fs-6'>
+                  <NavLink
+                    to='/tentang'
+                    className='text-decoration-none'
+                    activeClassName='aktif'>
+                    Tentang
+                  </NavLink>
                 </Nav.Link>
-                <Nav.Link href='#link' className='efek text-dark fs-6'>
-                  Kontak
+                <Nav.Link className='efek fs-6'>
+                  <NavLink
+                    to='/kontak'
+                    className='text-decoration-none'
+                    activeClassName='aktif'>
+                    Kontak
+                  </NavLink>
                 </Nav.Link>
               </Nav>
               <Nav className='ms-auto me-5'>
@@ -69,10 +94,11 @@ class App extends React.Component {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <Beranda />
-        {/* <div>
-          <Switch></Switch>
-        </div> */}
+        <Switch>
+          {routes.map((item, index) => (
+            <Route path={item.path} exact={item.exact} render={item.render} />
+          ))}
+        </Switch>
       </Router>
     );
   }
