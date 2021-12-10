@@ -24,7 +24,7 @@ class App extends React.Component {
       },
       {
         path: "/layanan",
-        render: () => <div>Halaman Layanan</div>,
+        render: () => <div className='text-center'>Halaman Layanan</div>,
       },
     ];
     return (
