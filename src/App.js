@@ -2,8 +2,16 @@ import "./App.css";
 import "./css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
+import Beranda_2 from "./Komponen/Beranda (part 2)";
 import { BsCart3 } from "react-icons/bs";
-import { Navbar, Container, Nav, NavDropdown, Button } from "react-bootstrap";
+import {
+  Navbar,
+  Card,
+  Container,
+  Nav,
+  NavDropdown,
+  Button,
+} from "react-bootstrap";
 import {
   BrowserRouter as Router,
   NavLink,
@@ -86,6 +94,8 @@ class App extends React.Component {
             width='546px'
             height='500px'
           />
+          <br />
+          <Beranda_2 />
         </Container>
         {/* <div>
           <Switch></Switch>
@@ -94,5 +104,4 @@ class App extends React.Component {
     );
   }
 }
-
 export default App;
