@@ -21,7 +21,7 @@ export default class Beranda extends Component {
               Lihat Portofolio
             </Button>
           </Nav.Link>
-          <Nav.Link href='#daftar' className='d-inline-block me-5'>
+          <Nav.Link href='' className='d-inline-block me-5'>
             {/* <Button
               variant='outline-primary'
               className='btn-sm rounded-pill me-1'>

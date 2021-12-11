@@ -1,9 +1,12 @@
-var http = require("http");
 var mysql = require("mysql");
+var bodyParser = require("body-parser");
 var express = require("express");
 var app = express();
+var cors = require("cors");
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 var conn = mysql.createConnection({
   host: "localhost",
@@ -24,9 +27,12 @@ conn.connect((err) => {
   //   );
 });
 
-app.post("/Daftar", (req, res) => {
-  db.query(
-    "INSERT INTO user (username, email, password ) VALUES (?,?.?)",
+app.post("/daftar", (req, res) => {
+  var username = req.body.username;
+  var email = req.body.email;
+  var password = req.body.password;
+  conn.query(
+    "INSERT INTO user (username, email, password) VALUES (?,?,?)",
     [username, email, password],
     (err, result) => {
       console.log(err);
