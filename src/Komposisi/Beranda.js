@@ -2,11 +2,10 @@ import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Beranda.css";
 import React, { Component } from "react";
-import { BsCart3 } from "react-icons/bs";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
-import logo from "../Assets/logo.png";
 import Beranda_2 from "./Beranda (part 2)";
 import ilustrasi from "../Assets/ilustrasi.png";
+import Daftar from "./Daftar";
 export default class Beranda extends Component {
   render() {
     return (
@@ -22,7 +21,7 @@ export default class Beranda extends Component {
               Lihat Portofolio
             </Button>
           </Nav.Link>
-          <Nav.Link href='#porto' className='d-inline-block me-5'>
+          <Nav.Link href='#daftar' className='d-inline-block me-5'>
             <Button
               variant='outline-primary'
               className='btn-sm rounded-pill me-1'>

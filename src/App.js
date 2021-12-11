@@ -6,6 +6,7 @@ import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import logo from "./Assets/logo.png";
 import { BsCart3 } from "react-icons/bs";
 import Beranda from "./Komposisi/Beranda";
+import Daftar from "./Komposisi/Daftar";
 import {
   BrowserRouter as Router,
   NavLink,

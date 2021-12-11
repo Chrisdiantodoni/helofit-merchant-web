@@ -1,4 +1,10 @@
+var http = require("http");
 var mysql = require("mysql");
+var express = require("express");
+var app = express();
+
+app.use(express.json());
+
 var conn = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -16,4 +22,18 @@ conn.connect((err) => {
   //       else console.log("Tabel user berhasil dibuat");
   //     }
   //   );
+});
+
+app.post("/Daftar", (req, res) => {
+  db.query(
+    "INSERT INTO user (username, email, password ) VALUES (?,?.?)",
+    [username, email, password],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
+app.listen(8000, () => {
+  console.log("Server berjalan di port 8000");
 });
