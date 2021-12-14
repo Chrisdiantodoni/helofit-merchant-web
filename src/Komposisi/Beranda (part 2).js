@@ -2,6 +2,8 @@ import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import React, { Component } from "react";
+import logo from "../Assets/logo.png";
+import { BsFacebook, BsInstagram } from "react-icons/bs";
 import "./Beranda_2.css";
 export default class Beranda_2 extends Component {
   render() {
@@ -14,7 +16,7 @@ export default class Beranda_2 extends Component {
                 <h5 className='card-title fw-bold text-dark'>
                   Harga Terjangkau
                 </h5>
-                <p className='card-text text-secondary'>
+                <p className='card-text text-muted'>
                   Tarif jasa yang dikenakan sudah lebih murah dari yang
                   dipasaran namun tetap berkualitas dan sesuai dengan keinginan
                 </p>
@@ -27,7 +29,7 @@ export default class Beranda_2 extends Component {
                 <h5 className='card-title fw-bold text-dark'>
                   Harga Terjangkau
                 </h5>
-                <p className='card-text text-secondary'>
+                <p className='card-text text-muted'>
                   Tarif jasa yang dikenakan sudah lebih murah dari yang
                   dipasaran namun tetap berkualitas dan sesuai dengan keinginan
                 </p>
@@ -40,7 +42,7 @@ export default class Beranda_2 extends Component {
                 <h5 className='card-title fw-bold text-dark'>
                   Harga Terjangkau
                 </h5>
-                <p className='card-text text-secondary'>
+                <p className='card-text text-muted'>
                   Tarif jasa yang dikenakan sudah lebih murah dari yang
                   dipasaran namun tetap berkualitas dan sesuai dengan keinginan
                 </p>
@@ -53,7 +55,7 @@ export default class Beranda_2 extends Component {
                 <h5 className='card-title fw-bold text-dark'>
                   Harga Terjangkau
                 </h5>
-                <p className='card-text text-secondary'>
+                <p className='card-text text-muted'>
                   Tarif jasa yang dikenakan sudah lebih murah dari yang
                   dipasaran namun tetap berkualitas dan sesuai dengan keinginan
                 </p>
@@ -64,7 +66,7 @@ export default class Beranda_2 extends Component {
         <br />
         <br />
         <div className='Layanan'>
-          <p className='text-secondary'>
+          <p className='text-muted'>
             Layanan Kami <br />
             <h3 className='fw-bold text-dark'>Apa yang kamu butuhkan?</h3>
           </p>
@@ -149,12 +151,128 @@ export default class Beranda_2 extends Component {
                   <a className='btn btn-primary'>Konsultasi Sekarang</a>
                 </div>
               </div>
-              <div className='col-md-3 bg-secondary p-3 me-auto'>
+              <div className='col-md-4 bg-secondary me-auto'>
                 <img className='img-fluid rounded-start bg-primary' />
               </div>
             </div>
           </div>
           <br />
+        </div>
+        <div className='Testimoni ms-5 me-4'>
+          <p className='text-muted mb-4'>
+            Testimoni Layanan <br />
+            <h3 className='fw-bold text-dark'>Yang dikatakan Mereka</h3>
+          </p>
+          <div className='row row-cols-1 row-cols-md-3 g-3'>
+            <div className='col'>
+              <div className='card h-100'>
+                <img className='card-img-top bg-secondary' height='130px' />
+                <div className='card-body text-start'>
+                  <h4 className='card-text'>Andi Suryadi, Pemilik Usaha</h4>
+                  <p className='text-muted d-inline'>
+                    Aku mulai langganan Microdigi karena konten-konten yang
+                    dibuat gak pernah ngecewain deh, customer juga makin banyak,
+                    kadang bisa selesai sebelum deadline
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class='col'>
+              <div className='card h-100'>
+                <img className='card-img-top bg-dark' height='130px' />
+                <div className='card-body text-start'>
+                  <h4 className='card-text'>Andi Suryadi, Pemilik Usaha</h4>
+                  <p className='text-muted d-inline'>
+                    Aku mulai langganan Microdigi karena konten-konten yang
+                    dibuat gak pernah ngecewain deh, customer juga makin banyak,
+                    kadang bisa selesai sebelum deadline
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class='col'>
+              <div className='card h-100'>
+                <img className='card-img-top bg-danger' height='130px' />
+                <div className='card-body text-start'>
+                  <h4 className='card-text'>Andi Suryadi, Pemilik Usaha</h4>
+                  <p className='text-muted d-inline'>
+                    Aku mulai langganan Microdigi karena konten-konten yang
+                    dibuat gak pernah ngecewain deh, customer juga makin banyak,
+                    kadang bisa selesai sebelum deadline
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <br />
+          <hr className='text-muted mt-5' />
+          <div className='footer mb-5'>
+            <div className='row'>
+              <div className='col-md-5 text-start mt-4'>
+                <img
+                  className='img-fluid logo d-inline-block me-auto'
+                  src={logo}
+                  width='150px'
+                  height='20px'
+                />
+                <p className='text-muted'>
+                  Agensi Digital Kreatif yang siap memproduksi aset-aset <br />
+                  digital yang bukan sekedar menarik, tapi juga memberikan{" "}
+                  <br />
+                  engagement kepada audience brand dan produk Anda
+                </p>
+              </div>
+              <div className='col-md-3 text-start mt-4'>
+                <h5>Halaman</h5>
+                <p>
+                  <a className='aktif-footer' href='/tentang'>
+                    Tentang
+                  </a>
+                  <br />
+                  <a className='aktif-footer' href='/kontak'>
+                    Kontak
+                  </a>
+                </p>
+              </div>
+              <div className='col-md-2 text-start mt-4'>
+                <h5>Layanan</h5>
+                <p>
+                  <a className='aktif-footer' href='/desain'>
+                    Desain Grafis
+                  </a>
+                  <br />
+                  <a className='aktif-footer' href='/editing'>
+                    Editing Video
+                  </a>
+                  <br />
+                  <a className='aktif-footer' href='/aplikasi'>
+                    Pembuatan Aplikasi
+                  </a>
+                  <br />
+                  <a className='aktif-footer' href='/voice'>
+                    Voice Over
+                  </a>
+                  <br />
+                  <a className='aktif-footer' href='/website'>
+                    Pembuatan Website
+                  </a>
+                  <br />
+                  <a className='aktif-footer' href='/marketing'>
+                    Digital Marketing
+                  </a>
+                  <br />
+                </p>
+              </div>
+              <div className='col-md-2 text-start mt-4'>
+                <h5>Ikuti</h5>
+                <p>
+                  <BsFacebook className='icon fb me-1' />
+                  <BsInstagram className='icon ig' />
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </Container>
     );

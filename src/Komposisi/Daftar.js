@@ -13,7 +13,6 @@ export class Daftar extends Component {
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
   }
-
   setValueState(event) {
     this.setState({
       [event.target.name]: event.target.value,
@@ -40,7 +39,10 @@ export class Daftar extends Component {
       });
     };
     return (
-      <div>
+      <div
+        ref={(node) => {
+          this.node = node;
+        }}>
         <button
           type='button'
           className='btn-sm btn-outline-primary rounded-pill me-1'
