@@ -4,8 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import logo from "./Assets/logo.png";
-import { BsCart3 } from "react-icons/bs";
+import { BsCart3, BsFacebook, BsInstagram } from "react-icons/bs";
 import Beranda from "./Komposisi/Beranda";
+import Footer from "./Komposisi/Footer";
 import Daftar from "./Komposisi/Daftar";
 import {
   BrowserRouter as Router,
@@ -21,7 +22,12 @@ class App extends React.Component {
       {
         path: "/",
         exact: true,
-        render: () => <Beranda />,
+        render: () => (
+          <div>
+            <Beranda />
+            <Footer />
+          </div>
+        ),
       },
       {
         path: "/layanan",
