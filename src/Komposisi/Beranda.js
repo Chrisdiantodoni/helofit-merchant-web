@@ -10,7 +10,7 @@ export default class Beranda extends Component {
   render() {
     return (
       <div>
-        <Container className='text-center pe-5 me-5'>
+        <Container className='text-center'>
           <h1 className='pt-5 text-dark'>Creative Digital Agency</h1>
           <p className='text-muted'>
             Kami ada untuk membangun strategi dalam meningkatkan penjualan
@@ -21,13 +21,12 @@ export default class Beranda extends Component {
               Lihat Portofolio
             </Button>
           </Nav.Link>
-          <Nav.Link href='' className='d-inline-block me-5'>
-            {/* <Button
-              variant='outline-primary'
-              className='btn-sm rounded-pill me-1'>
-              Daftar Gratis!
-            </Button> */}
-            <Daftar />
+          <Nav.Link href='/daftar' className='d-inline-block me-5'>
+            <Button
+              variant='light'
+              className='btn-sm btn-outline-primary rounded-pill'>
+              Daftar Gratis
+            </Button>
           </Nav.Link>
           <img
             src={ilustrasi}

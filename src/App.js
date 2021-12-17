@@ -28,6 +28,10 @@ class App extends React.Component {
         path: "/layanan",
         render: () => <Layanan />,
       },
+      {
+        path: "/daftar",
+        render: () => <Daftar />,
+      },
     ];
     return (
       <Router>

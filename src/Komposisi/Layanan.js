@@ -3,32 +3,31 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Carousel } from "react-bootstrap";
 import React, { Component } from "react";
 import Footer from "./Footer";
+import logo from "../Assets/ilustrasi.png";
 export class Layanan extends Component {
   render() {
     return (
       <Container className='text-center mx-auto'>
-        <Carousel className='mt-5 bg-info' variant='dark'>
+        <Carousel className='mt-5 bg-secondary' variant='dark'>
           <Carousel.Item interval={1500}>
-            <img className='d-block w-100' alt='First slide' />
+            <img className='d-block w-100' alt='First slide' src={logo} />
             <Carousel.Caption>
               <h3>First slide label</h3>
               <p>Text</p>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item interval={1500}>
-            <img className='d-block w-100' alt='Second slide' />
+            <img className='d-block w-100' alt='Second slide' src={logo} />
             <Carousel.Caption>
               <h3>Second slide label</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              <p>Text</p>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item interval={1500}>
-            <img className='d-block w-100' alt='Third slide' />
+            <img className='d-block w-100' alt='Third slide' src={logo} />
             <Carousel.Caption>
               <h3>Third slide label</h3>
-              <p>
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-              </p>
+              <p>Text</p>
             </Carousel.Caption>
           </Carousel.Item>
         </Carousel>
