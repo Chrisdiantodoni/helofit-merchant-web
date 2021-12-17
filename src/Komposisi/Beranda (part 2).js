@@ -2,8 +2,7 @@ import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import React, { Component } from "react";
-import logo from "../Assets/logo.png";
-import { BsFacebook, BsInstagram } from "react-icons/bs";
+import Footer from "../Komposisi/Footer.js";
 import "./Beranda_2.css";
 export default class Beranda_2 extends Component {
   render() {
@@ -205,6 +204,7 @@ export default class Beranda_2 extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </Container>
     );
   }

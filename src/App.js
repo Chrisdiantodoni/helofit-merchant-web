@@ -6,7 +6,7 @@ import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import logo from "./Assets/logo.png";
 import { BsCart3, BsFacebook, BsInstagram } from "react-icons/bs";
 import Beranda from "./Komposisi/Beranda";
-import Footer from "./Komposisi/Footer";
+import Layanan from "./Komposisi/Layanan";
 import Daftar from "./Komposisi/Daftar";
 import {
   BrowserRouter as Router,
@@ -22,16 +22,11 @@ class App extends React.Component {
       {
         path: "/",
         exact: true,
-        render: () => (
-          <div>
-            <Beranda />
-            <Footer />
-          </div>
-        ),
+        render: () => <Beranda />,
       },
       {
         path: "/layanan",
-        render: () => <div className='text-center'>Halaman Layanan</div>,
+        render: () => <Layanan />,
       },
     ];
     return (

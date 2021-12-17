@@ -9,7 +9,7 @@ import { BsFacebook, BsInstagram } from "react-icons/bs";
 export class Footer extends Component {
   render() {
     return (
-      <Container className='text-center mx-auto pe-5 me-5 mt-5'>
+      <Container className='mt-5'>
         <hr className='text-muted mt-5' />
         <div className='footer mb-5'>
           <div className='row'>
