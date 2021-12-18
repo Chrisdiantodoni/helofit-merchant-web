@@ -110,7 +110,7 @@ export class Daftar extends Component {
                   id='exampleCheck1'
                 />
                 <label class='form-check-label' for='exampleCheck1'>
-                  Saya setuju dengan{" "}
+                  Saya setuju dengan <span> </span>
                   <a href='/S&K' className='text-decoration-none'>
                     Syarat & Ketentuan <span> </span>
                   </a>

@@ -1,0 +1,10 @@
+.kanvas {
+  height: 500px;
+  background-color: #afd3e0;
+  border-radius: 10px;
+}
+.kanan {
+  height: 500px;
+  background-color: white;
+  border-radius: 10px;
+}

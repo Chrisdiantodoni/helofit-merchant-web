@@ -8,6 +8,7 @@ import { BsCart3, BsFacebook, BsInstagram } from "react-icons/bs";
 import Beranda from "./Komposisi/Beranda";
 import Layanan from "./Komposisi/Layanan";
 import Daftar from "./Komposisi/Daftar";
+import Login from "./Komposisi/Login";
 import {
   BrowserRouter as Router,
   NavLink,
@@ -31,6 +32,10 @@ class App extends React.Component {
       {
         path: "/daftar",
         render: () => <Daftar />,
+      },
+      {
+        path: "/login",
+        render: () => <Login />,
       },
     ];
     return (
@@ -91,7 +96,7 @@ class App extends React.Component {
                   title='Keranjang'>
                   <BsCart3 className='icon' />
                 </Navbar.Brand>
-                <Nav.Link href='#login'>
+                <Nav.Link href='/login'>
                   <Button variant='primary' className='rounded-3'>
                     Masuk
                   </Button>
