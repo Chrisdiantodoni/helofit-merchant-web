@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import Modal from "../Modal/modal.js";
 import Axios from "axios";
 export class Daftar extends Component {
   constructor() {
     super();
     this.state = {
-      username: null,
       email: null,
+      nama_depan: null,
+      nama_belakang: null,
       password: null,
     };
   }
@@ -16,12 +16,14 @@ export class Daftar extends Component {
     });
   }
   render() {
-    var usernameReg = this.state.username;
+    var namadpnReg = this.state.nama_depan;
+    var namablkgReg = this.state.nama_belakang;
     var emailReg = this.state.email;
     var passwordReg = this.state.password;
     const daftar = () => {
       Axios.post("http://localhost:8000/daftar", {
-        username: usernameReg,
+        nama_dpn: namadpnReg,
+        nama_blkg: namablkgReg,
         email: emailReg,
         password: passwordReg,
       }).then((response) => {
@@ -49,11 +51,13 @@ export class Daftar extends Component {
                 </label>
                 <input
                   className='text-dark'
-                  name='namadepan'
+                  name='nama_depan'
                   type='text'
-                  value={this.state.username}
+                  value={this.state.nama_depan}
                   onChange={this.setValueState.bind(this)}
-                  className='form-control rounded-pill'></input>
+                  className='form-control rounded-pill'
+                  required></input>
+                <div className='form-text text-danger'>{this.state.err}</div>
               </div>
               <div class='form-group mb-3'>
                 <label>
@@ -61,9 +65,9 @@ export class Daftar extends Component {
                 </label>
                 <input
                   className='text-dark'
-                  name='namabelakang'
+                  name='nama_belakang'
                   type='text'
-                  value={this.state.username}
+                  value={this.state.nama_belakang}
                   onChange={this.setValueState.bind(this)}
                   className='form-control rounded-pill'></input>
               </div>
@@ -139,7 +143,7 @@ export class Daftar extends Component {
             </form>
           </div>
         </div>
-        <Modal title='Daftar'>
+        {/* <Modal title='Daftar'>
           <div className='Judul'>
             <h5 className='mt-2 text-dark'>Daftar</h5>
             <hr className='text-secondary' />
@@ -204,7 +208,7 @@ export class Daftar extends Component {
               Daftar
             </button>
           </div>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }

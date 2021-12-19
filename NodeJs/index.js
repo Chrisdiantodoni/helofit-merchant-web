@@ -18,22 +18,23 @@ var conn = mysql.createConnection({
 conn.connect((err) => {
   if (err) console.log("Masalah dengan MySQL" + err);
   else console.log("Terkoneksi dengan Database");
-  //   conn.query(
-  //     "CREATE TABLE user (id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, username VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, password VARCHAR(30) NOT NULL)",
-  //     (err, result) => {
-  //       if (err) console.error("Error saat membuat tabel " + err);
-  //       else console.log("Tabel user berhasil dibuat");
-  //     }
-  //   );
+  // conn.query(
+  //   "CREATE TABLE user (email VARCHAR(30) NOT NULL PRIMARY KEY, nama_dpn VARCHAR(30) NOT NULL, nama_blkg VARCHAR(30) NOT NULL, password VARCHAR(30) NOT NULL)",
+  //   (err, result) => {
+  //     if (err) console.error("Error saat membuat tabel " + err);
+  //     else console.log("Tabel user berhasil dibuat");
+  //   }
+  // );
 });
 
 app.post("/daftar", (req, res) => {
-  var username = req.body.username;
   var email = req.body.email;
+  var nama_dpn = req.body.nama_dpn;
+  var nama_blkg = req.body.nama_blkg;
   var password = req.body.password;
   conn.query(
-    "INSERT INTO user (username, email, password) VALUES (?,?,?)",
-    [username, email, password],
+    "INSERT INTO user (email, nama_dpn, nama_blkg, password) VALUES (?,?,?,?)",
+    [email, nama_dpn, nama_blkg, password],
     (err, result) => {
       console.log(err);
     }
