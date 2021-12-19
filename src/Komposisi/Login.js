@@ -1,9 +1,39 @@
 import React, { Component } from "react";
+import Axios from "axios";
 import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.css";
 export class Login extends Component {
+  constructor() {
+    super();
+    this.state = {
+      email: null,
+      password: null,
+      status: null,
+    };
+  }
+  setValueState(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
   render() {
+    var emailLog = this.state.email;
+    var passwordLog = this.state.password;
+    var statusLog = this.state.status;
+    const login = () => {
+      Axios.post("http://localhost:8000/login", {
+        email: emailLog,
+        password: passwordLog,
+      }).then((response) => {
+        if (response.data.message) {
+          statusLog(response.data.message);
+        } else {
+          statusLog(response.data[0].email);
+        }
+        console.log(response);
+      });
+    };
     return (
       <div class='container mx-auto mt-5'>
         <div class='kanvas row shadow border border-1'>
@@ -25,8 +55,8 @@ export class Login extends Component {
                   className='text-dark rounded-3'
                   name='email'
                   type='email'
-                  // value={this.state.email}
-                  // onChange={this.setValueState.bind(this)}
+                  value={this.state.email}
+                  onChange={this.setValueState.bind(this)}
                   className='form-control rounded-pill'></input>
               </div>
               <div class='form-group mb-3'>
@@ -37,8 +67,8 @@ export class Login extends Component {
                   className='text-dark rounded-3'
                   name='password'
                   type='password'
-                  // value={this.state.password}
-                  // onChange={this.setValueState.bind(this)}
+                  value={this.state.password}
+                  onChange={this.setValueState.bind(this)}
                   className='form-control rounded-pill'></input>
               </div>
               <p className='text-muted text-end'>Lupa password?</p>
@@ -46,8 +76,7 @@ export class Login extends Component {
                 <button
                   type='button'
                   className='btn btn-primary rounded-pill w-100'
-                  // onClick={login}
-                >
+                  onClick={login}>
                   Masuk
                 </button>
                 <p className='text-secondary mt-2'>
@@ -60,6 +89,7 @@ export class Login extends Component {
             </form>
           </div>
         </div>
+        <h1>{statusLog}</h1>
       </div>
     );
   }

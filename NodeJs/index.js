@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var express = require("express");
 var app = express();
 var cors = require("cors");
+const e = require("cors");
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,6 +42,24 @@ app.post("/daftar", (req, res) => {
   );
 });
 
+app.post("/login", (req, res) => {
+  var email = req.body.email;
+  var password = req.body.password;
+  conn.query(
+    "SELECT * FROM user WHERE email = ? AND password = ?",
+    [email, password],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      if (result.length > 0) {
+        res.send(result);
+      } else {
+        res.send({ message: "Email/Password Anda Masih Salah" });
+      }
+    }
+  );
+});
 app.listen(8000, () => {
   console.log("Server berjalan di port 8000");
 });
