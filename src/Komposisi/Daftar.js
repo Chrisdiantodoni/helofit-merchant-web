@@ -56,7 +56,8 @@ export class Daftar extends Component {
                   value={this.state.nama_depan}
                   onChange={this.setValueState.bind(this)}
                   className='form-control rounded-pill'
-                  required></input>
+                  required
+                  placeholder='Masukkan Nama Depan'></input>
                 <div className='form-text text-danger'>{this.state.err}</div>
               </div>
               <div class='form-group mb-3'>
@@ -69,7 +70,9 @@ export class Daftar extends Component {
                   type='text'
                   value={this.state.nama_belakang}
                   onChange={this.setValueState.bind(this)}
-                  className='form-control rounded-pill'></input>
+                  className='form-control rounded-pill'
+                  required
+                  placeholder='Masukkan Nama Belakang'></input>
               </div>
               <div class='form-group mb-3'>
                 <label>
@@ -81,7 +84,9 @@ export class Daftar extends Component {
                   type='email'
                   value={this.state.email}
                   onChange={this.setValueState.bind(this)}
-                  className='form-control rounded-pill'></input>
+                  className='form-control rounded-pill'
+                  required
+                  placeholder='Masukkan Email'></input>
               </div>
               <div class='form-group mb-3'>
                 <label>
@@ -93,7 +98,9 @@ export class Daftar extends Component {
                   type='password'
                   value={this.state.password}
                   onChange={this.setValueState.bind(this)}
-                  className='form-control rounded-pill'></input>
+                  className='form-control rounded-pill'
+                  required
+                  placeholder='Masukkan Password'></input>
               </div>
               <div class='form-group mb-3'>
                 <label>
@@ -105,7 +112,9 @@ export class Daftar extends Component {
                   type='password'
                   value={this.state.konfirmasi}
                   onChange={this.setValueState.bind(this)}
-                  className='form-control rounded-pill'></input>
+                  className='form-control rounded-pill'
+                  required
+                  placeholder='Masukkan Password Kembali'></input>
               </div>
               <div class='form-check mb-3'>
                 <input

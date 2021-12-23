@@ -80,7 +80,7 @@ export class Layanan extends Component {
             <div className='card h-100'>
               <img className='card-img-top bg-success' height='130px' />
               <div className='card-body text-start'>
-                <h4 className='card-text'>Pembuatan Aplikasi</h4>
+                <h4 className='card-text'>Pembuatan Website</h4>
               </div>
               <div class='card-footer bg-light'>
                 <a className='btn btn-primary w-100'>Selengkapnya</a>
