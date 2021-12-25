@@ -55,11 +55,14 @@ app.post("/login", (req, res) => {
       if (result.length > 0) {
         res.send(result);
       } else {
-        res.send({ message: "Email/Password Anda Masih Salah" });
+        res.send({
+          message: "Login gagal. Mohon periksa Email/Password Anda kembali",
+        });
       }
     }
   );
 });
+
 app.listen(8000, () => {
   console.log("Server berjalan di port 8000");
 });

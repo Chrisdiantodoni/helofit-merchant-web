@@ -25,13 +25,16 @@ export class Login extends Component {
       Axios.post("http://localhost:8000/login", {
         email: emailLog,
         password: passwordLog,
-      }).then((response) => {
-        if (response.data.message) {
-          statusLog(response.data.message);
+      }).then((res) => {
+        if (res.data.message) {
+          statusLog = res.data.message;
         } else {
-          statusLog(response.data[0].email);
+          localStorage.setItem("token", res.token);
         }
-        console.log(response);
+        this.setState({
+          status: statusLog,
+        });
+        console.log(res);
       });
     };
     return (
@@ -40,7 +43,8 @@ export class Login extends Component {
           <div class='col-md'></div>
           <div class='col-md kanan'>
             <form className='container'>
-              <h3 className='text-center pt-5'>
+              <div className='mt-2 text-danger'>{statusLog}</div>
+              <h3 className='text-center pt-2'>
                 Masuk ke Akun Microdigi Kamu!
                 <p className='text-muted fs-6 pt-2'>
                   Sudah punya akun Microdigi? Yuk masuk untuk mengakses
@@ -89,7 +93,6 @@ export class Login extends Component {
             </form>
           </div>
         </div>
-        <h1>{statusLog}</h1>
       </div>
     );
   }
