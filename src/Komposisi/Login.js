@@ -43,7 +43,6 @@ export class Login extends Component {
           <div class='col-md'></div>
           <div class='col-md kanan'>
             <form className='container'>
-              <div className='mt-2 text-danger'>{statusLog}</div>
               <h3 className='text-center pt-2'>
                 Masuk ke Akun Microdigi Kamu!
                 <p className='text-muted fs-6 pt-2'>
@@ -59,6 +58,7 @@ export class Login extends Component {
                   className='text-dark rounded-3'
                   name='email'
                   type='email'
+                  placeholder='Masukkan Email Anda'
                   value={this.state.email}
                   onChange={this.setValueState.bind(this)}
                   className='form-control rounded-pill'></input>
@@ -71,10 +71,12 @@ export class Login extends Component {
                   className='text-dark rounded-3'
                   name='password'
                   type='password'
+                  placeholder='Masukkan Password Anda'
                   value={this.state.password}
                   onChange={this.setValueState.bind(this)}
                   className='form-control rounded-pill'></input>
               </div>
+              <div className='mt-2 text-danger fs-4'>{statusLog}</div>
               <p className='text-muted text-end'>Lupa password?</p>
               <div className='text-center'>
                 <button
