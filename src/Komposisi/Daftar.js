@@ -9,7 +9,7 @@ const required = (value) => {
   if (!value) {
     return (
       <div className='alert alert-danger' role='alert'>
-        This field is required!
+        Bagian ini diperlukan!
       </div>
     );
   }
@@ -18,7 +18,7 @@ const email = (value) => {
   if (!isEmail(value)) {
     return (
       <div className='alert alert-danger' role='alert'>
-        This is not a valid email.
+        Ini bukan email yang valid.
       </div>
     );
   }
@@ -27,28 +27,34 @@ const vusername = (value) => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div className='alert alert-danger' role='alert'>
-        The username must be between 3 and 20 characters.
+         username harus antara 3 dan 20 karakter.
       </div>
     );
   }
 };
 
+
+
 const vpassword = (value) => {
   if (value.length < 6 || value.length > 40) {
     return (
       <div className='alert alert-danger' role='alert'>
-        The password must be between 6 and 40 characters.
+        password harus antara 3 dan 20 karakter.
       </div>
     );
   }
 };
+
+
 export class Daftar extends Component {
+
   constructor() {
     super();
     this.handleRegister = this.handleRegister.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeKonfirmasi = this.onChangeKonfirmasi.bind(this);
 
     this.state = {
       email: null,
@@ -59,6 +65,8 @@ export class Daftar extends Component {
       message: "",
     };
   }
+
+  
   onChangeUsername(e) {
     this.setState({
       username: e.target.value,
@@ -76,6 +84,13 @@ export class Daftar extends Component {
       password: e.target.value,
     });
   }
+
+  onChangeKonfirmasi(e) {
+    this.setState({
+      Konfirmasi: e.target.value,
+    });
+  }
+
   handleRegister(e) {
     e.preventDefault();
 
@@ -91,6 +106,8 @@ export class Daftar extends Component {
       [event.target.name]: event.target.value,
     });
   }
+
+
   render() {
     var namadpnReg = this.state.nama_depan;
     var namablkgReg = this.state.nama_belakang;
@@ -181,6 +198,7 @@ export class Daftar extends Component {
                       className='text-dark rounded-3'
                       name='password'
                       type='password'
+                      id ='password'
                       value={this.state.password}
                       className='form-control rounded-pill'
                       onChange={this.onChangePassword}
@@ -195,7 +213,8 @@ export class Daftar extends Component {
                       className='text-dark rounded-3'
                       name='konfirmasi'
                       type='password'
-                      onChange={this.onChangePassword}
+                      id ='konfirmasi'
+                      onChange={this.onChangeKonfirmasi}
                       validations={[required, vpassword]}
                       className='form-control rounded-pill'
                       required
