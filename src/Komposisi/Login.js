@@ -3,14 +3,65 @@ import Axios from "axios";
 import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.css";
+import { isEmail } from "validator";
+
+const required = (value) => {
+  if (!value) {
+    return (
+      <div className='alert alert-danger' role='alert'>
+        Bagian ini diperlukan!
+      </div>
+    );
+  }
+};
+
+const email = (value) => {
+  if (!isEmail(value)) {
+    return (
+      <div className='alert alert-danger' role='alert'>
+        Ini bukan email yang valid.
+      </div>
+    );
+  }
+};
+
 export class Login extends Component {
   constructor() {
     super();
+    this.handleRegister = this.handleRegister.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+
     this.state = {
       email: null,
       password: null,
+      successful: false,
+      message: "",
       status: null,
     };
+  }
+
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value,
+    });
+  }
+
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value,
+    });
+  }
+
+  handleRegister(e) {
+    e.preventDefault();
+
+    this.setState({
+      message: "",
+      successful: false,
+    });
+
+    this.form.validateAll();
   }
   setValueState(event) {
     this.setState({
@@ -58,8 +109,10 @@ export class Login extends Component {
                   className='text-dark rounded-3'
                   name='email'
                   type='email'
-                  placeholder='Masukkan Email Anda'
+                  placeholder='Masukkan Em
+                  onChange={this.onChangeEmail}ail Anda'
                   value={this.state.email}
+                  validations={[required, email]}
                   onChange={this.setValueState.bind(this)}
                   className='form-control rounded-pill'></input>
               </div>
