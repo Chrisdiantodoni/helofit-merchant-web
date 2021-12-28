@@ -109,8 +109,7 @@ export class Login extends Component {
                   className='text-dark rounded-3'
                   name='email'
                   type='email'
-                  placeholder='Masukkan Em
-                  onChange={this.onChangeEmail}ail Anda'
+                  placeholder='Masukkan Email Anda'
                   value={this.state.email}
                   validations={[required, email]}
                   onChange={this.setValueState.bind(this)}
