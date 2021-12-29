@@ -106,27 +106,25 @@ export class Login extends Component {
                   Alamat Email<span className='text-danger'>*</span>
                 </label>
                 <input
-                  className='text-dark rounded-3'
+                  className='text-dark rounded-3 form-control rounded-pill'
                   name='email'
                   type='email'
                   placeholder='Masukkan Email Anda'
                   value={this.state.email}
                   validations={[required, email]}
-                  onChange={this.setValueState.bind(this)}
-                  className='form-control rounded-pill'></input>
+                  onChange={this.setValueState.bind(this)}></input>
               </div>
               <div class='form-group mb-3'>
                 <label>
                   Password<span className='text-danger'>*</span>
                 </label>
                 <input
-                  className='text-dark rounded-3'
+                  className='text-dark rounded-3 form-control rounded-pill'
                   name='password'
                   type='password'
                   placeholder='Masukkan Password Anda'
                   value={this.state.password}
-                  onChange={this.setValueState.bind(this)}
-                  className='form-control rounded-pill'></input>
+                  onChange={this.setValueState.bind(this)}></input>
               </div>
               <div className='mt-2 text-danger fs-4'>{statusLog}</div>
               <p className='text-muted text-end'>Lupa password?</p>

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Axios from "axios";
+// import Axios from "axios";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import conf from "./Confpass";
 import CheckButton from "react-validation/build/button";
 
 import { isEmail } from "validator";
+import AuthService from "../services/auth.service";
 const required = (value) => {
   if (!value) {
     return (
@@ -25,25 +25,14 @@ const email = (value) => {
   }
 };
 const vfield = (value) => {
-  if (value.length < 6 || value.length > 30) {
+  if (value.length < 3 || value.length > 30) {
     return (
       <div className='alert alert-danger' role='alert'>
-        Field harus berisi antara 6 dan 30 karakter.
+        Field harus berisi antara 3 dan 30 karakter.
       </div>
     );
   }
 };
-// const vconf = (value) => {
-//   const { password, konfirmasi } = this.state;
-//   // if (password !== "undefined" && konfirmasi !== "undefined") {
-//   if (password != konfirmasi) {
-//     <div className='alert alert-danger' role='alert'>
-//       Password Harus Sama
-//     </div>;
-//   } else {
-//   }
-//   // }
-// };
 export class Daftar extends Component {
   constructor() {
     super();
@@ -51,7 +40,6 @@ export class Daftar extends Component {
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-    this.onChangeKonfirmasi = this.onChangeKonfirmasi.bind(this);
 
     this.state = {
       email: null,
@@ -59,40 +47,9 @@ export class Daftar extends Component {
       nama_belakang: null,
       successful: false,
       password: null,
-      konfirmasi: null,
       message: "",
-      tes: "Password tidak sama",
     };
-    if (this.state.password != this.state.konfirmasi) {
-      <div className='alert alert-danger' role='alert'>
-        assword tidak sama
-      </div>;
-    }
-    // const vconf = (value) => {
-    //   if (
-    //     this.state.password !== "undefined" &&
-    //     this.state.konfirmasi !== "undefined"
-    //   ) {
-    //     if (this.state.password != this.state.konfirmasi) {
-    //       <div className='alert alert-danger' role='alert'>
-    //         Ini bukan email yang valid.
-    //       </div>;
-    //     }
-    //   }
-    // };
   }
-  // vconf(v) {
-  //   if (
-  //     this.state.password !== "undefined" &&
-  //     this.state.konfirmasi !== "undefined"
-  //   ) {
-  //     if (this.state.password != this.state.konfirmasi) {
-  //       <div className='alert alert-danger' role='alert'>
-  //         Ini bukan email yang valid.
-  //       </div>;
-  //     }
-  //   }
-  // }
   onChangeUsername(e) {
     this.setState({
       username: e.target.value,
@@ -122,10 +79,38 @@ export class Daftar extends Component {
 
     this.setState({
       message: "",
-      successful: false,
+      successful: true,
     });
 
     this.form.validateAll();
+    if (this.checkBtn.context._errors.length === 0) {
+      AuthService.Daftar(
+        this.state.email,
+        this.state.nama_depan,
+        this.state.nama_belakang,
+        this.state.password
+      ).then(
+        (res) => {
+          this.setState({
+            message: res.data.message,
+            successful: true,
+          });
+        },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          this.setState({
+            successful: false,
+            message: resMessage,
+          });
+        }
+      );
+    }
   }
   setValueState(event) {
     this.setState({
@@ -134,20 +119,20 @@ export class Daftar extends Component {
   }
 
   render() {
-    var namadpnReg = this.state.nama_depan;
-    var namablkgReg = this.state.nama_belakang;
-    var emailReg = this.state.email;
-    var passwordReg = this.state.password;
-    const daftar = () => {
-      Axios.post("http://localhost:8000/daftar", {
-        nama_dpn: namadpnReg,
-        nama_blkg: namablkgReg,
-        email: emailReg,
-        password: passwordReg,
-      }).then((response) => {
-        console.log(response);
-      });
-    };
+    // var namadpnReg = this.state.nama_depan;
+    // var namablkgReg = this.state.nama_belakang;
+    // var emailReg = this.state.email;
+    // var passwordReg = this.state.password;
+    // const daftar = () => {
+    //   Axios.post("http://localhost:8000/daftar", {
+    //     nama_dpn: namadpnReg,
+    //     nama_blkg: namablkgReg,
+    //     email: emailReg,
+    //     password: passwordReg,
+    //   }).then((response) => {
+    //     console.log(response);
+    //   });
+    // };
 
     return (
       <div>
@@ -158,7 +143,7 @@ export class Daftar extends Component {
           <div className='container border border-1 w-50 rounded-3 mx-auto mb-3'>
             <Form
               className='ms-5 mt-2 mx-auto text-start me-5 mb-5'
-              onSubmit={this.handleLogin}
+              onSubmit={this.handleRegister}
               ref={(c) => {
                 this.form = c;
               }}>
@@ -176,13 +161,12 @@ export class Daftar extends Component {
                       Nama Depan<span className='text-danger'>*</span>
                     </label>
                     <Input
-                      className='text-dark'
                       name='nama_depan'
                       type='text'
                       value={this.state.nama_depan}
                       onChange={this.onChangeUsername}
                       validations={[required, vfield]}
-                      className='form-control rounded-pill'
+                      className='text-dark form-control rounded-pill'
                       placeholder='Masukkan Nama Depan'></Input>
                     <div className='form-text text-danger'>
                       {this.state.err}
@@ -193,13 +177,12 @@ export class Daftar extends Component {
                       Nama Belakang<span className='text-danger'>*</span>
                     </label>
                     <Input
-                      className='text-dark'
                       name='nama_belakang'
                       type='text'
                       value={this.state.nama_belakang}
                       onChange={this.onChangeUsername}
                       validations={[required, vfield]}
-                      className='form-control rounded-pill'
+                      className='text-dark form-control rounded-pill'
                       placeholder='Masukkan Nama Belakang'></Input>
                   </div>
                   <div class='form-group mb-3'>
@@ -207,47 +190,31 @@ export class Daftar extends Component {
                       Email<span className='text-danger'>*</span>
                     </label>
                     <Input
-                      className='text-dark rounded-3'
                       name='email'
                       type='email'
                       value={this.state.email}
                       onChange={this.onChangeEmail}
-                      className='form-control rounded-pill'
+                      className='text-dark rounded-3 form-control rounded-pill'
                       placeholder='Masukkan Email'
-                      validations={[required, email]}></Input>
+                      validations={[required, email, vfield]}></Input>
                   </div>
                   <div class='form-group mb-3'>
                     <label>
                       Password<span className='text-danger'>*</span>
                     </label>
                     <Input
-                      className='text-dark rounded-3'
                       name='password'
                       type='password'
                       value={this.state.password}
-                      className='form-control rounded-pill'
+                      className='text-dark rounded-3 form-control rounded-pill'
                       onChange={this.onChangePassword}
                       validations={[required, vfield]}
                       placeholder='Masukkan Password'></Input>
                   </div>
-                  <div class='form-group mb-3'>
-                    <label>
-                      Konfirmasi Password<span className='text-danger'>*</span>
-                    </label>
-                    <Input
-                      className='text-dark rounded-3'
-                      name='konfirmasi'
-                      type='password'
-                      value={this.state.konfirmasi}
-                      onChange={this.onChangeKonfirmasi}
-                      validations={[required]}
-                      className='form-control rounded-pill'
-                      placeholder='Masukkan Password Kembali'></Input>
-                  </div>
                   <div class='form-check mb-3'>
                     <Input
                       type='checkbox'
-                      class='form-check-input'
+                      className='form-check-input'
                       id='exampleCheck1'
                     />
                     <label class='form-check-label' for='exampleCheck1'>
@@ -267,7 +234,8 @@ export class Daftar extends Component {
                     <button
                       type='button'
                       className='btn btn-primary rounded-pill w-100'
-                      onClick={daftar}>
+                      // onClick={daftar}
+                    >
                       Daftar
                     </button>
                     <p className='text-secondary mt-2'>
@@ -292,6 +260,12 @@ export class Daftar extends Component {
                   </div>
                 </div>
               )}
+              <CheckButton
+                style={{ display: "none" }}
+                ref={(c) => {
+                  this.checkBtn = c;
+                }}
+              />
             </Form>
           </div>
         </div>

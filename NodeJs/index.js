@@ -6,8 +6,38 @@ var cors = require("cors");
 const e = require("cors");
 
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+var corsOptions = {
+  origin: "http://localhost:8000",
+};
+app.use(cors(corsOptions));
+
+const db = require("./models");
+const Role = db.role;
+
+function initial() {
+  Role.create({
+    id: 1,
+    name: "user",
+  });
+
+  Role.create({
+    id: 2,
+    name: "moderator",
+  });
+
+  Role.create({
+    id: 3,
+    name: "admin",
+  });
+}
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("Drop and Resync Db");
+//   initial();
+// });
+
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
 
 var conn = mysql.createConnection({
   host: "localhost",
@@ -28,40 +58,43 @@ conn.connect((err) => {
   // );
 });
 
-app.post("/daftar", (req, res) => {
-  var email = req.body.email;
-  var nama_dpn = req.body.nama_dpn;
-  var nama_blkg = req.body.nama_blkg;
-  var password = req.body.password;
-  conn.query(
-    "INSERT INTO user (email, nama_dpn, nama_blkg, password) VALUES (?,?,?,?)",
-    [email, nama_dpn, nama_blkg, password],
-    (err, result) => {
-      console.log(err);
-    }
-  );
+app.get("/", (req, res) => {
+  res.json({ message: "Database." });
 });
+// app.post("/daftar", (req, res) => {
+//   var email = req.body.email;
+//   var nama_dpn = req.body.nama_dpn;
+//   var nama_blkg = req.body.nama_blkg;
+//   var password = req.body.password;
+//   conn.query(
+//     "INSERT INTO user (email, nama_dpn, nama_blkg, password) VALUES (?,?,?,?)",
+//     [email, nama_dpn, nama_blkg, password],
+//     (err, result) => {
+//       console.log(err);
+//     }
+//   );
+// });
 
-app.post("/login", (req, res) => {
-  var email = req.body.email;
-  var password = req.body.password;
-  conn.query(
-    "SELECT * FROM user WHERE email = ? AND password = ?",
-    [email, password],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        res.send(result);
-      } else {
-        res.send({
-          message: "Login gagal. Mohon periksa Email/Password Anda kembali",
-        });
-      }
-    }
-  );
-});
+// app.post("/login", (req, res) => {
+//   var email = req.body.email;
+//   var password = req.body.password;
+//   conn.query(
+//     "SELECT * FROM user WHERE email = ? AND password = ?",
+//     [email, password],
+//     (err, result) => {
+//       if (err) {
+//         res.send({ err: err });
+//       }
+//       if (result.length > 0) {
+//         res.send(result);
+//       } else {
+//         res.send({
+//           message: "Login gagal. Mohon periksa Email/Password Anda kembali",
+//         });
+//       }
+//     }
+//   );
+// });
 
 app.listen(8000, () => {
   console.log("Server berjalan di port 8000");
