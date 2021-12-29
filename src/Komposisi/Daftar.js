@@ -76,13 +76,13 @@ export class Daftar extends Component {
 
   handleRegister(e) {
     e.preventDefault();
-
     this.setState({
       message: "",
-      successful: true,
+      successful: false,
     });
 
     this.form.validateAll();
+
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.Daftar(
         this.state.email,
@@ -232,7 +232,7 @@ export class Daftar extends Component {
                   </div>
                   <div className='text-center'>
                     <button
-                      type='button'
+                      type='submit'
                       className='btn btn-primary rounded-pill w-100'
                       // onClick={daftar}
                     >
