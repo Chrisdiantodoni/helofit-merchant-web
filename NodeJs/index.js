@@ -7,10 +7,12 @@ const e = require("cors");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-var corsOptions = {
-  origin: "http://localhost:8000",
-};
-app.use(cors(corsOptions));
+// var corsOptions = {
+//   origin: "http://localhost:8000",
+//   methods: ["GET", "POST"],
+//   credentials: true,
+// };
+app.use(cors());
 
 const db = require("./models");
 const Role = db.role;

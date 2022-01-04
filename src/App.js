@@ -9,6 +9,7 @@ import Beranda from "./Komposisi/Beranda";
 import Layanan from "./Komposisi/Layanan";
 import Daftar from "./Komposisi/Daftar";
 import Login from "./Komposisi/Login";
+import Welcome from "./Komposisi/Welcome";
 import AuthService from "./services/auth.service";
 import {
   BrowserRouter as Router,
@@ -44,6 +45,7 @@ class App extends React.Component {
     AuthService.logout();
   }
   render() {
+    const currentUser = this.state;
     const routes = [
       {
         path: "/",
@@ -61,6 +63,10 @@ class App extends React.Component {
       {
         path: "/login",
         render: () => <Login />,
+      },
+      {
+        path: "/welcome",
+        render: () => <Welcome />,
       },
     ];
     return (
