@@ -11,7 +11,7 @@ var bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
   // Save User to Database
   User.create({
-    nama_dpn: req.body.nama_depan,
+    nama_dpn: req.body.nama_dpn,
     nama_blkg: req.body.nama_blkg,
     email: req.body.email,
     password: req.body.password,
@@ -49,10 +49,8 @@ exports.signin = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "Email tidak ditemukan!" });
       }
-
-      //   var passwordIsValid = (req.body.password, user.password);
 
       if (req.body.password != user.password) {
         return res.status(401).send({

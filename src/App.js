@@ -22,12 +22,12 @@ import {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.logOut = this.logOut.bind(this);
+    this.Keluar = this.Keluar.bind(this);
 
     this.state = {
       showModeratorBoard: false,
       showAdminBoard: false,
-      currentUser: undefined,
+      currentUser: true,
     };
   }
   componentDidMount() {
@@ -41,8 +41,8 @@ class App extends React.Component {
       });
     }
   }
-  logOut() {
-    AuthService.logout();
+  Keluar() {
+    AuthService.Keluar();
   }
   render() {
     const currentUser = this.state;
@@ -127,11 +127,27 @@ class App extends React.Component {
                   title='Keranjang'>
                   <BsCart3 className='icon' />
                 </Navbar.Brand>
-                <Nav.Link href='/login'>
-                  <Button variant='primary' className='rounded-3'>
-                    Masuk
-                  </Button>
-                </Nav.Link>
+                {currentUser ? (
+                  <Nav>
+                    <Nav.Link to={"/welcome"} className='nav-link'>
+                      {currentUser.nama_dpn}
+                    </Nav.Link>
+                    <Nav.Link
+                      href='/login'
+                      className='nav-link'
+                      onClick={this.Keluar}>
+                      <Button variant='danger' className='rounded-3'>
+                        Logout
+                      </Button>
+                    </Nav.Link>
+                  </Nav>
+                ) : (
+                  <Nav.Link href='/login'>
+                    <Button variant='primary' className='rounded-3'>
+                      Masuk
+                    </Button>
+                  </Nav.Link>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>

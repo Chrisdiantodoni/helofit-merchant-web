@@ -37,9 +37,6 @@ export class Daftar extends Component {
   constructor() {
     super();
     this.handleRegister = this.handleRegister.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
       email: null,
@@ -49,29 +46,6 @@ export class Daftar extends Component {
       password: null,
       message: "",
     };
-  }
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value,
-    });
-  }
-
-  onChangeEmail(e) {
-    this.setState({
-      email: e.target.value,
-    });
-  }
-
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value,
-    });
-  }
-
-  onChangeKonfirmasi(e) {
-    this.setState({
-      konfirmasi: e.target.value,
-    });
   }
 
   handleRegister(e) {
@@ -164,7 +138,7 @@ export class Daftar extends Component {
                       name='nama_depan'
                       type='text'
                       value={this.state.nama_depan}
-                      onChange={this.onChangeUsername}
+                      onChange={this.setValueState.bind(this)}
                       validations={[required, vfield]}
                       className='text-dark form-control rounded-pill'
                       placeholder='Masukkan Nama Depan'></Input>
@@ -180,7 +154,7 @@ export class Daftar extends Component {
                       name='nama_belakang'
                       type='text'
                       value={this.state.nama_belakang}
-                      onChange={this.onChangeUsername}
+                      onChange={this.setValueState.bind(this)}
                       validations={[required, vfield]}
                       className='text-dark form-control rounded-pill'
                       placeholder='Masukkan Nama Belakang'></Input>
@@ -193,7 +167,7 @@ export class Daftar extends Component {
                       name='email'
                       type='email'
                       value={this.state.email}
-                      onChange={this.onChangeEmail}
+                      onChange={this.setValueState.bind(this)}
                       className='text-dark rounded-3 form-control rounded-pill'
                       placeholder='Masukkan Email'
                       validations={[required, email, vfield]}></Input>
@@ -207,7 +181,7 @@ export class Daftar extends Component {
                       type='password'
                       value={this.state.password}
                       className='text-dark rounded-3 form-control rounded-pill'
-                      onChange={this.onChangePassword}
+                      onChange={this.setValueState.bind(this)}
                       validations={[required, vfield]}
                       placeholder='Masukkan Password'></Input>
                   </div>

@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import Axios from "axios";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
 import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.css";
 import { isEmail } from "validator";
-
+import { withRouter } from "react-router-dom";
+import AuthService from "../services/auth.service";
 const required = (value) => {
   if (!value) {
     return (
       <div className='alert alert-danger' role='alert'>
-        Bagian ini diperlukan!
+        Field perlu diisi!
       </div>
     );
   }
@@ -25,75 +29,101 @@ const email = (value) => {
   }
 };
 
+const vfield = (value) => {
+  if (value.length < 3 || value.length > 30) {
+    return (
+      <div className='alert alert-danger' role='alert'>
+        Field harus berisi antara 3 dan 30 karakter.
+      </div>
+    );
+  }
+};
 export class Login extends Component {
   constructor() {
     super();
-    this.handleRegister = this.handleRegister.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
 
     this.state = {
       email: null,
       password: null,
       successful: false,
+      loading: false,
       message: "",
-      status: null,
     };
   }
 
-  onChangeEmail(e) {
-    this.setState({
-      email: e.target.value,
-    });
-  }
-
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value,
-    });
-  }
-
-  handleRegister(e) {
-    e.preventDefault();
-
-    this.setState({
-      message: "",
-      successful: false,
-    });
-
-    this.form.validateAll();
-  }
   setValueState(event) {
     this.setState({
       [event.target.name]: event.target.value,
     });
   }
-  render() {
-    var emailLog = this.state.email;
-    var passwordLog = this.state.password;
-    var statusLog = this.state.status;
-    const login = () => {
-      Axios.post("http://localhost:8000/login", {
-        email: emailLog,
-        password: passwordLog,
-      }).then((res) => {
-        if (res.data.message) {
-          statusLog = res.data.message;
-        } else {
-          localStorage.setItem("token", res.token);
+  handleLogin(e) {
+    e.preventDefault();
+
+    this.setState({
+      message: "",
+      loading: true,
+    });
+
+    this.form.validateAll();
+
+    if (this.checkBtn.context._errors.length === 0) {
+      AuthService.login(this.state.email, this.state.password).then(
+        () => {
+          this.props.history.push("/welcome");
+          window.location.reload();
+        },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          this.setState({
+            loading: false,
+            message: resMessage,
+          });
         }
-        this.setState({
-          status: statusLog,
-        });
-        console.log(res);
+      );
+    } else {
+      this.setState({
+        loading: false,
       });
-    };
+    }
+  }
+  render() {
+    // var emailLog = this.state.email;
+    // var passwordLog = this.state.password;
+    // var statusLog = this.state.status;
+    // const login = () => {
+    //   Axios.post("http://localhost:8000/login", {
+    //     email: emailLog,
+    //     password: passwordLog,
+    //   }).then((res) => {
+    //     if (res.data.message) {
+    //       statusLog = res.data.message;
+    //     } else {
+    //       localStorage.setItem("token", res.token);
+    //     }
+    //     this.setState({
+    //       status: statusLog,
+    //     });
+    //     console.log(res);
+    //   });
+    // };
     return (
       <div class='container mx-auto mt-5'>
         <div class='kanvas row shadow border border-1'>
           <div class='col-md'></div>
           <div class='col-md kanan'>
-            <form className='container'>
+            <Form
+              className='container'
+              onSubmit={this.handleLogin}
+              ref={(c) => {
+                this.form = c;
+              }}>
               <h3 className='text-center pt-2'>
                 Masuk ke Akun Microdigi Kamu!
                 <p className='text-muted fs-6 pt-2'>
@@ -105,35 +135,38 @@ export class Login extends Component {
                 <label>
                   Alamat Email<span className='text-danger'>*</span>
                 </label>
-                <input
+                <Input
                   className='text-dark rounded-3 form-control rounded-pill'
                   name='email'
                   type='email'
                   placeholder='Masukkan Email Anda'
                   value={this.state.email}
-                  validations={[required, email]}
-                  onChange={this.setValueState.bind(this)}></input>
+                  validations={[required, email, vfield]}
+                  onChange={this.setValueState.bind(this)}></Input>
               </div>
               <div class='form-group mb-3'>
                 <label>
                   Password<span className='text-danger'>*</span>
                 </label>
-                <input
+                <Input
                   className='text-dark rounded-3 form-control rounded-pill'
                   name='password'
                   type='password'
                   placeholder='Masukkan Password Anda'
                   value={this.state.password}
-                  onChange={this.setValueState.bind(this)}></input>
+                  validations={[required, vfield]}
+                  onChange={this.setValueState.bind(this)}></Input>
               </div>
-              <div className='mt-2 text-danger fs-4'>{statusLog}</div>
               <p className='text-muted text-end'>Lupa password?</p>
               <div className='text-center'>
                 <button
-                  type='button'
+                  type='submit'
                   className='btn btn-primary rounded-pill w-100'
-                  onClick={login}>
-                  Masuk
+                  disabled={this.state.loading}>
+                  {this.state.loading && (
+                    <span className='spinner-border spinner-border-sm'></span>
+                  )}
+                  <span>Masuk</span>
                 </button>
                 <p className='text-secondary mt-2'>
                   Belum punya akun? <span> </span>
@@ -142,7 +175,20 @@ export class Login extends Component {
                   </a>
                 </p>
               </div>
-            </form>
+              {this.state.message && (
+                <div className='form-group'>
+                  <div className='alert alert-danger' role='alert'>
+                    {this.state.message}
+                  </div>
+                </div>
+              )}
+              <CheckButton
+                style={{ display: "none" }}
+                ref={(c) => {
+                  this.checkBtn = c;
+                }}
+              />
+            </Form>
           </div>
         </div>
       </div>
@@ -150,4 +196,4 @@ export class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
