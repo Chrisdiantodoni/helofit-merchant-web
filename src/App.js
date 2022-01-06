@@ -9,6 +9,7 @@ import Beranda from "./Komposisi/Beranda";
 import Layanan from "./Komposisi/Layanan";
 import Daftar from "./Komposisi/Daftar";
 import Login from "./Komposisi/Login";
+import Tentang from "./Komposisi/Tentang";
 import Welcome from "./Komposisi/Welcome";
 import AuthService from "./services/auth.service";
 import {
@@ -85,6 +86,10 @@ class App extends React.Component {
       {
         path: "/layanan",
         render: () => <Layanan />,
+      },
+      {
+        path: "/tentang",
+        render: () => <Tentang />,
       },
       {
         path: "/daftar",
