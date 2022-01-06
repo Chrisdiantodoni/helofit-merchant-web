@@ -34,6 +34,7 @@ class App extends React.Component {
     const user = AuthService.getCurrentUser();
 
     if (user) {
+
       this.setState({
         currentUser: user,
         showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
@@ -46,6 +47,34 @@ class App extends React.Component {
   }
   render() {
     var buttons;
+    if(this.currentUser){
+      buttons = (
+      <Nav>
+                    <Nav.Link to={"/welcome"} className='nav-link'>
+                      {currentUser.nama_dpn}
+                    </Nav.Link>
+                    <Nav.Link
+                      href='/login'
+                      className='nav-link'
+                      onClick={this.Keluar}>
+                      <Button variant='danger' className='rounded-3'>
+                        Logout
+                      </Button>
+                    </Nav.Link>
+                  </Nav>
+      )
+
+    }else
+    {
+      buttons = (
+      <Nav.Link href='/login'>
+                    <Button variant='primary' className='rounded-3'>
+                      Masuk
+                    </Button>
+                  </Nav.Link>
+      )
+    }
+
     const currentUser = this.state;
     const routes = [
       {
@@ -120,7 +149,8 @@ class App extends React.Component {
                 </Nav.Link>
               </Nav>
               <Nav className='ms-auto me-5'>
-                {currentUser ? (
+                {buttons}
+                {/* {currentUser ? (
                   <Nav>
                     <Nav.Link to={"/welcome"} className='nav-link'>
                       {currentUser.nama_dpn}
@@ -140,7 +170,7 @@ class App extends React.Component {
                       Masuk
                     </Button>
                   </Nav.Link>
-                )}
+                )} */}
               </Nav>
             </Navbar.Collapse>
           </Container>
