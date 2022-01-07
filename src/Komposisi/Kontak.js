@@ -36,6 +36,15 @@ const vfield = (value) => {
     );
   }
 };
+const vpesan = (value) => {
+  if (value.length < 20 || value.length > 200) {
+    return (
+      <div className='alert alert-danger' role='alert'>
+        Pesan harus berisi antara 20 dan 200 karakter.
+      </div>
+    );
+  }
+};
 export class Kontak extends Component {
   constructor() {
     super();
@@ -73,7 +82,6 @@ export class Kontak extends Component {
               <GoLocation /> Jl. M.H Thamrin No 112 Medan
             </p>
             <br />
-
             <BsInstagram className='ms-5 icon ig text-center m-1 mb-2' />
             <BsFacebook className='icon fb text-center m-1 mb-2' />
           </div>
@@ -118,8 +126,8 @@ export class Kontak extends Component {
                   name='pesan'
                   type='text'
                   placeholder='Masukkan Pesan Anda'
-                  value={this.state.email}
-                  validations={[required]}
+                  value={this.state.pesan}
+                  validations={[required, vpesan]}
                   onChange={this.setValueState.bind(this)}></Input>
               </div>
               <div className='text-center'>
