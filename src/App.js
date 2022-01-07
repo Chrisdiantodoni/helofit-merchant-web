@@ -9,6 +9,7 @@ import Beranda from "./Komposisi/Beranda";
 import Layanan from "./Komposisi/Layanan";
 import Daftar from "./Komposisi/Daftar";
 import Login from "./Komposisi/Login";
+import Kontak from "./Komposisi/Kontak";
 import Tentang from "./Komposisi/Tentang";
 import Welcome from "./Komposisi/Welcome";
 import AuthService from "./services/auth.service";
@@ -35,7 +36,6 @@ class App extends React.Component {
     const user = AuthService.getCurrentUser();
 
     if (user) {
-
       this.setState({
         currentUser: user,
         showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
@@ -46,37 +46,48 @@ class App extends React.Component {
   Keluar() {
     AuthService.Keluar();
   }
+  On() {
+    this.setState({
+      currentUser: false,
+    });
+  }
+  Off() {
+    this.setState({
+      currentUser: true,
+    });
+  }
   render() {
     var buttons;
-    if(this.currentUser){
+    const currentUser = this.state;
+    if (currentUser) {
       buttons = (
-      <Nav>
-                    <Nav.Link to={"/welcome"} className='nav-link'>
-                      {currentUser.nama_dpn}
-                    </Nav.Link>
-                    <Nav.Link
-                      href='/login'
-                      className='nav-link'
-                      onClick={this.Keluar}>
-                      <Button variant='danger' className='rounded-3'>
-                        Logout
-                      </Button>
-                    </Nav.Link>
-                  </Nav>
-      )
-
-    }else
-    {
+        <Nav>
+          <Nav.Link to={"/welcome"} className='nav-link'>
+            {currentUser.nama_dpn}
+          </Nav.Link>
+          <Nav.Link href='/login' className='nav-link' onClick={this.Keluar}>
+            <Button
+              variant='danger'
+              className='rounded-3'
+              onClick={this.Off.bind(this)}>
+              Logout
+            </Button>
+          </Nav.Link>
+        </Nav>
+      );
+    } else {
       buttons = (
-      <Nav.Link href='/login'>
-                    <Button variant='primary' className='rounded-3'>
-                      Masuk
-                    </Button>
-                  </Nav.Link>
-      )
+        <Nav.Link href='/login'>
+          <Button
+            variant='primary'
+            className='rounded-3'
+            onClick={this.On.bind(this)}>
+            Masuk
+          </Button>
+        </Nav.Link>
+      );
     }
 
-    const currentUser = this.state;
     const routes = [
       {
         path: "/",
@@ -94,6 +105,10 @@ class App extends React.Component {
       {
         path: "/daftar",
         render: () => <Daftar />,
+      },
+      {
+        path: "/kontak",
+        render: () => <Kontak />,
       },
       {
         path: "/login",
