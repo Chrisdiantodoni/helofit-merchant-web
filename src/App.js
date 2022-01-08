@@ -11,6 +11,9 @@ import Daftar from "./Komposisi/Daftar";
 import Login from "./Komposisi/Login";
 import Kontak from "./Komposisi/Kontak";
 import Tentang from "./Komposisi/Tentang";
+import Keuangan from "./Komposisi/Keuangan";
+import Manajemen from "./Komposisi/Manajemen";
+import FAQ from "./Komposisi/FAQ";
 import Welcome from "./Komposisi/Welcome";
 import AuthService from "./services/auth.service";
 import {
@@ -61,32 +64,62 @@ class App extends React.Component {
     const currentUser = this.state;
     if (currentUser) {
       buttons = (
-        <Nav>
-          <Nav.Link to={"/welcome"} className='nav-link'>
-            {currentUser.nama_dpn}
-          </Nav.Link>
-          <Nav.Link href='/login' className='nav-link' onClick={this.Keluar}>
-            <Button
-              variant='danger'
-              className='rounded-3'
-              onClick={this.Off.bind(this)}>
-              Logout
-            </Button>
-          </Nav.Link>
-        </Nav>
+        <div className='navbar-nav ml-auto'>
+          <li className='nav-item'>
+            <Nav.Link to={"/welcome"} className='nav-link'>
+              {currentUser.nama_dpn}
+            </Nav.Link>
+          </li>
+          <li className='nav-item'>
+            <Nav.Link href='/login' className='nav-link' onClick={this.Keluar}>
+              <Button variant='danger' className='rounded-3'>
+                Logout
+              </Button>
+            </Nav.Link>
+          </li>
+        </div>
       );
     } else {
       buttons = (
-        <Nav.Link href='/login'>
-          <Button
-            variant='primary'
-            className='rounded-3'
-            onClick={this.On.bind(this)}>
-            Masuk
-          </Button>
-        </Nav.Link>
+        <div className='navbar-nav ml-auto'>
+          <li className='nav-item'>
+            <Nav.Link href='/login'>
+              <Button variant='primary' className='rounded-3'>
+                Masuk
+              </Button>
+            </Nav.Link>
+          </li>
+        </div>
       );
     }
+    // if (currentUser) {
+    //   buttons = (
+    //     <Nav>
+    //       <Nav.Link to={"/welcome"} className='nav-link'>
+    //         {currentUser.nama_dpn}
+    //       </Nav.Link>
+    //       <Nav.Link href='/login' className='nav-link' onClick={this.Keluar}>
+    //         <Button
+    //           variant='danger'
+    //           className='rounded-3'
+    //           onClick={this.Off.bind(this)}>
+    //           Logout
+    //         </Button>
+    //       </Nav.Link>
+    //     </Nav>
+    //   );
+    // } else {
+    //   buttons = (
+    //     <Nav.Link href='/login'>
+    //       <Button
+    //         variant='primary'
+    //         className='rounded-3'
+    //         onClick={this.On.bind(this)}>
+    //         Masuk
+    //       </Button>
+    //     </Nav.Link>
+    //   );
+    // }
 
     const routes = [
       {
@@ -109,6 +142,18 @@ class App extends React.Component {
       {
         path: "/kontak",
         render: () => <Kontak />,
+      },
+      {
+        path: "/faq",
+        render: () => <FAQ />,
+      },
+      {
+        path: "/manajemen",
+        render: () => <Manajemen />,
+      },
+      {
+        path: "/keuangan",
+        render: () => <Keuangan />,
       },
       {
         path: "/login",

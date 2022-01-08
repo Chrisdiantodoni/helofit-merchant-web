@@ -36,35 +36,22 @@ export class Footer extends Component {
                 <a className='aktif-footer' href='/kontak'>
                   Kontak
                 </a>
+                <br />
+                <a className='aktif-footer' href='/faq'>
+                  Bantuan/FAQ
+                </a>
               </p>
             </div>
             <div className='col-md-2 text-start mt-4'>
               <h5>Layanan</h5>
               <p>
-                <a className='aktif-footer' href='/desain'>
-                  Desain Grafis
+                <a className='aktif-footer' href='/manajemen'>
+                  Manajemen Kegiatan
                 </a>
                 <br />
-                <a className='aktif-footer' href='/editing'>
-                  Editing Video
+                <a className='aktif-footer' href='/keuangan'>
+                  Catatan Keuangan
                 </a>
-                <br />
-                <a className='aktif-footer' href='/aplikasi'>
-                  Pembuatan Aplikasi
-                </a>
-                <br />
-                <a className='aktif-footer' href='/voice'>
-                  Voice Over
-                </a>
-                <br />
-                <a className='aktif-footer' href='/website'>
-                  Pembuatan Website
-                </a>
-                <br />
-                <a className='aktif-footer' href='/marketing'>
-                  Digital Marketing
-                </a>
-                <br />
               </p>
             </div>
             <div className='col-md-2 text-start mt-4'>
