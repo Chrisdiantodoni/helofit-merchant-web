@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
 import "../css/bootstrap.min.css";
 import "./Kontak.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BsTelephone, BsFacebook, BsInstagram } from "react-icons/bs";
 import { GoLocation, GoMail } from "react-icons/go";
 import { isEmail } from "validator";
+import * as Axios from "axios";
 const required = (value) => {
   if (!value) {
     return (
@@ -45,20 +47,80 @@ const vpesan = (value) => {
     );
   }
 };
+
 export class Kontak extends Component {
   constructor() {
     super();
+    this.handleKontak = this.handleKontak.bind(this);
 
     this.state = {
       nama: "",
       email: "",
       pesan: "",
+      loading: false,
+      successful: false,
+      message: "",
     };
   }
   setValueState(event) {
     this.setState({
       [event.target.name]: event.target.value,
     });
+  }
+
+  handleKontak(e) {
+    e.preventDefault();
+    this.setState({
+      message: "",
+      successful: false,
+    });
+
+    this.form.validateAll();
+    if (this.checkBtn.context._errors.length === 0) {
+      Axios.post("http://localhost:8000/feedback", {
+        nama: this.state.nama,
+        email: this.state.email,
+        pesan: this.state.pesan,
+      }).then(
+        (res) => {
+          this.setState({
+            message: res.data.message,
+            successful: true,
+          });
+        },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          this.setState({
+            successful: false,
+            message: resMessage,
+          });
+        }
+      );
+
+      // .then(() => {
+      //   this.setState({
+      //     message: "Feedback Anda Telah Diterima :)",
+      //     successful: true,
+      //   });
+      // });
+      // AuthService.Pesan(
+      //   this.state.nama,
+      //   this.state.email,
+      //   this.state.pesan
+      // ).then((res) => {
+      // this.setState({
+      //   message: res.data.message,
+      //   successful: true,
+      // });
+      //   console.log(this.state.message);
+      // });
+    }
   }
   render() {
     return (
@@ -88,66 +150,83 @@ export class Kontak extends Component {
           <div class='col-md kanan h-75'>
             <Form
               className='container'
+              onSubmit={this.handleKontak}
               ref={(c) => {
                 this.form = c;
               }}>
-              <div class='form-group mb-2'>
-                <label>
-                  Nama Kamu<span className='text-danger'>*</span>
-                </label>
-                <Input
-                  className='text-dark rounded-3 form-control rounded-pill'
-                  name='nama'
-                  type='text'
-                  placeholder='Masukkan Nama Anda'
-                  value={this.state.nama}
-                  validations={[required, vfield]}
-                  onChange={this.setValueState.bind(this)}></Input>
-              </div>
-              <div class='form-group mb-2'>
-                <label>
-                  Email Kamu<span className='text-danger'>*</span>
-                </label>
-                <Input
-                  className='text-dark rounded-3 form-control rounded-pill'
-                  name='email'
-                  type='email'
-                  placeholder='Masukkan Email Anda'
-                  value={this.state.email}
-                  validations={[required, email, vfield]}
-                  onChange={this.setValueState.bind(this)}></Input>
-              </div>
-              <div class='form-group mb-3'>
-                <label>
-                  Pesan<span className='text-danger'>*</span>
-                </label>
-                <Input
-                  className='text-dark rounded-3 form-control rounded-pill'
-                  name='pesan'
-                  type='text'
-                  placeholder='Masukkan Pesan Anda'
-                  value={this.state.pesan}
-                  validations={[required, vpesan]}
-                  onChange={this.setValueState.bind(this)}></Input>
-              </div>
-              <div className='text-center'>
-                <button
-                  type='submit'
-                  className='btn btn-primary rounded-pill w-100 mb-5'
-                  disabled={this.state.loading}>
-                  {this.state.loading && (
-                    <span className='spinner-border spinner-border-sm'></span>
-                  )}
-                  <span>Kirim Pesan</span>
-                </button>
-              </div>
+              {!this.state.successful && (
+                <div>
+                  <div class='form-group mb-2'>
+                    <label>
+                      Nama Kamu<span className='text-danger'>*</span>
+                    </label>
+                    <Input
+                      className='text-dark rounded-3 form-control rounded-pill'
+                      name='nama'
+                      type='text'
+                      placeholder='Masukkan Nama Anda'
+                      value={this.state.nama}
+                      validations={[required, vfield]}
+                      onChange={this.setValueState.bind(this)}></Input>
+                  </div>
+                  <div class='form-group mb-2'>
+                    <label>
+                      Email Kamu<span className='text-danger'>*</span>
+                    </label>
+                    <Input
+                      className='text-dark rounded-3 form-control rounded-pill'
+                      name='email'
+                      type='email'
+                      placeholder='Masukkan Email Anda'
+                      value={this.state.email}
+                      validations={[required, email, vfield]}
+                      onChange={this.setValueState.bind(this)}></Input>
+                  </div>
+                  <div class='form-group mb-3'>
+                    <label>
+                      Pesan<span className='text-danger'>*</span>
+                    </label>
+                    <Input
+                      className='text-dark rounded-3 form-control rounded-pill'
+                      name='pesan'
+                      type='text'
+                      placeholder='Masukkan Pesan Anda'
+                      value={this.state.pesan}
+                      validations={[required, vpesan]}
+                      onChange={this.setValueState.bind(this)}></Input>
+                  </div>
+                  <div className='text-center'>
+                    <button
+                      type='submit'
+                      className='btn btn-primary rounded-pill w-100 mb-5'
+                      disabled={this.state.loading}>
+                      {this.state.loading && (
+                        <span className='spinner-border spinner-border-sm'></span>
+                      )}
+                      <span>Kirim Pesan</span>
+                    </button>
+                  </div>
+                </div>
+              )}
               {this.state.message && (
                 <div className='form-group'>
-                  <div className='alert alert-danger' role='alert'>
+                  <div
+                    className={
+                      this.state.successful
+                        ? "alert alert-success"
+                        : "alert alert-danger"
+                    }
+                    role='alert'>
                     {this.state.message}
                   </div>
                 </div>
               )}
+              <CheckButton
+                style={{ display: "none" }}
+                ref={(c) => {
+                  this.checkBtn = c;
+                }}
+              />
             </Form>
           </div>
         </div>

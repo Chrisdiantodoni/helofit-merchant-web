@@ -94,25 +94,6 @@ export class Login extends Component {
     }
   }
   render() {
-    // var emailLog = this.state.email;
-    // var passwordLog = this.state.password;
-    // var statusLog = this.state.status;
-    // const login = () => {
-    //   Axios.post("http://localhost:8000/login", {
-    //     email: emailLog,
-    //     password: passwordLog,
-    //   }).then((res) => {
-    //     if (res.data.message) {
-    //       statusLog = res.data.message;
-    //     } else {
-    //       localStorage.setItem("token", res.token);
-    //     }
-    //     this.setState({
-    //       status: statusLog,
-    //     });
-    //     console.log(res);
-    //   });
-    // };
     return (
       <div class='container mx-auto mt-5'>
         <div class='kanvas row shadow border border-1'>

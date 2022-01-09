@@ -142,9 +142,6 @@ export class Daftar extends Component {
                       validations={[required, vfield]}
                       className='text-dark form-control rounded-pill'
                       placeholder='Masukkan Nama Depan'></Input>
-                    <div className='form-text text-danger'>
-                      {this.state.err}
-                    </div>
                   </div>
                   <div class='form-group mb-3'>
                     <label>

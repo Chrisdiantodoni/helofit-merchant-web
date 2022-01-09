@@ -49,16 +49,6 @@ class App extends React.Component {
   Keluar() {
     AuthService.Keluar();
   }
-  On() {
-    this.setState({
-      currentUser: false,
-    });
-  }
-  Off() {
-    this.setState({
-      currentUser: true,
-    });
-  }
   render() {
     var buttons;
     const currentUser = this.state;
@@ -92,34 +82,6 @@ class App extends React.Component {
         </div>
       );
     }
-    // if (currentUser) {
-    //   buttons = (
-    //     <Nav>
-    //       <Nav.Link to={"/welcome"} className='nav-link'>
-    //         {currentUser.nama_dpn}
-    //       </Nav.Link>
-    //       <Nav.Link href='/login' className='nav-link' onClick={this.Keluar}>
-    //         <Button
-    //           variant='danger'
-    //           className='rounded-3'
-    //           onClick={this.Off.bind(this)}>
-    //           Logout
-    //         </Button>
-    //       </Nav.Link>
-    //     </Nav>
-    //   );
-    // } else {
-    //   buttons = (
-    //     <Nav.Link href='/login'>
-    //       <Button
-    //         variant='primary'
-    //         className='rounded-3'
-    //         onClick={this.On.bind(this)}>
-    //         Masuk
-    //       </Button>
-    //     </Nav.Link>
-    //   );
-    // }
 
     const routes = [
       {
@@ -214,28 +176,11 @@ class App extends React.Component {
                 </Nav.Link>
               </Nav>
               <Nav className='ms-auto me-5'>
-                {buttons}
-                {/* {currentUser ? (
-                  <Nav>
-                    <Nav.Link to={"/welcome"} className='nav-link'>
-                      {currentUser.nama_dpn}
-                    </Nav.Link>
-                    <Nav.Link
-                      href='/login'
-                      className='nav-link'
-                      onClick={this.Keluar}>
-                      <Button variant='danger' className='rounded-3'>
-                        Logout
-                      </Button>
-                    </Nav.Link>
-                  </Nav>
-                ) : (
-                  <Nav.Link href='/login'>
-                    <Button variant='primary' className='rounded-3'>
-                      Masuk
-                    </Button>
-                  </Nav.Link>
-                )} */}
+                <Nav.Link href='/login'>
+                  <Button variant='primary' className='rounded-3'>
+                    Masuk
+                  </Button>
+                </Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>

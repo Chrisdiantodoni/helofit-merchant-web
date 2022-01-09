@@ -6,7 +6,6 @@ const Role = db.role;
 const Op = db.Sequelize.Op;
 
 var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -40,7 +39,6 @@ exports.signup = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
-
 exports.signin = (req, res) => {
   User.findOne({
     where: {
@@ -70,7 +68,7 @@ exports.signin = (req, res) => {
         }
         res.status(200).send({
           id: user.id,
-          username: user.username,
+          nama_dpn: user.nama_dpn,
           email: user.email,
           roles: authorities,
           accessToken: token,

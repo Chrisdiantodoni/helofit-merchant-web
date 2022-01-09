@@ -22,6 +22,14 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
+  Pesan(nama, email, pesan) {
+    return axios.post(API_URL + "feedback", {
+      nama,
+      email,
+      pesan,
+    });
+  }
+
   Daftar(email, nama_dpn, nama_blkg, password) {
     return axios.post(API_URL + "signup", {
       email,

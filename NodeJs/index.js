@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const db = require("./models");
+const db1 = require("./models");
 const Role = db.role;
 
 function initial() {
@@ -58,10 +59,30 @@ conn.connect((err) => {
   //     else console.log("Tabel user berhasil dibuat");
   //   }
   // );
+  // conn.query(
+  //   "CREATE TABLE feedbacks (No INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, nama VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, pesan VARCHAR(200) NOT NULL)",
+  //   (err, result) => {
+  //     if (err) console.error("Error saat membuat tabel " + err);
+  //     else console.log("Tabel feedbacks berhasil dibuat");
+  //   }
+  // );
 });
 
 app.get("/", (req, res) => {
   res.json({ message: "Database." });
+});
+app.post("/feedback", (req, res) => {
+  var nama = req.body.nama;
+  var email = req.body.email;
+  var pesan = req.body.pesan;
+  conn.query(
+    "INSERT INTO feedbacks (nama, email, pesan) VALUES (?,?,?)",
+    [nama, email, pesan],
+    (err, result) => {
+      res.send({ message: "Feedback Anda Telah Diterima :)" });
+      console.log(result);
+    }
+  );
 });
 // app.post("/daftar", (req, res) => {
 //   var email = req.body.email;
@@ -73,27 +94,6 @@ app.get("/", (req, res) => {
 //     [email, nama_dpn, nama_blkg, password],
 //     (err, result) => {
 //       console.log(err);
-//     }
-//   );
-// });
-
-// app.post("/login", (req, res) => {
-//   var email = req.body.email;
-//   var password = req.body.password;
-//   conn.query(
-//     "SELECT * FROM user WHERE email = ? AND password = ?",
-//     [email, password],
-//     (err, result) => {
-//       if (err) {
-//         res.send({ err: err });
-//       }
-//       if (result.length > 0) {
-//         res.send(result);
-//       } else {
-//         res.send({
-//           message: "Login gagal. Mohon periksa Email/Password Anda kembali",
-//         });
-//       }
 //     }
 //   );
 // });
