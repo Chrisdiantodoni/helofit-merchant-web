@@ -19,8 +19,8 @@ export class FAQ extends Component {
                 </span>
               </Accordion.Header>
               <Accordion.Body>
-                <span className='fw-bold'>
-                  Jawaban: Untuk pendaftaran sebgai pengguna semuanya GRATIS
+                <span className='text-secondary'>
+                  Untuk pendaftaran sebagai pengguna semuanya GRATIS
                 </span>
               </Accordion.Body>
             </Accordion.Item>
@@ -31,9 +31,8 @@ export class FAQ extends Component {
                 </span>
               </Accordion.Header>
               <Accordion.Body>
-                <span className='fw-bold'>
-                  Jawaban: Manajemen Kegiatan (to-do list) dan Catatan Keuangan
-                  Harian
+                <span className='text-secondary'>
+                  Manajemen Kegiatan (to-do list) dan Catatan Keuangan Harian
                 </span>
               </Accordion.Body>
             </Accordion.Item>
@@ -44,9 +43,9 @@ export class FAQ extends Component {
                 </span>
               </Accordion.Header>
               <Accordion.Body>
-                <span className='fw-bold'>
-                  Jawaban: Buka halaman utama, daftar/login dan selamat memakai
-                  fitur yang tersedia :)
+                <span className='text-secondary'>
+                  Buka halaman utama, daftar/login dan selamat memakai fitur
+                  yang tersedia :)
                 </span>
               </Accordion.Body>
             </Accordion.Item>
@@ -55,10 +54,10 @@ export class FAQ extends Component {
                 <span className='fw-bold'>Untuk apa Taskita dibuat?</span>
               </Accordion.Header>
               <Accordion.Body>
-                <span className='fw-bold'>
-                  Jawaban: Memudahkan setiap orang dalam mengatur kegiatan dan
-                  keuangan sebagai syarat ketuntasan tugas mata kuliah aplikasi
-                  web team terkait.
+                <span className='text-secondary'>
+                  Memudahkan setiap orang dalam mengatur kegiatan dan keuangan
+                  sebagai syarat ketuntasan tugas mata kuliah aplikasi web team
+                  terkait.
                 </span>
               </Accordion.Body>
             </Accordion.Item>

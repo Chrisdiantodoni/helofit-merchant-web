@@ -32,7 +32,6 @@ const vfield = (value) => {
     );
   }
 };
-// const timeout = setTimeout(window.location.href("/login"), 5000);
 export class Daftar extends Component {
   constructor() {
     super();
@@ -192,9 +191,7 @@ export class Daftar extends Component {
                   <div className='text-center'>
                     <button
                       type='submit'
-                      className='btn btn-primary rounded-pill w-100'
-                      // onClick={daftar}
-                    >
+                      className='btn btn-primary rounded-pill w-100'>
                       Daftar
                     </button>
                     <p className='text-secondary mt-2'>

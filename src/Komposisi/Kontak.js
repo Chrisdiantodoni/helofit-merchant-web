@@ -48,7 +48,6 @@ const vpesan = (value) => {
     );
   }
 };
-
 export class Kontak extends Component {
   constructor() {
     super();
@@ -75,7 +74,6 @@ export class Kontak extends Component {
       message: "",
       successful: false,
     });
-
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
       Axios.post("http://localhost:8000/feedback", {
@@ -88,6 +86,9 @@ export class Kontak extends Component {
             message: res.data.message,
             successful: true,
           });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         },
         (error) => {
           const resMessage =
