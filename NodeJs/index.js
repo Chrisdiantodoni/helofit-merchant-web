@@ -80,7 +80,6 @@ app.post("/feedback", (req, res) => {
     [nama, email, pesan],
     (err, result) => {
       res.send({ message: "Feedback Anda Telah Diterima :)" });
-      console.log(result);
     }
   );
 });

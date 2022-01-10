@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import Navbarbefore from "../Komponen/Navbar(before login)";
 import "../css/bootstrap.min.css";
 import "./Kontak.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -102,132 +103,117 @@ export class Kontak extends Component {
           });
         }
       );
-
-      // .then(() => {
-      //   this.setState({
-      //     message: "Feedback Anda Telah Diterima :)",
-      //     successful: true,
-      //   });
-      // });
-      // AuthService.Pesan(
-      //   this.state.nama,
-      //   this.state.email,
-      //   this.state.pesan
-      // ).then((res) => {
-      // this.setState({
-      //   message: res.data.message,
-      //   successful: true,
-      // });
-      //   console.log(this.state.message);
-      // });
     }
   }
   render() {
     return (
-      <div class='container mx-auto mt-5'>
-        <div class='row shadow border border-1 pt-5'>
-          <div class='col-md'>
-            <h3 className='ms-5'>
-              <span className='fw-bold'>Hubungi Kami</span>
-              <p className='text-muted fs-6 pt-2'>
-                Apabila ada saran atau pertanyaan lebih lanjut kamu bisa
-                <br /> menghubungi kami dengan kontak yang tertera.
+      <div>
+        <Navbarbefore />
+        <div class='container mx-auto mt-5'>
+          <div class='row shadow border border-1 pt-5'>
+            <div class='col-md'>
+              <h3 className='ms-5'>
+                <span className='fw-bold'>Hubungi Kami</span>
+                <p className='text-muted fs-6 pt-2'>
+                  Apabila ada saran atau pertanyaan lebih lanjut kamu bisa
+                  <br /> menghubungi kami dengan kontak yang tertera.
+                </p>
+              </h3>
+              <p className='ms-5 ps-2 text-primary'>
+                <BsTelephone /> +621234567890
               </p>
-            </h3>
-            <p className='ms-5 ps-2 text-primary'>
-              <BsTelephone /> +621234567890
-            </p>
-            <p className='ms-5 ps-2 text-primary'>
-              <GoMail /> microdigi@gmail.com
-            </p>
-            <p className='ms-5 ps-2 text-primary'>
-              <GoLocation /> Jl. M.H Thamrin No 112 Medan
-            </p>
-            <br />
-            <BsInstagram className='ms-5 icon ig text-center m-1 mb-2' />
-            <BsFacebook className='icon fb text-center m-1 mb-2' />
-          </div>
-          <div class='col-md kanan h-75'>
-            <Form
-              className='container'
-              onSubmit={this.handleKontak}
-              ref={(c) => {
-                this.form = c;
-              }}>
-              {!this.state.successful && (
-                <div>
-                  <div class='form-group mb-2'>
-                    <label>
-                      Nama Kamu<span className='text-danger'>*</span>
-                    </label>
-                    <Input
-                      className='text-dark rounded-3 form-control rounded-pill'
-                      name='nama'
-                      type='text'
-                      placeholder='Masukkan Nama Anda'
-                      value={this.state.nama}
-                      validations={[required, vfield]}
-                      onChange={this.setValueState.bind(this)}></Input>
-                  </div>
-                  <div class='form-group mb-2'>
-                    <label>
-                      Email Kamu<span className='text-danger'>*</span>
-                    </label>
-                    <Input
-                      className='text-dark rounded-3 form-control rounded-pill'
-                      name='email'
-                      type='email'
-                      placeholder='Masukkan Email Anda'
-                      value={this.state.email}
-                      validations={[required, email, vfield]}
-                      onChange={this.setValueState.bind(this)}></Input>
-                  </div>
-                  <div class='form-group mb-3'>
-                    <label>
-                      Pesan<span className='text-danger'>*</span>
-                    </label>
-                    <Input
-                      className='text-dark rounded-3 form-control rounded-pill'
-                      name='pesan'
-                      type='text'
-                      placeholder='Masukkan Pesan Anda'
-                      value={this.state.pesan}
-                      validations={[required, vpesan]}
-                      onChange={this.setValueState.bind(this)}></Input>
-                  </div>
-                  <div className='text-center'>
-                    <button
-                      type='submit'
-                      className='btn btn-primary rounded-pill w-100 mb-5'
-                      disabled={this.state.loading}>
-                      {this.state.loading && (
-                        <span className='spinner-border spinner-border-sm'></span>
-                      )}
-                      <span>Kirim Pesan</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-              {this.state.message && (
-                <div className='form-group'>
-                  <div
-                    className={
-                      this.state.successful
-                        ? "alert alert-success"
-                        : "alert alert-danger"
-                    }
-                    role='alert'>
-                    {this.state.message}
-                  </div>
-                </div>
-              )}
-              <CheckButton
-                style={{ display: "none" }}
+              <p className='ms-5 ps-2 text-primary'>
+                <GoMail /> microdigi@gmail.com
+              </p>
+              <p className='ms-5 ps-2 text-primary'>
+                <GoLocation /> Jl. M.H Thamrin No 112 Medan
+              </p>
+              <br />
+              <BsInstagram className='ms-5 icon ig text-center m-1 mb-2' />
+              <BsFacebook className='icon fb text-center m-1 mb-2' />
+            </div>
+            <div class='col-md kanan h-75'>
+              <Form
+                className='container'
+                onSubmit={this.handleKontak}
                 ref={(c) => {
-                  this.checkBtn = c;
-                }}
-              />
-            </Form>
+                  this.form = c;
+                }}>
+                {!this.state.successful && (
+                  <div>
+                    <div class='form-group mb-2'>
+                      <label>
+                        Nama Kamu<span className='text-danger'>*</span>
+                      </label>
+                      <Input
+                        className='text-dark rounded-3 form-control rounded-pill'
+                        name='nama'
+                        type='text'
+                        placeholder='Masukkan Nama Anda'
+                        value={this.state.nama}
+                        validations={[required, vfield]}
+                        onChange={this.setValueState.bind(this)}></Input>
+                    </div>
+                    <div class='form-group mb-2'>
+                      <label>
+                        Email Kamu<span className='text-danger'>*</span>
+                      </label>
+                      <Input
+                        className='text-dark rounded-3 form-control rounded-pill'
+                        name='email'
+                        type='email'
+                        placeholder='Masukkan Email Anda'
+                        value={this.state.email}
+                        validations={[required, email, vfield]}
+                        onChange={this.setValueState.bind(this)}></Input>
+                    </div>
+                    <div class='form-group mb-3'>
+                      <label>
+                        Pesan<span className='text-danger'>*</span>
+                      </label>
+                      <Input
+                        className='text-dark rounded-3 form-control rounded-pill'
+                        name='pesan'
+                        type='text'
+                        placeholder='Masukkan Pesan Anda'
+                        value={this.state.pesan}
+                        validations={[required, vpesan]}
+                        onChange={this.setValueState.bind(this)}></Input>
+                    </div>
+                    <div className='text-center'>
+                      <button
+                        type='submit'
+                        className='btn btn-primary rounded-pill w-100 mb-5'
+                        disabled={this.state.loading}>
+                        {this.state.loading && (
+                          <span className='spinner-border spinner-border-sm'></span>
+                        )}
+                        <span>Kirim Pesan</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {this.state.message && (
+                  <div className='form-group'>
+                    <div
+                      className={
+                        this.state.successful
+                          ? "alert alert-success"
+                          : "alert alert-danger"
+                      }
+                      role='alert'>
+                      {this.state.message}
+                    </div>
+                  </div>
+                )}
+                <CheckButton
+                  style={{ display: "none" }}
+                  ref={(c) => {
+                    this.checkBtn = c;
+                  }}
+                />
+              </Form>
+            </div>
           </div>
         </div>
       </div>

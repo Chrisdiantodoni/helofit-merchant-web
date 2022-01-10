@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-// import Axios from "axios";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
 import { isEmail } from "validator";
+import { withRouter } from "react-router-dom";
 import AuthService from "../services/auth.service";
 const required = (value) => {
   if (!value) {
@@ -33,6 +32,7 @@ const vfield = (value) => {
     );
   }
 };
+// const timeout = setTimeout(window.location.href("/login"), 5000);
 export class Daftar extends Component {
   constructor() {
     super();
@@ -69,6 +69,9 @@ export class Daftar extends Component {
             message: res.data.message,
             successful: true,
           });
+          setTimeout(() => {
+            this.props.history.push("/login");
+          }, 1500);
         },
         (error) => {
           const resMessage =
@@ -93,21 +96,6 @@ export class Daftar extends Component {
   }
 
   render() {
-    // var namadpnReg = this.state.nama_depan;
-    // var namablkgReg = this.state.nama_belakang;
-    // var emailReg = this.state.email;
-    // var passwordReg = this.state.password;
-    // const daftar = () => {
-    //   Axios.post("http://localhost:8000/daftar", {
-    //     nama_dpn: namadpnReg,
-    //     nama_blkg: namablkgReg,
-    //     email: emailReg,
-    //     password: passwordReg,
-    //   }).then((response) => {
-    //     console.log(response);
-    //   });
-    // };
-
     return (
       <div>
         <div className='container mx-auto'>
@@ -311,4 +299,4 @@ export class Daftar extends Component {
   }
 }
 
-export default Daftar;
+export default withRouter(Daftar);

@@ -1,15 +1,16 @@
 import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Beranda.css";
-import Daftar from "./Daftar";
+import Navbarbefore from "../Komponen/Navbar(before login)";
+import { Container, Nav, Button } from "react-bootstrap";
 import React, { Component } from "react";
-import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import Beranda_2 from "./Beranda (part 2)";
 import ilustrasi from "../Assets/ilustrasi.png";
 export default class Beranda extends Component {
   render() {
     return (
       <div>
+        <Navbarbefore />
         <Container className='text-center'>
           <h1 className='pt-5 text-dark'>Creative Digital Agency</h1>
           <p className='text-muted'>
