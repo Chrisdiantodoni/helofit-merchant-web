@@ -81,7 +81,7 @@ export class Finance extends Component {
                       <tr className='row'>
                         <td className='col-2'>
                           <button className='btn btn-primary rounded rounded-3'>
-                            Tambah Data
+                            Tambah Catatan
                           </button>
                         </td>
                       </tr>

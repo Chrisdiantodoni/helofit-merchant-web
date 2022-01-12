@@ -36,11 +36,21 @@ export class Tasks extends Component {
                           <label className='fw-bold'>Deadline</label>
                         </td>
                         <td className='col'>
-                          <select
-                            name='deadline'
-                            value={this.state.deadline}
+                          <input
+                            type='date'
+                            name='awal'
+                            value={this.state.awal}
                             className='w-25 border border-1'
-                            onChange={this.setValueState.bind(this)}></select>
+                            onChange={this.setValueState.bind(this)}
+                          />
+                          &nbsp;ke&nbsp;
+                          <input
+                            type='date'
+                            name='akhir'
+                            value={this.state.akhir}
+                            className='w-25 border border-1'
+                            onChange={this.setValueState.bind(this)}
+                          />
                         </td>
                       </tr>
                       <tr className='row'>
@@ -58,7 +68,7 @@ export class Tasks extends Component {
                       <tr className='row'>
                         <td className='col-2'>
                           <button className='btn btn-primary rounded rounded-3'>
-                            Tambah Data
+                            Tambah List
                           </button>
                         </td>
                       </tr>
