@@ -13,7 +13,9 @@ import Keuangan from "./Komposisi/Keuangan";
 import Manajemen from "./Komposisi/Manajemen";
 import FAQ from "./Komposisi/FAQ";
 //Setelah Login(User)
-import WelcomeUser from "./Komposisi(User)/Welcome";
+import WelcomeUser from "./Komposisi(User)/WelcomeUser";
+import Tasks from "./Komposisi(User)/Tasks";
+import Finance from "./Komposisi(User)/Finance";
 import AuthService from "./services/auth.service";
 import {
   BrowserRouter as Router,
@@ -23,6 +25,7 @@ import {
   withRouter,
   Switch,
 } from "react-router-dom";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -92,6 +95,14 @@ class App extends React.Component {
       {
         path: "/welcome/user",
         render: () => <WelcomeUser />,
+      },
+      {
+        path: "/welcome/tasks",
+        render: () => <Tasks />,
+      },
+      {
+        path: "/welcome/finance",
+        render: () => <Finance />,
       },
     ];
     return (

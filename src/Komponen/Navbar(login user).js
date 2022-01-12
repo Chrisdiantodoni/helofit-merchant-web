@@ -1,76 +1,62 @@
 import React, { Component } from "react";
-import { Navbar, Container, Nav, Button } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import { HiSwitchHorizontal } from "react-icons/hi";
+import { AiOutlineUser } from "react-icons/ai";
 import logo from "../Assets/logo.png";
 import AuthService from "../services/auth.service";
 export class Navbaruser extends Component {
   constructor(props) {
     super(props);
     this.Keluar = this.Keluar.bind(this);
-    this.state = {};
+    this.state = { currentUser: true };
   }
-
   Keluar() {
     AuthService.Keluar();
   }
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+      });
+    }
+  }
   render() {
+    const { currentUser } = this.state;
     return (
       <Navbar bg='light' expand='lg'>
-        <Container>
-          <Navbar.Brand>
-            <img
-              className='img-fluid logo d-inline-block mx-auto'
-              src={logo}
-              width='150px'
-              height='20px'
-            />
-          </Navbar.Brand>
+        <Container fluid>
+          <div>
+            <Navbar.Brand className='ms-5'>
+              <img
+                className='img-fluid logo d-inline-block text-center'
+                src={logo}
+                width='150px'
+                height='20px'
+              />
+            </Navbar.Brand>
+          </div>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='text-center mx-auto me-1'>
-              <Nav.Link className='efek fs-6'>
-                <NavLink
-                  to='/'
-                  className='text-decoration-none'
-                  exact
-                  activeStyle={{ fontWeight: "bold", color: "blue" }}>
-                  Beranda
-                </NavLink>
-              </Nav.Link>
-              <Nav.Link className='efek fs-6'>
-                <NavLink
-                  to='/layanan'
-                  className='text-decoration-none'
-                  activeClassName='aktif'>
-                  Layanan
-                </NavLink>
-              </Nav.Link>
-              <Nav.Link className='efek fs-6'>
-                <NavLink
-                  to='/tentang'
-                  className='text-decoration-none'
-                  activeClassName='aktif'>
-                  Tentang
-                </NavLink>
-              </Nav.Link>
-              <Nav.Link className='efek fs-6'>
-                <NavLink
-                  to='/kontak'
-                  className='text-decoration-none'
-                  activeClassName='aktif'>
-                  Kontak
-                </NavLink>
-              </Nav.Link>
-            </Nav>
+            &ensp;
+            <span className='ps-5 mt-2 fs-3 fw-bold text-secondary'>
+              <HiSwitchHorizontal className='border border-secondary mb-2 me-2' />
+              {this.props.konten}
+            </span>
             <Nav className='ms-auto me-5'>
-              <Nav.Link href='/'>
-                <Button
-                  variant='danger'
-                  onClick={this.Keluar}
-                  className='rounded-3'>
-                  Logout
-                </Button>
-              </Nav.Link>
+              <span className='d-flex ms-4 mt-2 fs-3 fw-bold '>
+                <AiOutlineUser className='mt-3' />
+                <NavDropdown
+                  title={currentUser.nama_dpn}
+                  id='basic-nav-dropdown'
+                  className='text-dark'>
+                  <NavDropdown.Item href='#'>Action</NavDropdown.Item>
+                  <NavDropdown.Item href='/' onClick={this.Keluar}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </span>
             </Nav>
           </Navbar.Collapse>
         </Container>
