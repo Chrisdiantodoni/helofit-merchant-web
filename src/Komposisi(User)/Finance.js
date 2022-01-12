@@ -8,6 +8,12 @@ export class Finance extends Component {
 
     this.state = {
       currentUser: AuthService.getCurrentUser(),
+      keuangan: [],
+      tipe: null,
+      kategori: null,
+      nominal: null,
+      keterangan: null,
+      total: 0,
     };
   }
   setValueState(event) {
@@ -15,6 +21,31 @@ export class Finance extends Component {
       [event.target.name]: event.target.value,
     });
   }
+
+  addData() {
+    var data_tmp = this.state.keuangan;
+    var status = this.state.tipe;
+    var nominal = parseInt(this.state.nominal);
+
+    if (status == "1") {
+      this.state.total += nominal;
+    } else if (status == "2") {
+      this.state.total -= nominal;
+    }
+    // else {
+    //     window.alert('Pilih Tipe untuk Total yang benar')
+    // }
+
+    data_tmp.push({
+      tipe: this.state.tipe,
+      kategori: this.state.kategori,
+      total: this.state.total,
+      nominal: this.state.nominal,
+      keterangan: this.state.keterangan,
+    });
+    this.setState({ keuangan: data_tmp });
+  }
+
   render() {
     const { currentUser } = this.state;
     return (
@@ -37,9 +68,12 @@ export class Finance extends Component {
                         <td className='col'>
                           <select
                             name='tipe'
-                            value={this.state.tipe}
-                            className='w-25 border border-1'
-                            onChange={this.setValueState.bind(this)}></select>
+                            value={this.state.status}
+                            className='w-25 border border-1 '
+                            onChange={this.setValueState.bind(this)}>
+                            <option value={1}>Pemasukan</option>
+                            <option value={2}>Pengeluaran</option>
+                          </select>
                         </td>
                       </tr>
                       <tr className='row'>
@@ -51,7 +85,13 @@ export class Finance extends Component {
                             name='kategori'
                             value={this.state.kategori}
                             className='w-25 border border-1'
-                            onChange={this.setValueState.bind(this)}></select>
+                            onChange={this.setValueState.bind(this)}>
+                            <option value='1'>Gaji</option>
+                            <option value='2'>Kendaraan</option>
+                            <option value='3'>Usaha</option>
+                            <option value='4'>Makanan</option>
+                            <option value='5'>Lainya</option>
+                          </select>
                         </td>
                       </tr>
                       <tr className='row'>
@@ -80,8 +120,10 @@ export class Finance extends Component {
                       </tr>
                       <tr className='row'>
                         <td className='col-2'>
-                          <button className='btn btn-primary rounded rounded-3'>
-                            Tambah Catatan
+                          <button
+                            onClick={this.addData.bind(this)}
+                            className='btn btn-primary rounded rounded-3'>
+                            Tambah Data
                           </button>
                         </td>
                       </tr>
@@ -99,18 +141,22 @@ export class Finance extends Component {
                           Aksi
                         </td>
                       </tr>
-                      <tr className='row'>
-                        <td className='col-md-2'>Deadline</td>
-                        <td className='col-md-1'>Status</td>
-                        <td className='col-md-3'>Keterangan List</td>
-                        <td className='col-md-2'>Nominal</td>
-                        <td className='col-md-3'>
-                          <button className='btn btn-warning text-light me-3'>
-                            Edit Data
-                          </button>
-                          <button className='btn btn-danger'>Hapus Data</button>
-                        </td>
-                      </tr>
+                      {this.state.keuangan.map((item, index) => (
+                        <tr className='row'>
+                          <td className='col-md-2'>{item.tipe}</td>
+                          <td className='col-md-1'>{item.kategori}</td>
+                          <td className='col-md-3'>{item.keterangan}</td>
+                          <td className='col-md-2'>{item.nominal}</td>
+                          <td className='col-md-3'>
+                            <button className='btn btn-warning text-light me-3'>
+                              Edit Data
+                            </button>
+                            <button className='btn btn-danger'>
+                              Hapus Data
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
