@@ -9,7 +9,7 @@ export class Finance extends Component {
     this.state = {
       currentUser: AuthService.getCurrentUser(),
       keuangan: [],
-      tipe: null,
+      tipe: "",
       kategori: null,
       nominal: null,
       keterangan: null,
@@ -21,15 +21,19 @@ export class Finance extends Component {
       [event.target.name]: event.target.value,
     });
   }
-
+  setTipe(e) {
+    this.setState({
+      tipe: e.target.value,
+    });
+  }
   addData() {
     var data_tmp = this.state.keuangan;
-    var status = this.state.tipe;
+    var tipe = this.state.tipe;
     var nominal = parseInt(this.state.nominal);
 
-    if (status == "1") {
+    if (tipe == "Pemasukan") {
       this.state.total += nominal;
-    } else if (status == "2") {
+    } else if (tipe == "Pengeluaran") {
       this.state.total -= nominal;
     }
     // else {
@@ -48,6 +52,10 @@ export class Finance extends Component {
 
   render() {
     const { currentUser } = this.state;
+    const tipeoption = [
+      { value: "Pemasukan", label: "Pemasukan" },
+      { value: "Pengeluaran", label: "Pengeluaran" },
+    ];
     return (
       <div>
         <Navbaruser konten='Catatan Keuangan' />
@@ -68,12 +76,10 @@ export class Finance extends Component {
                         <td className='col'>
                           <select
                             name='tipe'
-                            value={this.state.status}
+                            value={this.state.tipe}
                             className='w-25 border border-1 '
-                            onChange={this.setValueState.bind(this)}>
-                            <option value={1}>Pemasukan</option>
-                            <option value={2}>Pengeluaran</option>
-                          </select>
+                            onChange={this.setTipe.bind(this)}
+                            options={tipeoption}></select>
                         </td>
                       </tr>
                       <tr className='row'>
@@ -86,11 +92,11 @@ export class Finance extends Component {
                             value={this.state.kategori}
                             className='w-25 border border-1'
                             onChange={this.setValueState.bind(this)}>
-                            <option value='1'>Gaji</option>
-                            <option value='2'>Kendaraan</option>
-                            <option value='3'>Usaha</option>
-                            <option value='4'>Makanan</option>
-                            <option value='5'>Lainya</option>
+                            <option value='Gaji'>Gaji</option>
+                            <option value='Kendaraan'>Kendaraan</option>
+                            <option value='Usaha'>Usaha</option>
+                            <option value='Makanan'>Makanan</option>
+                            <option value='Lainnya'>Lainnya</option>
                           </select>
                         </td>
                       </tr>
@@ -141,6 +147,7 @@ export class Finance extends Component {
                           Aksi
                         </td>
                       </tr>
+
                       {this.state.keuangan.map((item, index) => (
                         <tr className='row'>
                           <td className='col-md-2'>{item.tipe}</td>
@@ -157,6 +164,7 @@ export class Finance extends Component {
                           </td>
                         </tr>
                       ))}
+                      {this.state.tipe}
                     </tbody>
                   </table>
                 </div>

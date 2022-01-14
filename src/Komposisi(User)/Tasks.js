@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import Textarea from "react-validation/build/textarea";
 import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
-import AuthService from "../services/auth.service";
+import CheckButton from "react-validation/build/button";
 import "../css/bootstrap.min.css";
 import Navbaruser from "../Komponen/Navbar(login user)";
+import AuthService from "../services/auth.service";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
-import { date } from "yup";
+import * as Axios from "axios";
 const required = (value) => {
   if (!value) {
     return (
@@ -16,6 +17,16 @@ const required = (value) => {
     );
   }
 };
+const reqdate = (value) => {
+  if (!value) {
+    return (
+      <div className='alert alert-danger w-25' role='alert'>
+        Silakan pilih tanggal deadline!
+      </div>
+    );
+  }
+};
+
 const vfield = (value) => {
   if (value.length < 3 || value.length > 100) {
     return (
@@ -30,15 +41,30 @@ export class Tasks extends Component {
     super(props);
     var today = new Date(),
       date =
-        today.getDate() +
+        ("0" + today.getDate()).slice(-2) +
         "/" +
-        (today.getMonth() + 1) +
+        ("0" + today.getMonth() + 1).slice(-2) +
         "/" +
-        today.getFullYear();
+        today.getFullYear(),
+      minim =
+        today.getFullYear() +
+        "-" +
+        ("0" + today.getMonth() + 1).slice(-2) +
+        "-" +
+        ("0" + today.getDate()).slice(-2);
+    this.handleTask = this.handleTask.bind(this);
     this.state = {
-      currentUser: AuthService.getCurrentUser(),
+      listtasks: [],
       deadline: "",
-      default: date,
+      status: false,
+      sisa: "",
+      keterangan: "",
+      mindate: minim,
+      sekarang: date,
+      currentUser: AuthService.getCurrentUser(),
+      loading: false,
+      successful: false,
+      message: "",
     };
   }
   setValueState(event) {
@@ -46,9 +72,72 @@ export class Tasks extends Component {
       [event.target.name]: event.target.value,
     });
   }
-  componentDidMount() {}
+  handleTask(e) {
+    const { currentUser } = this.state;
+    e.preventDefault();
+    this.setState({
+      message: "",
+      successful: false,
+    });
+    this.form.validateAll();
+    if (this.checkBtn.context._errors.length === 0) {
+      Axios.post("http://localhost:8000/tasks", {
+        userID: currentUser.id,
+        deadline: this.state.deadline,
+        status: this.state.status,
+        keterangan: this.state.keterangan,
+      }).then(
+        (res) => {
+          this.setState({
+            message: res.data.message,
+            successful: true,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          this.setState({
+            successful: false,
+            message: resMessage,
+          });
+        }
+      );
+    }
+  }
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+      });
+    }
+    fetch("http://localhost:8000/tasks")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          listtasks: res,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+  Sisa(current, dead) {
+    return (dead - current) / (1000 * 60 * 60 * 24);
+  }
   render() {
-    const { currentUser, deadline, tes } = this.state;
+    const { listtasks, sekarang, mindate } = this.state;
+    const currentDate = new Date(mindate);
+    const dead = new Date("2022-03-16");
+    const sisa = (dead - currentDate) / (1000 * 60 * 60 * 24);
     return (
       <div>
         <Navbaruser konten='To-do List' />
@@ -60,8 +149,11 @@ export class Tasks extends Component {
             <div class='container mx-auto mt-5'>
               <div class='shadow border border-1 rounded-3'>
                 <div className='ms-5 mt-5 me-5 pe-5'>
-                  <Form>
-                    {tes}
+                  <Form
+                    onSubmit={this.handleTask}
+                    ref={(c) => {
+                      this.form = c;
+                    }}>
                     <table class='table table-borderless'>
                       <tbody>
                         <tr className='row'>
@@ -73,9 +165,9 @@ export class Tasks extends Component {
                               type='date'
                               name='deadline'
                               value={this.state.deadline}
-                              min='2022-01-13'
+                              min={mindate}
                               className='w-25 border border-1'
-                              validations={[required]}
+                              validations={[reqdate]}
                               onChange={this.setValueState.bind(this)}
                             />
                           </td>
@@ -86,8 +178,8 @@ export class Tasks extends Component {
                           </td>
                           <td className='col'>
                             <Textarea
-                              name='list'
-                              value={this.state.list}
+                              name='keterangan'
+                              value={this.state.keterangan}
                               className='w-25 border border-1'
                               validations={[required, vfield]}
                               onChange={this.setValueState.bind(this)}
@@ -100,6 +192,25 @@ export class Tasks extends Component {
                               Tambah List
                             </button>
                           </td>
+                          {this.state.message && (
+                            <div className='form-group'>
+                              <div
+                                className={
+                                  this.state.successful
+                                    ? "alert alert-success"
+                                    : "alert alert-danger"
+                                }
+                                role='alert'>
+                                {this.state.message}
+                              </div>
+                            </div>
+                          )}
+                          <CheckButton
+                            style={{ display: "none" }}
+                            ref={(c) => {
+                              this.checkBtn = c;
+                            }}
+                          />
                         </tr>
                       </tbody>
                     </table>
@@ -110,14 +221,46 @@ export class Tasks extends Component {
                       <tr className='row fw-bold border-dark'>
                         <td className='col-md-2'>Deadline</td>
                         <td className='col-md-1'>Status</td>
+                        <td className='col-md-2'>Sisa Hari</td>
                         <td className='col-md-4'>Keterangan List</td>
-                        <td className='col-md-5' colspan='2'>
+                        <td className='col-md-3' colspan='2'>
                           Aksi
                         </td>
                       </tr>
-                      <tr className='row'>
+                      {listtasks.map((item, index) => (
+                        <tr className='row' key={index}>
+                          <td className='col-md-2'>{item.deadline}</td>
+                          <td className='col-md-1'>
+                            <input
+                              type='checkbox'
+                              className='ms-2 mt-1 w-50 h-50'
+                              value='0'
+                            />
+                          </td>
+                          <td className='col-md-2'>
+                            {/* {this.Sisa(sekarang, item.deadline)} */}
+                            {sisa}
+                          </td>
+                          <td className='col-md-4'>{item.keterangan}</td>
+                          <td className='col-md-3'>
+                            <button className='btn btn-warning text-light me-3'>
+                              Edit Data
+                            </button>
+                            <button className='btn btn-danger'>
+                              Hapus Data
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                      {/* <tr className='row'>
                         <td className='col-md-2'>Deadline</td>
-                        <td className='col-md-1'>Status</td>
+                        <td className='col-md-1'>
+                          <input
+                            type='checkbox'
+                            className='ms-2 mt-1 w-50 h-50'
+                            value='0'
+                          />
+                        </td>
                         <td className='col-md-4'>Keterangan List</td>
                         <td className='col-md-5'>
                           <button className='btn btn-warning text-light me-3'>
@@ -125,7 +268,7 @@ export class Tasks extends Component {
                           </button>
                           <button className='btn btn-danger'>Hapus Data</button>
                         </td>
-                      </tr>
+                      </tr> */}
                     </tbody>
                   </table>
                 </div>

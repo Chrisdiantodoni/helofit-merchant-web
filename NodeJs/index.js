@@ -11,7 +11,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const db = require("./models");
-const db1 = require("./models");
 const Role = db.role;
 
 function initial() {
@@ -62,11 +61,15 @@ conn.connect((err) => {
   //     else console.log("Tabel feedbacks berhasil dibuat");
   //   }
   // );
+  // conn.query(
+  //   "CREATE TABLE tasks (id INT UNSIGNED AUTO_INCREMENT,userID INT, deadline DATE NOT NULL, status BOOLEAN, keterangan VARCHAR(100) NOT NULL, PRIMARY KEY(id,userID), FOREIGN KEY (userID) REFERENCES users(id))",
+  //   (err, result) => {
+  //     if (err) console.error("Error saat membuat tabel " + err);
+  //     else console.log("Tabel tasks berhasil dibuat");
+  //   }
+  // );
 });
 
-app.get("/", (req, res) => {
-  res.json({ message: "Database." });
-});
 app.post("/feedback", (req, res) => {
   var nama = req.body.nama;
   var email = req.body.email;
@@ -79,19 +82,33 @@ app.post("/feedback", (req, res) => {
     }
   );
 });
-// app.post("/daftar", (req, res) => {
-//   var email = req.body.email;
-//   var nama_dpn = req.body.nama_dpn;
-//   var nama_blkg = req.body.nama_blkg;
-//   var password = req.body.password;
-//   conn.query(
-//     "INSERT INTO user (email, nama_dpn, nama_blkg, password) VALUES (?,?,?,?)",
-//     [email, nama_dpn, nama_blkg, password],
-//     (err, result) => {
-//       console.log(err);
-//     }
-//   );
-// });
+app.post("/tasks", (req, res) => {
+  var userID = req.body.userID;
+  var deadline = req.body.deadline;
+  var status = req.body.status;
+  var keterangan = req.body.keterangan;
+  conn.query(
+    "INSERT INTO tasks (userID, deadline, status, keterangan) VALUES (?,?,?,?)",
+    [userID, deadline, status, keterangan],
+    (err, result) => {
+      res.send({ message: "List Berhasil Dibuat!" });
+    }
+  );
+});
+app.get("/tasks", (req, res) => {
+  var query =
+    "SELECT *, DATE_FORMAT(deadline, '%d/%m/%Y') AS deadline FROM tasks ORDER BY STR_TO_DATE(deadline, '%d/%m/%Y')";
+  conn.query(query, (err, rows) => {
+    res.json(rows);
+  });
+});
+app.get("/tasks/:id", (req, res) => {
+  var id = req.params.id;
+  var query = "SELECT * FROM tasks WHERE id = " + id;
+  conn.query(query, (err, rows) => {
+    res.json(rows[0]);
+  });
+});
 
 app.listen(8000, () => {
   console.log("Server berjalan di port 8000");
