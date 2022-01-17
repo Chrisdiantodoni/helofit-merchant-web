@@ -6,6 +6,7 @@ import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import Select from "react-validation/build/select";
+import * as Axios from "axios";
 const tipe2 = [
   { value: "Pemasukan", label: "Pemasukan" },
   { value: "Pengeluaran", label: "Pengeluaran" },
@@ -44,6 +45,7 @@ export class Finance extends Component {
       message: "",
       successful: false,
       keuangan: [],
+      currentUser: AuthService.getCurrentUser(),
       tipe: "Pemasukan",
       kategori: "Gaji",
       nominal: null,
@@ -71,16 +73,13 @@ export class Finance extends Component {
     } else if (tipe == "Pengeluaran") {
       sub -= nominal;
     }
+    return sub;
     // return this.setState({
     //   total: sub,
     // });
-    // total -= days * 86400;
-    // const sisa = (akhir - awal) / (1000 * 60 * 60 * 24);
-    // return (
-    //   <div>{sisa < -1 ? <p>Telah Berakhir</p> : <p>{days} hari lagi</p>}</div>
-    // );
   }
   addData(e) {
+    const { currentUser } = this.state;
     e.preventDefault();
     this.setState({
       message: "",
@@ -88,19 +87,67 @@ export class Finance extends Component {
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
-      var data_tmp = this.state.keuangan;
-
-      data_tmp.push({
+      Axios.post("http://localhost:8000/finances", {
+        userID: currentUser.id,
         tipe: this.state.tipe,
         kategori: this.state.kategori,
         total: this.state.total,
         nominal: this.state.nominal,
         keterangan: this.state.keterangan,
-      });
-      this.setState({ keuangan: data_tmp });
+      }).then(
+        (res) => {
+          this.setState({
+            message: res.data.message,
+            successful: true,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          this.setState({
+            successful: false,
+            message: resMessage,
+          });
+        }
+      );
+
+      // data_tmp.push({
+      //   tipe: this.state.tipe,
+      //   kategori: this.state.kategori,
+      //   total: this.state.total,
+      //   nominal: this.state.nominal,
+      //   keterangan: this.state.keterangan,
+      // });
+      // this.setState({ keuangan: data_tmp });
     }
   }
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
 
+    if (user) {
+      this.setState({
+        currentUser: user,
+      });
+    }
+    fetch("http://localhost:8000/finances")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          keuangan: res,
+          total: this.HitungTotal(res.tipe, res.nominal),
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
   render() {
     const { currentUser, tipe, kategori, total } = this.state;
 

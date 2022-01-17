@@ -68,6 +68,13 @@ conn.connect((err) => {
   //     else console.log("Tabel tasks berhasil dibuat");
   //   }
   // );
+  // conn.query(
+  //   "CREATE TABLE finances (id INT UNSIGNED AUTO_INCREMENT,userID INT, tipe VARCHAR(20) NOT NULL, kategori VARCHAR(20) NOT NULL, nominal INT NOT NULL, keterangan VARCHAR(100) NOT NULL, PRIMARY KEY(id,userID), FOREIGN KEY (userID) REFERENCES users(id))",
+  //   (err, result) => {
+  //     if (err) console.error("Error saat membuat tabel " + err);
+  //     else console.log("Tabel finances berhasil dibuat");
+  //   }
+  // );
 });
 
 app.post("/feedback", (req, res) => {
@@ -95,6 +102,20 @@ app.post("/tasks", (req, res) => {
     }
   );
 });
+app.post("/finances", (req, res) => {
+  var userID = req.body.userID;
+  var tipe = req.body.tipe;
+  var kategori = req.body.kategori;
+  var nominal = req.body.nominal;
+  var keterangan = req.body.keterangan;
+  conn.query(
+    "INSERT INTO finances (userID, tipe, kategori, nominal , keterangan) VALUES (?,?,?,?,?)",
+    [userID, tipe, kategori, nominal, keterangan],
+    (err, result) => {
+      res.send({ message: "Catatan Berhasil Dibuat!" });
+    }
+  );
+});
 app.put("/tasks/:id", (req, res) => {
   var status = req.body.status;
   var id = req.params.id;
@@ -105,6 +126,12 @@ app.put("/tasks/:id", (req, res) => {
     }
   );
 });
+app.get("/finances", (req, res) => {
+  var query = "SELECT * FROM finances";
+  conn.query(query, (err, rows) => {
+    res.json(rows);
+  });
+});
 app.get("/tasks", (req, res) => {
   var query =
     "SELECT *, DATE_FORMAT(deadline, '%d-%m-%Y') AS deadline FROM tasks ORDER BY STR_TO_DATE(deadline, '%d-%m-%Y'), deadline ASC";
@@ -112,6 +139,7 @@ app.get("/tasks", (req, res) => {
     res.json(rows);
   });
 });
+
 app.get("/tasks/:id", (req, res) => {
   var id = req.params.id;
   var query = "SELECT * FROM tasks WHERE id = " + id;

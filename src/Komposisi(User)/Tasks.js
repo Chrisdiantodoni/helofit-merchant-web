@@ -310,8 +310,8 @@ export class Tasks extends Component {
                               type='checkbox'
                               className='ms-2 mt-1 w-50 h-50'
                               // checked={item.status}
-                              onClick={this.handleCheckBox(item.status)}
-                              // onClick={(e) => console.log(item.status)}
+                              // onClick={this.handleCheckBox(item.status)}
+                              onClick={(e) => console.log(item.status)}
                             />
                           </td>
                           <td className='col-md-2'>
