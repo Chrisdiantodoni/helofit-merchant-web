@@ -30,7 +30,12 @@ export class Laporan extends Component {
           <div className='col-8'>
             <div class='container mx-auto mt-5'>
               <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'></div>
+                <div className='ms-5 mt-5 me-3 pe-5'>
+                  <h2>Download Laporan</h2>
+                  <p>Berikut adalah laporan yang dapat diunduh dalam bentuk dokumen</p>
+                  <hr/>
+                  <p><i>Rekap semua data user </i></p>
+                </div>
               </div>
             </div>
           </div>

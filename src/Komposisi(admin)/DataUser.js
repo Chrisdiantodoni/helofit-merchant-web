@@ -30,7 +30,11 @@ export class DataUser extends Component {
           <div className='col-8'>
             <div class='container mx-auto mt-5'>
               <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'></div>
+                <div className='ms-5 mt-5 me-3 pe-5'>
+                  <button className='btn btn-primary rounded-3 float-end'>Tambah User</button>
+                  <br/>
+                  <br/>
+                </div>
               </div>
             </div>
           </div>

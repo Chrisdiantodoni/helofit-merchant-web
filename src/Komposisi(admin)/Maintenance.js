@@ -30,7 +30,13 @@ export class Maintenance extends Component {
           <div className='col-8'>
             <div class='container mx-auto mt-5'>
               <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'></div>
+                <div className='ms-5 mt-5 me-3 pe-5'>
+                  <h2>Pemberitahuan Maintenance</h2>
+                  <p>Jangan lupa untuk selalu melakukan Maintenance setiap
+                    bulannya pada tanggal 4. Dan selalu melakukan backup data
+                    setiap hari minggu
+                  </p>
+                </div>
               </div>
             </div>
           </div>
