@@ -65,13 +65,15 @@ export class Finance extends Component {
     });
   }
   HitungTotal(tipe, nominal) {
-    var total = parseInt(this.state.total);
+    var sub = parseInt(this.state.total);
     if (tipe == "Pemasukan") {
-      total += nominal;
+      sub += nominal;
     } else if (tipe == "Pengeluaran") {
-      total -= nominal;
+      sub -= nominal;
     }
-    return total;
+    // return this.setState({
+    //   total: sub,
+    // });
     // total -= days * 86400;
     // const sisa = (akhir - awal) / (1000 * 60 * 60 * 24);
     // return (
@@ -243,13 +245,11 @@ export class Finance extends Component {
                               Hapus Data
                             </button>
                           </td>
-                          <td className='fw-bold fs-3 text-center me-5'>
-                            <p>
-                              Total {this.HitungTotal(item.tipe, item.nominal)}
-                            </p>
-                          </td>
                         </tr>
                       ))}
+                      <div className='fw-bold fs-3 text-center me-5'>
+                        <p>Total {this.HitungTotal("Pendapatan", 10000)}</p>
+                      </div>
                     </tbody>
                   </table>
                   {/* <div className='fw-bold fs-3 text-center ms-5 ps-5'>

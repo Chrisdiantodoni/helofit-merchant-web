@@ -17,6 +17,11 @@ import WelcomeUser from "./Komposisi(User)/WelcomeUser";
 import Tasks from "./Komposisi(User)/Tasks";
 import Finance from "./Komposisi(User)/Finance";
 import AuthService from "./services/auth.service";
+//Setelah Login(Admin)
+import WelcomeAdmin from "./Komposisi(admin)/WelcomeAdmin";
+import Laporan from "./Komposisi(admin)/Laporan";
+import DataUser from "./Komposisi(admin)/DataUser";
+import Maintenance from "./Komposisi(admin)/Maintenance";
 import {
   BrowserRouter as Router,
   NavLink,
@@ -103,6 +108,22 @@ class App extends React.Component {
       {
         path: "/welcome/finance",
         render: () => <Finance />,
+      },
+      {
+        path: "/admin/dashboard",
+        render: () => <WelcomeAdmin />,
+      },
+      {
+        path: "/admin/laporan",
+        render: () => <Laporan />,
+      },
+      {
+        path: "/admin/datauser",
+        render: () => <DataUser />,
+      },
+      {
+        path: "/admin/maintenance",
+        render: () => <Maintenance />,
       },
     ];
     return (
