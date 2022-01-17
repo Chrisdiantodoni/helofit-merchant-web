@@ -95,9 +95,19 @@ app.post("/tasks", (req, res) => {
     }
   );
 });
+app.put("/tasks/:id", (req, res) => {
+  var status = req.body.status;
+  var id = req.params.id;
+  conn.query(
+    "UPDATE tasks SET status = " + status + " WHERE ID = " + id,
+    (err, result) => {
+      res.json(result);
+    }
+  );
+});
 app.get("/tasks", (req, res) => {
   var query =
-    "SELECT *, DATE_FORMAT(deadline, '%d/%m/%Y') AS deadline FROM tasks ORDER BY STR_TO_DATE(deadline, '%d/%m/%Y')";
+    "SELECT *, DATE_FORMAT(deadline, '%d-%m-%Y') AS deadline FROM tasks ORDER BY STR_TO_DATE(deadline, '%d-%m-%Y'), deadline ASC";
   conn.query(query, (err, rows) => {
     res.json(rows);
   });

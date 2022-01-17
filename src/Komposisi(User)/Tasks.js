@@ -36,15 +36,18 @@ const vfield = (value) => {
     );
   }
 };
+function konversi(str) {
+  return str.split("-").reverse().join("/");
+}
 export class Tasks extends Component {
   constructor(props) {
     super(props);
     var today = new Date(),
       date =
         ("0" + today.getDate()).slice(-2) +
-        "/" +
+        "-" +
         ("0" + today.getMonth() + 1).slice(-2) +
-        "/" +
+        "-" +
         today.getFullYear(),
       minim =
         today.getFullYear() +
@@ -53,6 +56,8 @@ export class Tasks extends Component {
         "-" +
         ("0" + today.getDate()).slice(-2);
     this.handleTask = this.handleTask.bind(this);
+    // this.changeCheck = this.changeCheck.bind(this);
+    this.handleCheckBox = this.handleCheckBox.bind(this);
     this.state = {
       listtasks: [],
       deadline: "",
@@ -72,6 +77,27 @@ export class Tasks extends Component {
       [event.target.name]: event.target.value,
     });
   }
+  // changeCheck(e) {
+  //   var isChecked = e.target.checked;
+  //   var pesan;
+  //   if (isChecked == true) {
+  //     pesan = alert("checklist");
+  //   } else {
+  //     pesan = alert("uncheck");
+  //   }
+  //   return pesan;
+  //   // do whatever you want with isChecked value
+  // }
+
+  // handleCheckBox(check) {
+  //   console.log(check);
+  //   // var isChecked = check;
+  //   // if (isChecked == true) {
+  //   //   console.log("true");
+  //   // } else {
+  //   //   console.log("false");
+  //   // }
+  // }
   handleTask(e) {
     const { currentUser } = this.state;
     e.preventDefault();
@@ -131,13 +157,62 @@ export class Tasks extends Component {
       });
   }
   Sisa(current, dead) {
-    return (dead - current) / (1000 * 60 * 60 * 24);
+    const awal = new Date(current);
+    const akhir = new Date(konversi(dead));
+    var total = Math.abs(akhir - awal) / 1000;
+    var days = Math.round(total / 86400);
+    total -= days * 86400;
+    const sisa = (akhir - awal) / (1000 * 60 * 60 * 24);
+    return (
+      <div>{sisa < -1 ? <p>Telah Berakhir</p> : <p>{days} hari lagi</p>}</div>
+    );
+  }
+  handleCheckBox(status, id) {
+    var hasil = status;
+    if (status == 0) {
+      hasil = 1;
+      console.log(hasil);
+    } else if (status == 1) {
+      hasil = 0;
+      console.log(hasil);
+    }
+    //   return;
+    // console.log(hasil);
+    //  Axios.put("http://localhost:8000/tasks", {
+    //   status: hasil,
+    // }).then((res) => {
+    //   this.setState({
+    //     message: res.data.message,
+    //     successful: true,
+    //   });
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 1500);
+    // });
+  }
+  //   // handleCheckClick = (status) => {
+  //   //   this.setState({ checkBoxChecked: !this.state.checkBoxChecked });
+  //   //   this.props.handleCheckClick(this.state.checkBoxChecked);
+  // }
+  // function(status) {
+  //   if (status == 0) {
+  //     return console.log();
+  //   } else {
+  //     return "invalid";
+  //   }
+  // }
+  handleInputChange(e) {
+    const target = e.target;
+    var value = target.value;
+    console.log(target);
+    // if (target.checked) {
+    //   check[value] = value;
+    // } else {
+    //   check.splice(value, 1);
+    // }
   }
   render() {
     const { listtasks, sekarang, mindate } = this.state;
-    const currentDate = new Date(mindate);
-    const dead = new Date("2022-03-16");
-    const sisa = (dead - currentDate) / (1000 * 60 * 60 * 24);
     return (
       <div>
         <Navbaruser konten='To-do List' />
@@ -148,7 +223,7 @@ export class Tasks extends Component {
           <div className='col-8'>
             <div class='container mx-auto mt-5'>
               <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-5 pe-5'>
+                <div className='ms-5 mt-5 me-3 pe-5'>
                   <Form
                     onSubmit={this.handleTask}
                     ref={(c) => {
@@ -234,12 +309,13 @@ export class Tasks extends Component {
                             <input
                               type='checkbox'
                               className='ms-2 mt-1 w-50 h-50'
-                              value='0'
+                              // checked={item.status}
+                              onClick={this.handleCheckBox(item.status)}
+                              // onClick={(e) => console.log(item.status)}
                             />
                           </td>
                           <td className='col-md-2'>
-                            {/* {this.Sisa(sekarang, item.deadline)} */}
-                            {sisa}
+                            {this.Sisa(mindate, item.deadline)}
                           </td>
                           <td className='col-md-4'>{item.keterangan}</td>
                           <td className='col-md-3'>
@@ -280,5 +356,4 @@ export class Tasks extends Component {
     );
   }
 }
-
 export default Tasks;
