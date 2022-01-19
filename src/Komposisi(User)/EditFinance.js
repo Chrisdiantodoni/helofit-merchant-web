@@ -37,7 +37,7 @@ const vfield = (value) => {
     );
   }
 };
-export class Finance extends Component {
+export class EditFinance extends Component {
   constructor(props) {
     super(props);
 
@@ -45,33 +45,19 @@ export class Finance extends Component {
       currentUser: AuthService.getCurrentUser(),
       message: "",
       successful: false,
-      keuangan: [],
       tipe: "Pemasukan",
-      pemasukan: 0,
-      pengeluaran: 0,
       kategori: "Gaji",
-      nominal: null,
-      keterangan: null,
-      sisa: 0,
+      nominal: 0,
+      keterangan: "",
     };
-    this.CekNilai = this.CekNilai.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
   }
   setValueState(event) {
     this.setState({
       [event.target.name]: event.target.value,
     });
   }
-  CekNilai(nilai) {
-    var result;
-    if (nilai != null) {
-      result = nilai;
-    } else if (nilai == null) {
-      result = 0;
-    }
-    return result;
-  }
-  addData(e) {
-    const { currentUser } = this.state;
+  handleEdit(e) {
     e.preventDefault();
     this.setState({
       message: "",
@@ -79,20 +65,22 @@ export class Finance extends Component {
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
-      Axios.post("http://localhost:8000/finances", {
-        userID: currentUser.id,
-        tipe: this.state.tipe,
-        kategori: this.state.kategori,
-        nominal: this.state.nominal,
-        keterangan: this.state.keterangan,
-      }).then(
+      Axios.put(
+        "http://localhost:8000/finances/" + this.props.match.params.id,
+        {
+          tipe: this.state.tipe,
+          kategori: this.state.kategori,
+          nominal: this.state.nominal,
+          keterangan: this.state.keterangan,
+        }
+      ).then(
         (res) => {
           this.setState({
-            message: res.data.message,
+            message: "Catatan berhasil diupdate",
             successful: true,
           });
           setTimeout(() => {
-            window.location.reload();
+            this.props.history.goBack();
           }, 1500);
         },
         (error) => {
@@ -118,41 +106,14 @@ export class Finance extends Component {
         currentUser: user,
       });
     }
-    fetch("http://localhost:8000/finances")
+    fetch("http://localhost:8000/finances/" + this.props.match.params.id)
       .then((res) => res.json())
       .then((res) => {
         this.setState({
-          keuangan: res,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    fetch("http://localhost:8000/sisa")
-      .then((res) => res.json())
-      .then((res) => {
-        this.setState({
-          sisa: res.sisa,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    fetch("http://localhost:8000/pemasukan")
-      .then((res) => res.json())
-      .then((res) => {
-        this.setState({
-          pemasukan: res.pemasukan,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    fetch("http://localhost:8000/pengeluaran")
-      .then((res) => res.json())
-      .then((res) => {
-        this.setState({
-          pengeluaran: res.pengeluaran,
+          tipe: res.tipe,
+          kategori: res.kategori,
+          nominal: res.nominal,
+          keterangan: res.keterangan,
         });
       })
       .catch((err) => {
@@ -160,25 +121,10 @@ export class Finance extends Component {
       });
   }
   render() {
-    const { currentUser, tipe, kategori, sisa, pemasukan, pengeluaran } =
-      this.state;
-    const EditFinance = withRouter(({ history, id }) => (
-      <button
-        onClick={() => history.push("/editfinance/" + id)}
-        className='btn btn-warning text-light me-3'>
-        Edit Data
-      </button>
-    ));
-    const DeleteFinance = withRouter(({ history, id }) => (
-      <button
-        onClick={() => history.push("/deletefinance/" + id)}
-        className='btn btn-danger text-light me-3'>
-        Delete Data
-      </button>
-    ));
+    const { tipe, kategori } = this.state;
     return (
       <div>
-        <Navbaruser konten='Catatan Keuangan' />
+        <Navbaruser konten='Edit Catatan Keuangan' />
         <div className='row'>
           <div className='col-2 sidebar-wrapper'>
             <Sidebaruser />
@@ -188,7 +134,7 @@ export class Finance extends Component {
               <div class='shadow border border-1 rounded-3'>
                 <div className='ms-5 mt-5 me-3 pe-5'>
                   <Form
-                    onSubmit={this.addData.bind(this)}
+                    onSubmit={this.handleEdit}
                     ref={(c) => {
                       this.form = c;
                     }}>
@@ -263,8 +209,8 @@ export class Finance extends Component {
                         </tr>
                         <tr className='row'>
                           <td className='col-2'>
-                            <button className='btn btn-primary rounded rounded-3'>
-                              Tambah Data
+                            <button className='btn btn-success rounded rounded-3'>
+                              Update Catatan
                             </button>
                           </td>
                           {this.state.message && (
@@ -290,45 +236,6 @@ export class Finance extends Component {
                       </tbody>
                     </table>
                   </Form>
-                  <br />
-
-                  <table class='table table-light table-hover'>
-                    <tbody>
-                      <tr className='row fw-bold border-dark mb-3'>
-                        <td className='col-md-2'>Tipe</td>
-                        <td className='col-md-1'>Kategori</td>
-                        <td className='col-md-3'>Keterangan</td>
-                        <td className='col-md-2'>Nominal</td>
-                        <td className='col-md-3' colspan='2'>
-                          Aksi
-                        </td>
-                      </tr>
-
-                      {this.state.keuangan.map((item, index) => (
-                        <tr className='row'>
-                          <td className='col-md-2'>{item.tipe}</td>
-                          <td className='col-md-1'>{item.kategori}</td>
-                          <td className='col-md-3'>{item.keterangan}</td>
-                          <td className='col-md-2'>Rp {item.nominal}</td>
-                          <td className='col-md-3'>
-                            <EditFinance id={item.id} />
-                            <DeleteFinance id={item.id} />
-                          </td>
-                        </tr>
-                      ))}
-                      <div className='fw-bold fs-4 text-start'>
-                        <p>
-                          Total Pemasukan Rp {this.CekNilai(pemasukan)} <br />
-                          Total Pengeluaran Rp {this.CekNilai(pengeluaran)}
-                          <br />
-                          Sisa Rp {this.CekNilai(sisa)}
-                        </p>
-                      </div>
-                    </tbody>
-                  </table>
-                  {/* <div className='fw-bold fs-3 text-center ms-5 ps-5'>
-                    <p>Total {total}</p>
-                  </div> */}
                 </div>
               </div>
             </div>
@@ -339,4 +246,4 @@ export class Finance extends Component {
   }
 }
 
-export default Finance;
+export default withRouter(EditFinance);

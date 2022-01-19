@@ -15,7 +15,10 @@ import FAQ from "./Komposisi/FAQ";
 import WelcomeUser from "./Komposisi(User)/WelcomeUser";
 import Tasks from "./Komposisi(User)/Tasks";
 import EditTasks from "./Komposisi(User)/EditTasks";
+import DeleteTasks from "./Komposisi(User)/DeleteTasks";
 import Finance from "./Komposisi(User)/Finance";
+import EditFinance from "./Komposisi(User)/EditFinance";
+import DeleteFinance from "./Komposisi(User)/DeleteFinance";
 import AuthService from "./services/auth.service";
 //Setelah Login(Admin)
 import WelcomeAdmin from "./Komposisi(admin)/WelcomeAdmin";
@@ -106,8 +109,20 @@ class App extends React.Component {
         render: () => <EditTasks />,
       },
       {
+        path: "/deletetasks/:id",
+        render: () => <DeleteTasks />,
+      },
+      {
         path: "/welcome/finance",
         render: () => <Finance />,
+      },
+      {
+        path: "/editfinance/:id",
+        render: () => <EditFinance />,
+      },
+      {
+        path: "/deletefinance/:id",
+        render: () => <DeleteFinance />,
       },
       {
         path: "/admin/dashboard",

@@ -1,96 +1,61 @@
 import React, { Component } from "react";
-import Textarea from "react-validation/build/textarea";
-import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
-import Select from "react-validation/build/select";
-import AuthService from "../services/auth.service";
 import { withRouter } from "react-router-dom";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import * as Axios from "axios";
-import { NavItem } from "react-bootstrap";
-const status2 = [
-  { value: "Berjalan", label: "Berjalan" },
-  { value: "Selesai", label: "Selesai" },
-];
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className='alert alert-danger w-25' role='alert'>
-        Field perlu diisi!
-      </div>
-    );
-  }
-};
-const reqdate = (value) => {
-  if (!value) {
-    return (
-      <div className='alert alert-danger w-25' role='alert'>
-        Silakan pilih tanggal deadline!
-      </div>
-    );
-  }
-};
-
-const vfield = (value) => {
-  if (value.length < 3 || value.length > 100) {
-    return (
-      <div className='alert alert-danger w-25' role='alert'>
-        Field harus berisi antara 3 dan 100 karakter.
-      </div>
-    );
-  }
-};
-// function Waktu(date) {
-//   var tgl = date;
-//   tgl.toLocaleString("en-US");
-//   return tgl;
-// }
-// function Waktu(date, days) {
-//   var tgl = new Date(date);
-//   tgl.setDate(tgl.getDate() + days);
-//   return tgl;
-// }
-function Waktu(date) {
-  var tgl = new Date(date);
-  // tgl.setHours(tgl.getHours() + 7);
-  var lengkap =
-    ("0" + tgl.getDate()).slice(-2) +
-    "-" +
-    ("0" + tgl.getMonth() + 1).slice(-2) +
-    "-" +
-    tgl.getFullYear();
-  return console.log(lengkap);
-}
-function konversi(str) {
-  return str.split("-").reverse().join("/");
-}
-export class EditTasks extends Component {
+export class DeleteTasks extends Component {
   constructor(props) {
     super(props);
-    var today = new Date(),
-      minim =
-        today.getFullYear() +
-        "-" +
-        ("0" + today.getMonth() + 1).slice(-2) +
-        "-" +
-        ("0" + today.getDate()).slice(-2);
+
     this.state = {
-      currentUser: AuthService.getCurrentUser(),
+      message: "",
+      successful: "",
       deadline: "",
       status: "",
-      mindate: minim,
       keterangan: "",
     };
-    this.handleEdit = this.handleEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.CekStatus = this.CekStatus.bind(this);
   }
   setValueState(event) {
     this.setState({
       [event.target.name]: event.target.value,
     });
   }
-  handleEdit(e) {
+  componentDidMount() {
+    fetch("http://localhost:8000/tasks/" + this.props.match.params.id)
+      .then((response) => response.json())
+      .then((res) => {
+        this.setState({
+          deadline: res.deadline.slice(0, 10),
+          status: res.status,
+          keterangan: res.keterangan,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+  CekStatus(status) {
+    var pesan;
+    if (status == "Berjalan") {
+      pesan = (
+        <div className='btn btn-warning disabled w-25' role='alert'>
+          Berjalan
+        </div>
+      );
+    } else {
+      pesan = (
+        <div className='btn btn-success disabled w-25' role='alert'>
+          Selesai
+        </div>
+      );
+    }
+    return pesan;
+  }
+  handleDelete(e) {
     e.preventDefault();
     this.setState({
       message: "",
@@ -99,14 +64,13 @@ export class EditTasks extends Component {
 
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
-      Axios.put("http://localhost:8000/tasks/" + this.props.match.params.id, {
-        deadline: this.state.deadline,
-        status: this.state.status,
-        keterangan: this.state.keterangan,
-      }).then(
+      Axios.delete(
+        "http://localhost:8000/tasks/" + this.props.match.params.id,
+        { body: JSON.stringify(this.state) }
+      ).then(
         (res) => {
           this.setState({
-            message: "List berhasil diupdate!",
+            message: "List berhasil dihapus",
             successful: true,
           });
           setTimeout(() => {
@@ -129,27 +93,12 @@ export class EditTasks extends Component {
       );
     }
   }
-  componentDidMount() {
-    fetch("http://localhost:8000/tasks/" + this.props.match.params.id)
-      .then((response) => response.json())
-      .then((res) => {
-        this.setState({
-          deadline: res.deadline.slice(0, 10),
-          status: res.status,
-          keterangan: res.keterangan,
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   render() {
-    const { mindate } = this.state;
+    const { currentUser } = this.state;
 
     return (
       <div>
-        <Navbaruser konten='Edit to-do List' />
+        <Navbaruser konten='Hapus to-do List' />
         <div className='row'>
           <div className='col-2 sidebar-wrapper'>
             <Sidebaruser />
@@ -159,7 +108,7 @@ export class EditTasks extends Component {
               <div class='shadow border border-1 rounded-3'>
                 <div className='ms-5 mt-5 me-3 pe-5'>
                   <Form
-                    onSubmit={this.handleEdit}
+                    onSubmit={this.handleDelete}
                     ref={(c) => {
                       this.form = c;
                     }}>
@@ -170,13 +119,12 @@ export class EditTasks extends Component {
                             <label className='fw-bold'>Deadline</label>
                           </td>
                           <td className='col'>
-                            <Input
+                            <input
                               type='date'
                               name='deadline'
+                              disabled
                               value={this.state.deadline}
-                              min={mindate}
                               className='w-25 border border-1'
-                              validations={[reqdate]}
                               onChange={this.setValueState.bind(this)}
                             />
                           </td>
@@ -186,18 +134,7 @@ export class EditTasks extends Component {
                             <label className='fw-bold'>Status</label>
                           </td>
                           <td className='col'>
-                            <Select
-                              name='status'
-                              value={this.state.status}
-                              className='w-25 border border-1'
-                              validations={[required, vfield]}
-                              onChange={this.setValueState.bind(this)}>
-                              {status2.map((option) => (
-                                <option value={option.value}>
-                                  {option.label}
-                                </option>
-                              ))}
-                            </Select>
+                            {this.CekStatus(this.state.status)}
                           </td>
                         </tr>
                         <tr className='row'>
@@ -205,19 +142,19 @@ export class EditTasks extends Component {
                             <label className='fw-bold'>List</label>
                           </td>
                           <td className='col'>
-                            <Textarea
+                            <textarea
                               name='keterangan'
                               value={this.state.keterangan}
+                              disabled
                               className='w-25 border border-1'
-                              validations={[required, vfield]}
                               onChange={this.setValueState.bind(this)}
                             />
                           </td>
                         </tr>
                         <tr className='row'>
                           <td className='col-2'>
-                            <button className='btn btn-success rounded rounded-3'>
-                              Update List
+                            <button className='btn btn-danger rounded rounded-3'>
+                              Delete List
                             </button>
                           </td>
                           {this.state.message && (
@@ -240,7 +177,6 @@ export class EditTasks extends Component {
                             }}
                           />
                         </tr>
-                        {Waktu(this.state.deadline)}
                       </tbody>
                     </table>
                   </Form>
@@ -254,4 +190,4 @@ export class EditTasks extends Component {
   }
 }
 
-export default withRouter(EditTasks);
+export default withRouter(DeleteTasks);

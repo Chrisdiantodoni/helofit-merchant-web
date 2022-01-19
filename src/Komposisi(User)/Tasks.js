@@ -57,12 +57,10 @@ export class Tasks extends Component {
         "-" +
         ("0" + today.getDate()).slice(-2);
     this.handleTask = this.handleTask.bind(this);
-    // this.changeCheck = this.changeCheck.bind(this);
-    this.handleCheckBox = this.handleCheckBox.bind(this);
     this.state = {
       listtasks: [],
       deadline: "",
-      status: false,
+      status: "Berjalan",
       sisa: "",
       keterangan: "",
       mindate: minim,
@@ -79,32 +77,6 @@ export class Tasks extends Component {
       [event.target.name]: event.target.value,
     });
   }
-  setDate(e) {
-    this.setState({
-      date: e.target.value,
-    });
-  }
-  // changeCheck(e) {
-  //   var isChecked = e.target.checked;
-  //   var pesan;
-  //   if (isChecked == true) {
-  //     pesan = alert("checklist");
-  //   } else {
-  //     pesan = alert("uncheck");
-  //   }
-  //   return pesan;
-  //   // do whatever you want with isChecked value
-  // }
-
-  // handleCheckBox(check) {
-  //   console.log(check);
-  //   // var isChecked = check;
-  //   // if (isChecked == true) {
-  //   //   console.log("true");
-  //   // } else {
-  //   //   console.log("false");
-  //   // }
-  // }
   handleTask(e) {
     const { currentUser } = this.state;
     e.preventDefault();
@@ -174,50 +146,24 @@ export class Tasks extends Component {
       <div>{sisa < -1 ? <p>Telah Berakhir</p> : <p>{days} hari lagi</p>}</div>
     );
   }
-  handleCheckBox(status, id) {
-    var hasil = status;
-    if (status == 0) {
-      hasil = 1;
-      console.log(hasil);
-    } else if (status == 1) {
-      hasil = 0;
-      console.log(hasil);
+  CekStatus(status) {
+    var pesan;
+    if (status == "Berjalan") {
+      pesan = (
+        <div className='badge bg-warning rounded-pill' role='alert'>
+          Berjalan
+        </div>
+      );
+    } else {
+      pesan = (
+        <div className='badge bg-success rounded-pill' role='alert'>
+          Selesai
+        </div>
+      );
     }
-    //   return;
-    // console.log(hasil);
-    //  Axios.put("http://localhost:8000/tasks", {
-    //   status: hasil,
-    // }).then((res) => {
-    //   this.setState({
-    //     message: res.data.message,
-    //     successful: true,
-    //   });
-    //   setTimeout(() => {
-    //     window.location.reload();
-    //   }, 1500);
-    // });
+    return pesan;
   }
-  //   // handleCheckClick = (status) => {
-  //   //   this.setState({ checkBoxChecked: !this.state.checkBoxChecked });
-  //   //   this.props.handleCheckClick(this.state.checkBoxChecked);
-  // }
-  // function(status) {
-  //   if (status == 0) {
-  //     return console.log();
-  //   } else {
-  //     return "invalid";
-  //   }
-  // }
-  handleInputChange(e) {
-    const target = e.target;
-    var value = target.value;
-    console.log(target);
-    // if (target.checked) {
-    //   check[value] = value;
-    // } else {
-    //   check.splice(value, 1);
-    // }
-  }
+
   render() {
     const { listtasks, sekarang, mindate } = this.state;
     const EditTask = withRouter(({ history, id }) => (
@@ -225,6 +171,13 @@ export class Tasks extends Component {
         onClick={() => history.push("/edittasks/" + id)}
         className='btn btn-warning text-light me-3'>
         Edit Data
+      </button>
+    ));
+    const DeleteTask = withRouter(({ history, id }) => (
+      <button
+        onClick={() => history.push("/deletetasks/" + id)}
+        className='btn btn-danger text-light me-3'>
+        Hapus Data
       </button>
     ));
     return (
@@ -309,9 +262,9 @@ export class Tasks extends Component {
                     <tbody>
                       <tr className='row fw-bold border-dark'>
                         <td className='col-md-2'>Deadline</td>
-                        <td className='col-md-1'>Status</td>
+                        <td className='col-md-2'>Status</td>
                         <td className='col-md-2'>Sisa Hari</td>
-                        <td className='col-md-4'>Keterangan List</td>
+                        <td className='col-md-3'>Keterangan List</td>
                         <td className='col-md-3' colspan='2'>
                           Aksi
                         </td>
@@ -319,27 +272,16 @@ export class Tasks extends Component {
                       {listtasks.map((item, index) => (
                         <tr className='row' key={index}>
                           <td className='col-md-2'>{item.deadline}</td>
-                          <td className='col-md-1'>
-                            <input
-                              type='checkbox'
-                              className='ms-2 mt-1 w-50 h-50'
-                              // checked={item.status}
-                              // onClick={this.handleCheckBox(item.status)}
-                              onClick={(e) => console.log(item.status)}
-                            />
+                          <td className='col-md-2'>
+                            {this.CekStatus(item.status)}
                           </td>
                           <td className='col-md-2'>
                             {this.Sisa(mindate, item.deadline)}
                           </td>
-                          <td className='col-md-4'>{item.keterangan}</td>
+                          <td className='col-md-3'>{item.keterangan}</td>
                           <td className='col-md-3'>
-                            {/* <button className='btn btn-warning text-light me-3'>
-                              Edit Data
-                            </button> */}
                             <EditTask id={item.id} />
-                            <button className='btn btn-danger'>
-                              Hapus Data
-                            </button>
+                            <DeleteTask id={item.id} />
                           </td>
                         </tr>
                       ))}

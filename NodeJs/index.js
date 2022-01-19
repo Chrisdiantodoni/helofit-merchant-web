@@ -63,7 +63,7 @@ conn.connect((err) => {
   //   }
   // );
   // conn.query(
-  //   "CREATE TABLE tasks (id INT UNSIGNED AUTO_INCREMENT,userID INT, deadline DATE NOT NULL, status BOOLEAN, keterangan VARCHAR(100) NOT NULL, PRIMARY KEY(id,userID), FOREIGN KEY (userID) REFERENCES users(id))",
+  //   "CREATE TABLE tasks (id INT UNSIGNED AUTO_INCREMENT,userID INT, deadline DATE NOT NULL, status VARCHAR(15) NOT NULL, keterangan VARCHAR(100) NOT NULL, PRIMARY KEY(id,userID), FOREIGN KEY (userID) REFERENCES users(id))",
   //   (err, result) => {
   //     if (err) console.error("Error saat membuat tabel " + err);
   //     else console.log("Tabel tasks berhasil dibuat");
@@ -117,11 +117,58 @@ app.post("/finances", (req, res) => {
     }
   );
 });
-app.put("/tasks/:id", (req, res) => {
-  var status = req.body.status;
+app.put("/finances/:id", (req, res) => {
+  var tipe = req.body.tipe;
+  var kategori = req.body.kategori;
+  var nominal = req.body.nominal;
+  var keterangan = req.body.keterangan;
   var id = req.params.id;
   conn.query(
-    "UPDATE tasks SET status = " + status + " WHERE ID = " + id,
+    "UPDATE finances SET tipe = '" +
+      tipe +
+      "', kategori = '" +
+      kategori +
+      "', nominal = '" +
+      nominal +
+      "', keterangan = '" +
+      keterangan +
+      "' WHERE ID = " +
+      id,
+    (err, result) => {
+      res.json(result);
+    }
+  );
+});
+app.delete("/finances/:id", (req, res) => {
+  var id = req.params.id;
+  var query = "DELETE FROM finances WHERE id = " + id;
+  conn.query(query, (err, result) => {
+    if (err) res.json(err);
+    else res.json(result);
+  });
+});
+app.delete("/tasks/:id", (req, res) => {
+  var id = req.params.id;
+  var query = "DELETE FROM tasks WHERE id = " + id;
+  conn.query(query, (err, result) => {
+    if (err) res.json(err);
+    else res.json(result);
+  });
+});
+app.put("/tasks/:id", (req, res) => {
+  var status = req.body.status;
+  var deadline = req.body.deadline;
+  var keterangan = req.body.keterangan;
+  var id = req.params.id;
+  conn.query(
+    "UPDATE tasks SET deadline = '" +
+      deadline +
+      "', status = '" +
+      status +
+      "', keterangan = '" +
+      keterangan +
+      "' WHERE ID = " +
+      id,
     (err, result) => {
       res.json(result);
     }
@@ -158,6 +205,13 @@ app.get("/sisa", (req, res) => {
     const sisa = rows[0];
     if (err) res.status(400).json(err);
     else res.json(sisa);
+  });
+});
+app.get("/finances/:id", (req, res) => {
+  var id = req.params.id;
+  var query = "SELECT * FROM finances WHERE id = " + id;
+  conn.query(query, (err, rows) => {
+    res.json(rows[0]);
   });
 });
 app.get("/tasks", (req, res) => {
