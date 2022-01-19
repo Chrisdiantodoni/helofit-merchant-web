@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, NavDropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import logo from "../Assets/logo.png";
 export class Navbarbefore extends Component {
@@ -27,14 +27,17 @@ export class Navbarbefore extends Component {
                   Beranda
                 </NavLink>
               </Nav.Link>
-              <Nav.Link className='efek fs-6'>
-                <NavLink
-                  to='/layanan'
-                  className='text-decoration-none'
-                  activeClassName='aktif'>
-                  Layanan
-                </NavLink>
-              </Nav.Link>
+              <NavDropdown
+                title={<span className='text-primary'>Layanan</span>}
+                className='efek fs-6'
+                id='basic-nav-dropdown'>
+                <NavDropdown.Item href='/manajemen'>
+                  Manajemen Kegiatan
+                </NavDropdown.Item>
+                <NavDropdown.Item href='/keuangan'>
+                  Catatan Keuangan
+                </NavDropdown.Item>
+              </NavDropdown>
               <Nav.Link className='efek fs-6'>
                 <NavLink
                   to='/tentang'

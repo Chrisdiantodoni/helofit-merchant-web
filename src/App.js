@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 //Sebelum Login
 import Beranda from "./Komposisi/Beranda";
-import Layanan from "./Komposisi/Layanan";
 import Daftar from "./Komposisi/Daftar";
 import Login from "./Komposisi/Login";
 import Kontak from "./Komposisi/Kontak";
@@ -15,6 +14,7 @@ import FAQ from "./Komposisi/FAQ";
 //Setelah Login(User)
 import WelcomeUser from "./Komposisi(User)/WelcomeUser";
 import Tasks from "./Komposisi(User)/Tasks";
+import EditTasks from "./Komposisi(User)/EditTasks";
 import Finance from "./Komposisi(User)/Finance";
 import AuthService from "./services/auth.service";
 //Setelah Login(Admin)
@@ -66,10 +66,6 @@ class App extends React.Component {
         render: () => <Beranda />,
       },
       {
-        path: "/layanan",
-        render: () => <Layanan />,
-      },
-      {
         path: "/tentang",
         render: () => <Tentang />,
       },
@@ -104,6 +100,10 @@ class App extends React.Component {
       {
         path: "/welcome/tasks",
         render: () => <Tasks />,
+      },
+      {
+        path: "/edittasks/:id",
+        render: () => <EditTasks />,
       },
       {
         path: "/welcome/finance",

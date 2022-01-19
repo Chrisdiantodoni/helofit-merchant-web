@@ -13,11 +13,11 @@ export default class Beranda_2 extends Component {
             <div className='card h-100'>
               <div className='card-body text-start'>
                 <h5 className='card-title fw-bold text-dark'>
-                  Harga Terjangkau
+                Mudah Digunakan
                 </h5>
                 <p className='card-text text-muted'>
-                  Tarif jasa yang dikenakan sudah lebih murah dari yang
-                  dipasaran namun tetap berkualitas dan sesuai dengan keinginan
+                Gak ada kata ribet dalam kamus
+                Taskita, karena aplikasi ini mudah digunakan sesuai kebutuhanmu
                 </p>
               </div>
             </div>
@@ -26,11 +26,11 @@ export default class Beranda_2 extends Component {
             <div className='card h-100'>
               <div className='card-body text-start'>
                 <h5 className='card-title fw-bold text-dark'>
-                  Harga Terjangkau
+                  Layanan gratis
                 </h5>
                 <p className='card-text text-muted'>
-                  Tarif jasa yang dikenakan sudah lebih murah dari yang
-                  dipasaran namun tetap berkualitas dan sesuai dengan keinginan
+                Untuk menggunakan fitur yang ada , kamu tidak perlu khawatir
+                karena semua fitur Taskita gratis
                 </p>
               </div>
             </div>
@@ -39,11 +39,11 @@ export default class Beranda_2 extends Component {
             <div className='card h-100'>
               <div className='card-body text-start'>
                 <h5 className='card-title fw-bold text-dark'>
-                  Harga Terjangkau
+                 Tampilan Menarik
                 </h5>
                 <p className='card-text text-muted'>
-                  Tarif jasa yang dikenakan sudah lebih murah dari yang
-                  dipasaran namun tetap berkualitas dan sesuai dengan keinginan
+                Bukan cuma simpel, Taskita juga bikin kamu gak bosen dan enak
+                dilihat ketika menggunakannya.
                 </p>
               </div>
             </div>
@@ -52,11 +52,11 @@ export default class Beranda_2 extends Component {
             <div className='card h-100'>
               <div className='card-body text-start'>
                 <h5 className='card-title fw-bold text-dark'>
-                  Harga Terjangkau
+                 Kecepatan
                 </h5>
                 <p className='card-text text-muted'>
-                  Tarif jasa yang dikenakan sudah lebih murah dari yang
-                  dipasaran namun tetap berkualitas dan sesuai dengan keinginan
+                Untuk kecepatan Taskita gak usah diragukan lagi deh, pokoknya anti
+                lelet dan anti nunggu.
                 </p>
               </div>
             </div>
@@ -67,87 +67,43 @@ export default class Beranda_2 extends Component {
         <div className='Layanan'>
           <p className='text-muted'>
             Layanan Kami <br />
-            <h3 className='fw-bold text-dark'>Apa yang kamu butuhkan?</h3>
+            <h3 className='fw-bold text-dark'>Fitur Yang Bisa Kamu Gunakan</h3>
           </p>
           <br />
-          <div className='row row-cols-1 row-cols-md-3 g-4'>
-            <div className='col'>
+          <div className='row row-cols-1 row-cols-md-3 g-4 '>
+            <div className='col-md-6'>
               <div className='card h-100'>
                 <img className='card-img-top bg-primary' height='130px' />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Desain Grafis</h4>
+                  <h4 className='card-text'>Daftar Manajemen Kegiatan</h4>
                 </div>
                 <div class='card-footer bg-light'>
                   <a className='btn btn-primary w-100'>Selengkapnya</a>
                 </div>
               </div>
             </div>
-            <div class='col'>
+            <div class='col-md-6'>
               <div className='card h-100'>
                 <img className='card-img-top bg-info' height='130px' />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Editing Video</h4>
+                  <h4 className='card-text'>Catatan Keuangan Harian</h4>
                 </div>
                 <div class='card-footer bg-light'>
                   <a className='btn btn-primary w-100'>Selengkapnya</a>
                 </div>
               </div>
-            </div>
-            <div class='col'>
-              <div className='card h-100'>
-                <img className='card-img-top bg-warning' height='130px' />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Pembuatan Aplikasi</h4>
-                </div>
-                <div class='card-footer bg-light'>
-                  <a className='btn btn-primary w-100'>Selengkapnya</a>
-                </div>
-              </div>
-            </div>
-            <div class='col'>
-              <div className='card h-100'>
-                <img className='card-img-top bg-dark' height='130px' />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Voice Over</h4>
-                </div>
-                <div class='card-footer bg-light'>
-                  <a className='btn btn-primary w-100'>Selengkapnya</a>
-                </div>
-              </div>
-            </div>
-            <div class='col'>
-              <div className='card h-100'>
-                <img className='card-img-top bg-success' height='130px' />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Pembuatan Website</h4>
-                </div>
-                <div class='card-footer bg-light'>
-                  <a className='btn btn-primary w-100'>Selengkapnya</a>
-                </div>
-              </div>
-            </div>
-            <div class='col'>
-              <div className='card h-100'>
-                <img className='card-img-top bg-danger' height='130px' />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Digital Marketing</h4>
-                </div>
-                <div class='card-footer bg-light'>
-                  <a className='btn btn-primary w-100'>Selengkapnya</a>
-                </div>
-              </div>
-            </div>
+            </div> 
           </div>
           <br />
-          <div className='card mb-3 bg-dark p-4'>
-            <div className='row g-0'>
+          <div className='card mb-3 bg-dark p-4 pt-4 mt-4'>
+            <div className='row g-0 pt-2'>
               <div className='col-md-8'>
                 <div className='card-body text-start'>
                   <h3 className='card-text text-light fw-bold'>
-                    Penelitian mengatakan desain menarik <br /> dapat merangsang
-                    kesadaran audience <br /> akan Brand Kamu
+                  Sudah banyak orang terbantu dengan adanya aplikasi web taskita.
+                  Kamu kapan?
                   </h3>
-                  <a className='btn btn-primary'>Konsultasi Sekarang</a>
+                  <a className='btn btn-primary'>Mulai Sekarang</a>
                 </div>
               </div>
               <div className='col-md-4 bg-secondary me-auto'>
@@ -167,11 +123,10 @@ export default class Beranda_2 extends Component {
               <div className='card h-100'>
                 <img className='card-img-top bg-secondary' height='130px' />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Andi Suryadi, Pemilik Usaha</h4>
+                  <h4 className='card-text'>Yodi Suryana, Karyawan Swasta</h4>
                   <p className='text-muted d-inline'>
-                    Aku mulai langganan Microdigi karena konten-konten yang
-                    dibuat gak pernah ngecewain deh, customer juga makin banyak,
-                    kadang bisa selesai sebelum deadline
+                  Taskita Gokil sih, jadi gampang kalo mau buat to do list kerjaan. 
+                  Belum lagi tampilannya yang menarik. Mantap Buat Taskita
                   </p>
                 </div>
               </div>
@@ -180,11 +135,10 @@ export default class Beranda_2 extends Component {
               <div className='card h-100'>
                 <img className='card-img-top bg-dark' height='130px' />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Andi Suryadi, Pemilik Usaha</h4>
+                  <h4 className='card-text'>Chintia Hartono , Mahasiswa</h4>
                   <p className='text-muted d-inline'>
-                    Aku mulai langganan Microdigi karena konten-konten yang
-                    dibuat gak pernah ngecewain deh, customer juga makin banyak,
-                    kadang bisa selesai sebelum deadline
+                  Selama kuliah, Taskita membantu banget karena ga khawatir buat lupa ngerjain semua tugas kuliah dan kegiatan kuliah.
+                    easy to use banget jadi gampang mau buat to do list apapun
                   </p>
                 </div>
               </div>
@@ -193,11 +147,10 @@ export default class Beranda_2 extends Component {
               <div className='card h-100'>
                 <img className='card-img-top bg-danger' height='130px' />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Andi Suryadi, Pemilik Usaha</h4>
+                  <h4 className='card-text'>Claudia Tan , Siswa SMA</h4>
                   <p className='text-muted d-inline'>
-                    Aku mulai langganan Microdigi karena konten-konten yang
-                    dibuat gak pernah ngecewain deh, customer juga makin banyak,
-                    kadang bisa selesai sebelum deadline
+                    Taskita Mantep, aku jadi gampang buat semua to do list buat kegiatan sekolah sama pr ku, ga nyesal berlangganan
+                    dengan taskita. udah gitu cepet dan tampilannya menarik
                   </p>
                 </div>
               </div>

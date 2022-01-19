@@ -99,7 +99,7 @@ export class Daftar extends Component {
       <div>
         <div className='container mx-auto'>
           <h2 className='text-primary fw-bold text-center mt-4 mb-4'>
-            Selamat Datang di Microdigi
+            Selamat Datang di Taskita
           </h2>
           <div className='container border border-1 w-50 rounded-3 mx-auto mb-3'>
             <Form

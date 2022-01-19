@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const db = require("./models");
+// const { json } = require("sequelize/dist");
 const Role = db.role;
 
 function initial() {
@@ -132,11 +133,38 @@ app.get("/finances", (req, res) => {
     res.json(rows);
   });
 });
+app.get("/pemasukan", (req, res) => {
+  var query =
+    "SELECT SUM(nominal) AS pemasukan FROM finances WHERE tipe = 'Pemasukan'";
+  conn.query(query, (err, rows) => {
+    const pemasukan = rows[0];
+    if (err) res.status(400).json(err);
+    else res.json(pemasukan);
+  });
+});
+app.get("/pengeluaran", (req, res) => {
+  var query =
+    "SELECT SUM(nominal) AS pengeluaran FROM finances WHERE tipe = 'Pengeluaran'";
+  conn.query(query, (err, rows) => {
+    const pengeluaran = rows[0];
+    if (err) res.status(400).json(err);
+    else res.json(pengeluaran);
+  });
+});
+app.get("/sisa", (req, res) => {
+  var query =
+    "SELECT (SELECT SUM(nominal) AS sisa FROM finances WHERE tipe = 'Pemasukan') - (SELECT SUM(nominal) AS sisa FROM `finances` WHERE tipe = 'Pengeluaran') AS sisa";
+  conn.query(query, (err, rows) => {
+    const sisa = rows[0];
+    if (err) res.status(400).json(err);
+    else res.json(sisa);
+  });
+});
 app.get("/tasks", (req, res) => {
   var query =
     "SELECT *, DATE_FORMAT(deadline, '%d-%m-%Y') AS deadline FROM tasks ORDER BY STR_TO_DATE(deadline, '%d-%m-%Y'), deadline ASC";
-  conn.query(query, (err, rows) => {
-    res.json(rows);
+  conn.query(query, (err, result) => {
+    res.json(result);
   });
 });
 

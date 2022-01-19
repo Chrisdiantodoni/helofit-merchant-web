@@ -6,6 +6,7 @@ import CheckButton from "react-validation/build/button";
 import "../css/bootstrap.min.css";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import AuthService from "../services/auth.service";
+import { withRouter } from "react-router-dom";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import * as Axios from "axios";
 const required = (value) => {
@@ -70,11 +71,17 @@ export class Tasks extends Component {
       loading: false,
       successful: false,
       message: "",
+      date: "",
     };
   }
   setValueState(event) {
     this.setState({
       [event.target.name]: event.target.value,
+    });
+  }
+  setDate(e) {
+    this.setState({
+      date: e.target.value,
     });
   }
   // changeCheck(e) {
@@ -213,6 +220,13 @@ export class Tasks extends Component {
   }
   render() {
     const { listtasks, sekarang, mindate } = this.state;
+    const EditTask = withRouter(({ history, id }) => (
+      <button
+        onClick={() => history.push("/edittasks/" + id)}
+        className='btn btn-warning text-light me-3'>
+        Edit Data
+      </button>
+    ));
     return (
       <div>
         <Navbaruser konten='To-do List' />
@@ -319,32 +333,16 @@ export class Tasks extends Component {
                           </td>
                           <td className='col-md-4'>{item.keterangan}</td>
                           <td className='col-md-3'>
-                            <button className='btn btn-warning text-light me-3'>
+                            {/* <button className='btn btn-warning text-light me-3'>
                               Edit Data
-                            </button>
+                            </button> */}
+                            <EditTask id={item.id} />
                             <button className='btn btn-danger'>
                               Hapus Data
                             </button>
                           </td>
                         </tr>
                       ))}
-                      {/* <tr className='row'>
-                        <td className='col-md-2'>Deadline</td>
-                        <td className='col-md-1'>
-                          <input
-                            type='checkbox'
-                            className='ms-2 mt-1 w-50 h-50'
-                            value='0'
-                          />
-                        </td>
-                        <td className='col-md-4'>Keterangan List</td>
-                        <td className='col-md-5'>
-                          <button className='btn btn-warning text-light me-3'>
-                            Edit Data
-                          </button>
-                          <button className='btn btn-danger'>Hapus Data</button>
-                        </td>
-                      </tr> */}
                     </tbody>
                   </table>
                 </div>

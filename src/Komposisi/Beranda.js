@@ -12,21 +12,23 @@ export default class Beranda extends Component {
       <div>
         <Navbarbefore />
         <Container className='text-center'>
-          <h1 className='pt-5 text-dark'>Creative Digital Agency</h1>
-          <p className='text-muted'>
-            Kami ada untuk membangun strategi dalam meningkatkan penjualan
-            digital usaha Kamu.
-          </p>
+          <h1 className='pt-5 text-dark font-weight-bold'>
+            Simple Personal Management <br />
+            Tasks and Finance
+          </h1>
+          <h5 className='text-muted '>
+            Membantu Kamu lebih teratur dalam kegiatan dan keuangan
+          </h5>
           <Nav.Link href='#porto' className='d-inline-block mx-auto'>
             <Button variant='primary' className='btn-sm rounded-pill'>
-              Lihat Portofolio
+              Lebih Detail
             </Button>
           </Nav.Link>
           <Nav.Link href='/daftar' className='d-inline-block me-5'>
             <Button
               variant='light'
               className='btn-sm btn-outline-primary rounded-pill'>
-              Daftar Gratis
+              Daftar Gratis !
             </Button>
           </Nav.Link>
           <img

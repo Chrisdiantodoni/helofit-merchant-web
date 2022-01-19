@@ -4,6 +4,11 @@ import { Container } from "react-bootstrap";
 import React, { Component } from "react";
 import Footer from "./Footer";
 import Navbarbefore from "../Komponen/Navbar(before login)";
+import marco from "../Assets/marco.jpg";
+import karim from "../Assets/karim.png";
+import adrian from "../Assets/adrian.png";
+import zulharmin from "../Assets/zulharmin.jpeg";
+import christa from "../Assets/christa.png";
 class Tentang extends Component {
   render() {
     return (
@@ -109,7 +114,7 @@ class Tentang extends Component {
               </div>
             </div>
           </div>
-          <div className='row row-cols-1 row-cols-md-3 g-4 mt-3'>
+          <div className='row row-cols-1 row-cols-3 g-4 mt-3'>
             <div className='col'>
               <div className='pt-5 mt-5'>
                 <p className='text-muted'>
@@ -120,7 +125,11 @@ class Tentang extends Component {
             </div>
             <div className='col'>
               <div className='card h-100'>
-                <img className='card-img-top bg-info' height='130px' />
+                <img
+                  className='mx-auto d-inline-block'
+                  src={marco}
+                  height='200px'
+                />
                 <div className='card-body text-start'>
                   <h4 className='card-text'>Marco Lukita</h4>
                   <p className='text-muted d-inline'>Back-end Developer</p>
@@ -129,37 +138,53 @@ class Tentang extends Component {
             </div>
             <div className='col'>
               <div className='card h-100'>
-                <img className='card-img-top bg-warning' height='130px' />
+                <img
+                  className='mx-auto d-inline-block'
+                  src={karim}
+                  height='200px'
+                />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Marco Lukita</h4>
+                  <h4 className='card-text'>Kevin Karim</h4>
                   <p className='text-muted d-inline'>Back-end Developer</p>
                 </div>
               </div>
             </div>
             <div className='col'>
               <div className='card h-100'>
-                <img className='card-img-top bg-dark' height='130px' />
+                <img
+                  className='mx-auto d-inline-block'
+                  src={adrian}
+                  height='200px'
+                />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Marco Lukita</h4>
-                  <p className='text-muted d-inline'>Back-end Developer</p>
+                  <h4 className='card-text'>Adrian</h4>
+                  <p className='text-muted d-inline'>Front-end Developer</p>
                 </div>
               </div>
             </div>
             <div className='col'>
               <div className='card h-100'>
-                <img className='card-img-top bg-success' height='130px' />
+                <img
+                  className='mx-auto d-inline-block'
+                  src={zulharmin}
+                  height='200px'
+                />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Marco Lukita</h4>
-                  <p className='text-muted d-inline'>Back-end Developer</p>
+                  <h4 className='card-text'>Zulharmin</h4>
+                  <p className='text-muted d-inline'>UI Designer</p>
                 </div>
               </div>
             </div>
             <div className='col'>
               <div className='card h-100'>
-                <img className='card-img-top bg-danger' height='130px' />
+                <img
+                  className='mx-auto d-inline-block'
+                  src={christa}
+                  height='200px'
+                />
                 <div className='card-body text-start'>
-                  <h4 className='card-text'>Marco Lukita</h4>
-                  <p className='text-muted d-inline'>Back-end Developer</p>
+                  <h4 className='card-text'>Christa</h4>
+                  <p className='text-muted d-inline'>Front-end Developer</p>
                 </div>
               </div>
             </div>

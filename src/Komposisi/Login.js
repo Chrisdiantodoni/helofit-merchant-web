@@ -106,10 +106,10 @@ export class Login extends Component {
                 this.form = c;
               }}>
               <h3 className='text-center pt-2'>
-                Masuk ke Akun Microdigi Kamu!
+                Masuk ke Akun Taskita Kamu!
                 <p className='text-muted fs-6 pt-2'>
-                  Sudah punya akun Microdigi? Yuk masuk untuk mengakses
-                  <br /> beragam fitur Microdigi
+                  Sudah punya akun Taskita? Yuk masuk untuk mengakses
+                  <br /> beragam fitur Taskita
                 </p>
               </h3>
               <div class='form-group mb-3'>

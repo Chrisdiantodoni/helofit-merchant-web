@@ -45,39 +45,32 @@ export class Finance extends Component {
       message: "",
       successful: false,
       keuangan: [],
-      currentUser: AuthService.getCurrentUser(),
       tipe: "Pemasukan",
+      pemasukan: 0,
+      pengeluaran: 0,
       kategori: "Gaji",
       nominal: null,
       keterangan: null,
-      total: 0,
+      sisa: 0,
     };
-    // var tipe = this.state.tipe;
-    // var nominal = parseInt(this.state.nominal);
-
-    // if (tipe == "Pemasukan") {
-    //   this.state.total += nominal;
-    // } else if (tipe == "Pengeluaran") {
-    //   this.state.total -= nominal;
-    // }
   }
   setValueState(event) {
     this.setState({
       [event.target.name]: event.target.value,
     });
   }
-  HitungTotal(tipe, nominal) {
-    var sub = parseInt(this.state.total);
-    if (tipe == "Pemasukan") {
-      sub += nominal;
-    } else if (tipe == "Pengeluaran") {
-      sub -= nominal;
-    }
-    return sub;
-    // return this.setState({
-    //   total: sub,
-    // });
-  }
+  // HitungTotal(tipe, nominal) {
+  //   var sub = parseInt(this.state.total);
+  //   if (tipe == "Pemasukan") {
+  //     sub += nominal;
+  //   } else if (tipe == "Pengeluaran") {
+  //     sub -= nominal;
+  //   }
+  //   return sub;
+  //   // return this.setState({
+  //   //   total: sub,
+  //   // });
+  // }
   addData(e) {
     const { currentUser } = this.state;
     e.preventDefault();
@@ -91,7 +84,6 @@ export class Finance extends Component {
         userID: currentUser.id,
         tipe: this.state.tipe,
         kategori: this.state.kategori,
-        total: this.state.total,
         nominal: this.state.nominal,
         keterangan: this.state.keterangan,
       }).then(
@@ -117,15 +109,6 @@ export class Finance extends Component {
           });
         }
       );
-
-      // data_tmp.push({
-      //   tipe: this.state.tipe,
-      //   kategori: this.state.kategori,
-      //   total: this.state.total,
-      //   nominal: this.state.nominal,
-      //   keterangan: this.state.keterangan,
-      // });
-      // this.setState({ keuangan: data_tmp });
     }
   }
   componentDidMount() {
@@ -141,7 +124,36 @@ export class Finance extends Component {
       .then((res) => {
         this.setState({
           keuangan: res,
-          total: this.HitungTotal(res.tipe, res.nominal),
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    fetch("http://localhost:8000/sisa")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          sisa: res.sisa,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    fetch("http://localhost:8000/pemasukan")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          pemasukan: res.pemasukan,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    fetch("http://localhost:8000/pengeluaran")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          pengeluaran: res.pengeluaran,
         });
       })
       .catch((err) => {
@@ -149,7 +161,8 @@ export class Finance extends Component {
       });
   }
   render() {
-    const { currentUser, tipe, kategori, total } = this.state;
+    const { currentUser, tipe, kategori, sisa, pemasukan, pengeluaran } =
+      this.state;
 
     return (
       <div>
@@ -266,6 +279,7 @@ export class Finance extends Component {
                     </table>
                   </Form>
                   <br />
+
                   <table class='table table-light table-hover'>
                     <tbody>
                       <tr className='row fw-bold border-dark mb-3'>
@@ -283,7 +297,7 @@ export class Finance extends Component {
                           <td className='col-md-2'>{item.tipe}</td>
                           <td className='col-md-1'>{item.kategori}</td>
                           <td className='col-md-3'>{item.keterangan}</td>
-                          <td className='col-md-2'>{item.nominal}</td>
+                          <td className='col-md-2'>Rp {item.nominal}</td>
                           <td className='col-md-3'>
                             <button className='btn btn-warning text-light me-3'>
                               Edit Data
@@ -294,8 +308,12 @@ export class Finance extends Component {
                           </td>
                         </tr>
                       ))}
-                      <div className='fw-bold fs-3 text-center me-5'>
-                        <p>Total {this.HitungTotal("Pendapatan", 10000)}</p>
+                      <div className='fw-bold fs-4 text-start'>
+                        <p>
+                          Total Pemasukan Rp {pemasukan} <br /> Total
+                          Pengeluaran Rp {pengeluaran} <br />
+                          Sisa Rp {sisa}
+                        </p>
                       </div>
                     </tbody>
                   </table>
