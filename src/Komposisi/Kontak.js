@@ -124,7 +124,7 @@ export class Kontak extends Component {
                 <BsTelephone /> +621234567890
               </p>
               <p className='ms-5 ps-2 text-primary'>
-                <GoMail /> microdigi@gmail.com
+                <GoMail /> info.taskita@gmail.com
               </p>
               <p className='ms-5 ps-2 text-primary'>
                 <GoLocation /> Jl. M.H Thamrin No 112 Medan

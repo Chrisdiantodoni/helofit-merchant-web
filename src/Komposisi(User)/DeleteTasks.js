@@ -40,7 +40,7 @@ export class DeleteTasks extends Component {
   }
   CekStatus(status) {
     var pesan;
-    if (status == "Berjalan") {
+    if (status === "Berjalan") {
       pesan = (
         <div className='btn btn-warning disabled w-25' role='alert'>
           Berjalan
@@ -94,8 +94,6 @@ export class DeleteTasks extends Component {
     }
   }
   render() {
-    const { currentUser } = this.state;
-
     return (
       <div>
         <Navbaruser konten='Hapus to-do List' />

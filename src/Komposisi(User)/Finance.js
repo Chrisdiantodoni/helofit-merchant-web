@@ -160,8 +160,7 @@ export class Finance extends Component {
       });
   }
   render() {
-    const { currentUser, tipe, kategori, sisa, pemasukan, pengeluaran } =
-      this.state;
+    const { tipe, kategori, sisa, pemasukan, pengeluaran } = this.state;
     const EditFinance = withRouter(({ history, id }) => (
       <button
         onClick={() => history.push("/editfinance/" + id)}

@@ -3,7 +3,6 @@ import { Nav } from "react-bootstrap";
 import "./style.css";
 import { RiComputerLine } from "react-icons/ri";
 import { BsListTask, BsWallet2 } from "react-icons/bs";
-import { NavLink } from "react-router-dom";
 import { withRouter } from "react-router";
 export class Sidebaradmin extends Component {
   render() {

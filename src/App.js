@@ -11,6 +11,7 @@ import Tentang from "./Komposisi/Tentang";
 import Keuangan from "./Komposisi/Keuangan";
 import Manajemen from "./Komposisi/Manajemen";
 import FAQ from "./Komposisi/FAQ";
+import AuthService from "./services/auth.service";
 //Setelah Login(User)
 import WelcomeUser from "./Komposisi(User)/WelcomeUser";
 import Tasks from "./Komposisi(User)/Tasks";
@@ -19,20 +20,13 @@ import DeleteTasks from "./Komposisi(User)/DeleteTasks";
 import Finance from "./Komposisi(User)/Finance";
 import EditFinance from "./Komposisi(User)/EditFinance";
 import DeleteFinance from "./Komposisi(User)/DeleteFinance";
-import AuthService from "./services/auth.service";
+import Profil from "./Komposisi(User)/Profil";
 //Setelah Login(Admin)
 import WelcomeAdmin from "./Komposisi(admin)/WelcomeAdmin";
 import Laporan from "./Komposisi(admin)/Laporan";
 import DataUser from "./Komposisi(admin)/DataUser";
 import Maintenance from "./Komposisi(admin)/Maintenance";
-import {
-  BrowserRouter as Router,
-  NavLink,
-  Route,
-  Redirect,
-  withRouter,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends React.Component {
   constructor(props) {
@@ -60,8 +54,6 @@ class App extends React.Component {
     AuthService.Keluar();
   }
   render() {
-    const currentUser = this.state;
-
     const routes = [
       {
         path: "/",
@@ -103,6 +95,10 @@ class App extends React.Component {
       {
         path: "/welcome/tasks",
         render: () => <Tasks />,
+      },
+      {
+        path: "/welcome/profil",
+        render: () => <Profil />,
       },
       {
         path: "/edittasks/:id",

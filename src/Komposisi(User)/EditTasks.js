@@ -9,7 +9,6 @@ import { withRouter } from "react-router-dom";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import * as Axios from "axios";
-import { NavItem } from "react-bootstrap";
 const status2 = [
   { value: "Berjalan", label: "Berjalan" },
   { value: "Selesai", label: "Selesai" },
@@ -62,9 +61,6 @@ function Waktu(date) {
     "-" +
     tgl.getFullYear();
   return console.log(lengkap);
-}
-function konversi(str) {
-  return str.split("-").reverse().join("/");
 }
 export class EditTasks extends Component {
   constructor(props) {

@@ -19,13 +19,13 @@ class Tentang extends Component {
             <div className='col-md-8 text-start ms-1'>
               <p>
                 <span className='text-primary'>Tentang Kami</span>
-                <h3 className='fw-bold text-black'>Apa sih microdigi itu?</h3>
+                <h3 className='fw-bold text-black'>Apa sih Taskita itu?</h3>
                 <p className='card-text text-muted'>
-                  Agensi Digital Kreatif yang siap memproduksi aset-aset
+                  Taskita adalah aplikasi berbasis website yang simpel,
                   <br />
-                  digital yang bukan sekedar menarik, tapi juga memberikan
+                  modern, dan ringan bertujuan memudahkan setiap
                   <br />
-                  engagement kepada audience brand dan produk Kamu.
+                  pribadi mengatur kegiatan dan mencatat keuangan
                 </p>
               </p>
             </div>
@@ -34,39 +34,38 @@ class Tentang extends Component {
             </div>
             <div className='col-md-7 text-start ms-1'>
               <p className='text-muted'>
-                Visi Microdigi <br />
+                Visi Taskita <br />
                 <h5 className='fw-bold text-dark'>
-                  Sejuta umkm dan usaha makin <br />
-                  berkembang di Indonesia
+                  Puluhan juta pengguna di Indonesia <br />
+                  merasakan manfaat aplikasi
                 </h5>
               </p>
             </div>
             <div className='col-md ms-5'>
               <p className='text-muted text-start'>
-                Misi Microdigi <br />
+                Misi Taskita <br />
                 <h5 className='fw-bold text-dark'>
-                  Untuk menghasilkan konten yang <br />
-                  terbaik secara visual dan makna <br />
-                  untuk pelanggan
+                  Untuk membuat suatu budaya <br />
+                  setiap individu baru agar lebih <br />
+                  teratur setiap harinya
                 </h5>
               </p>
             </div>
           </div>
           <p className='text-muted'>
             Keunggulan Kami <br />
-            <h3 className='fw-bold text-dark'>Kenapa harus microdigi?</h3>
+            <h3 className='fw-bold text-dark'>Kenapa harus Taskita?</h3>
           </p>
           <div className='row row-cols-1 row-cols-md-4 g-4'>
             <div className='col'>
               <div className='card h-100'>
                 <div className='card-body text-start'>
                   <h5 className='card-title fw-bold text-dark'>
-                    Harga Terjangkau
+                    Mudah Digunakan
                   </h5>
                   <p className='card-text text-muted'>
-                    Tarif jasa yang dikenakan sudah lebih murah dari yang
-                    dipasaran namun tetap berkualitas dan sesuai dengan
-                    keinginan
+                    Gak ada kata ribet dalam kamus Taskita, karena aplikasi ini
+                    mudah digunakan sesuai kebutuhanmu
                   </p>
                 </div>
               </div>
@@ -75,12 +74,11 @@ class Tentang extends Component {
               <div className='card h-100'>
                 <div className='card-body text-start'>
                   <h5 className='card-title fw-bold text-dark'>
-                    Harga Terjangkau
+                    Layanan gratis
                   </h5>
                   <p className='card-text text-muted'>
-                    Tarif jasa yang dikenakan sudah lebih murah dari yang
-                    dipasaran namun tetap berkualitas dan sesuai dengan
-                    keinginan
+                    Untuk menggunakan fitur yang ada , kamu tidak perlu khawatir
+                    karena semua fitur Taskita gratis
                   </p>
                 </div>
               </div>
@@ -89,12 +87,11 @@ class Tentang extends Component {
               <div className='card h-100'>
                 <div className='card-body text-start'>
                   <h5 className='card-title fw-bold text-dark'>
-                    Harga Terjangkau
+                    Tampilan Menarik
                   </h5>
                   <p className='card-text text-muted'>
-                    Tarif jasa yang dikenakan sudah lebih murah dari yang
-                    dipasaran namun tetap berkualitas dan sesuai dengan
-                    keinginan
+                    Bukan cuma simpel, Taskita juga bikin kamu gak bosen dan
+                    enak dilihat ketika menggunakannya.
                   </p>
                 </div>
               </div>
@@ -102,13 +99,10 @@ class Tentang extends Component {
             <div className='col'>
               <div className='card h-100'>
                 <div className='card-body text-start'>
-                  <h5 className='card-title fw-bold text-dark'>
-                    Harga Terjangkau
-                  </h5>
+                  <h5 className='card-title fw-bold text-dark'>Kecepatan</h5>
                   <p className='card-text text-muted'>
-                    Tarif jasa yang dikenakan sudah lebih murah dari yang
-                    dipasaran namun tetap berkualitas dan sesuai dengan
-                    keinginan
+                    Untuk kecepatan Taskita gak usah diragukan lagi deh,
+                    pokoknya anti lelet dan anti nunggu.
                   </p>
                 </div>
               </div>

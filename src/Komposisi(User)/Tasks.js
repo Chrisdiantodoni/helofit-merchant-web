@@ -148,15 +148,15 @@ export class Tasks extends Component {
   }
   CekStatus(status) {
     var pesan;
-    if (status == "Berjalan") {
+    if (status === "Berjalan") {
       pesan = (
-        <div className='badge bg-warning rounded-pill' role='alert'>
+        <div className='badge bg-warning rounded-pill w-50' role='alert'>
           Berjalan
         </div>
       );
     } else {
       pesan = (
-        <div className='badge bg-success rounded-pill' role='alert'>
+        <div className='badge bg-success rounded-pill w-50' role='alert'>
           Selesai
         </div>
       );
@@ -165,7 +165,7 @@ export class Tasks extends Component {
   }
 
   render() {
-    const { listtasks, sekarang, mindate } = this.state;
+    const { listtasks, mindate } = this.state;
     const EditTask = withRouter(({ history, id }) => (
       <button
         onClick={() => history.push("/edittasks/" + id)}

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Nav } from "react-bootstrap";
 import "./style.css";
 import { RiComputerLine } from "react-icons/ri";
+import { AiOutlineUser } from "react-icons/ai";
 import { BsListTask, BsWallet2 } from "react-icons/bs";
-import { NavLink } from "react-router-dom";
 import { withRouter } from "react-router";
 export class Sidebaruser extends Component {
   render() {
@@ -35,6 +35,16 @@ export class Sidebaruser extends Component {
               <span className='pe-5'>
                 <BsWallet2 className='fs-4 mb-1' />
                 &nbsp;Finance
+              </span>
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              href='/welcome/profil'
+              className='text-light btn btn-primary border-bottom'>
+              <span className='pe-5 me-4'>
+                <AiOutlineUser className='fs-4 mb-1' />
+                &nbsp;Profil
               </span>
             </Nav.Link>
           </Nav.Item>
