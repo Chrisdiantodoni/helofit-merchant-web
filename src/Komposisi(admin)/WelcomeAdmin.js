@@ -7,9 +7,16 @@ export class WelcomeAdmin extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      currentUser: AuthService.getCurrentUser(),
-    };
+    this.state = {};
+  }
+  componentDidMount() {
+    const admin = AuthService.getCurrentAdmin();
+
+    if (admin) {
+      this.setState({
+        currentAdmin: admin,
+      });
+    }
   }
   setValueState(event) {
     this.setState({
@@ -18,8 +25,6 @@ export class WelcomeAdmin extends Component {
   }
 
   render() {
-    const { currentUser } = this.state;
-
     return (
       <div>
         <Navbaradmin konten='Dashboard Admin' />
@@ -31,9 +36,10 @@ export class WelcomeAdmin extends Component {
             <div class='container mx-auto mt-5'>
               <div class='shadow border border-1 rounded-3'>
                 <div className='ms-5 mt-5 me-3 pe-5'>
-                  <div class='col-md-7 text-bold'>
-                    <h2 className='text-secondary'>
-                      Sudah 14223 user terhubung dengan Taskita, semangat !
+                  <div class='col-7 text-bold'>
+                    <h2 className='text-secondary fw-bold'>
+                      Sudah 14223 user terhubung <br />
+                      dengan Taskita, semangat !
                     </h2>
                   </div>
                 </div>

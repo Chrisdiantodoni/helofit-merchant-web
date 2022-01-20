@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../services/auth.service";
-import Navbaruser from "../Komponen/Navbar(login user)";
+import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
 
 export class Laporan extends Component {
@@ -18,11 +18,9 @@ export class Laporan extends Component {
   }
 
   render() {
-    const { currentUser } = this.state;
-
     return (
       <div>
-        <Navbaruser konten='Laporan' />
+        <Navbaradmin konten='Laporan' />
         <div className='row'>
           <div className='col-2 sidebar-wrapper'>
             <Sidebaradmin />
@@ -32,9 +30,14 @@ export class Laporan extends Component {
               <div class='shadow border border-1 rounded-3'>
                 <div className='ms-5 mt-5 me-3 pe-5'>
                   <h2>Download Laporan</h2>
-                  <p>Berikut adalah laporan yang dapat diunduh dalam bentuk dokumen</p>
-                  <hr/>
-                  <p><i>Rekap semua data user </i></p>
+                  <p>
+                    Berikut adalah laporan yang dapat diunduh dalam bentuk
+                    dokumen
+                  </p>
+                  <hr />
+                  <p>
+                    <i>Rekap semua data user </i>
+                  </p>
                 </div>
               </div>
             </div>

@@ -150,6 +150,7 @@ class EditProfil extends Component {
                             <Input
                               name='email'
                               type='email'
+                              disabled
                               value={this.state.email}
                               className='form-control w-25 border border-1'
                               validations={[required, vfield]}
