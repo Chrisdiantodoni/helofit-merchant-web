@@ -255,26 +255,24 @@ export class Tasks extends Component {
                   <br />
                   <table class='table table-light table-hover'>
                     <tbody>
-                      <tr className='row fw-bold border-dark'>
-                        <td className='col-md-2'>Deadline</td>
-                        <td className='col-md-2'>Status</td>
-                        <td className='col-md-2'>Sisa Hari</td>
-                        <td className='col-md-3'>Keterangan List</td>
-                        <td className='col-md-3' colspan='2'>
+                      <tr className='row fw-bold table-dark border-dark'>
+                        <td className='col'>Deadline</td>
+                        <td className='col'>Status</td>
+                        <td className='col'>Sisa Hari</td>
+                        <td className='col'>Keterangan List</td>
+                        <td className='col-3' colspan='2'>
                           Aksi
                         </td>
                       </tr>
                       {listtasks.map((item, index) => (
                         <tr className='row' key={index}>
-                          <td className='col-md-2'>{item.deadline}</td>
-                          <td className='col-md-2'>
-                            {this.CekStatus(item.status)}
-                          </td>
-                          <td className='col-md-2'>
+                          <td className='col'>{item.deadline}</td>
+                          <td className='col'>{this.CekStatus(item.status)}</td>
+                          <td className='col'>
                             {this.Sisa(mindate, item.deadline)}
                           </td>
-                          <td className='col-md-3'>{item.keterangan}</td>
-                          <td className='col-md-3'>
+                          <td className='col'>{item.keterangan}</td>
+                          <td className='col-3'>
                             <EditTask id={item.id} />
                             <DeleteTask id={item.id} />
                           </td>

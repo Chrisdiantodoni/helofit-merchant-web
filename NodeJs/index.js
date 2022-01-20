@@ -243,6 +243,14 @@ app.get("/tasks/:userid", (req, res) => {
     res.json(result);
   });
 });
+app.get("/datauser", (req, res) => {
+  var query =
+    "SELECT CONCAT(nama_dpn,' ',nama_blkg) AS NamaLengkap, password, email FROM users";
+  conn.query(query, (err, result) => {
+    res.json(result);
+    console.log(result);
+  });
+});
 app.get("/kegiatan/:userid", (req, res) => {
   var userID = req.params.userid;
   var query = "SELECT COUNT(*) AS kegiatan FROM tasks WHERE userID = " + userID;

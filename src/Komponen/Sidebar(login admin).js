@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Nav } from "react-bootstrap";
 import "./style.css";
 import { RiComputerLine } from "react-icons/ri";
-import { BsWallet2 } from "react-icons/bs";
 import { AiOutlineFile, AiOutlineUser, AiOutlineSetting } from "react-icons/ai";
 import { withRouter } from "react-router";
 export class Sidebaradmin extends Component {
@@ -34,7 +33,7 @@ export class Sidebaradmin extends Component {
               href='/admin/datauser'
               className='text-light btn btn-primary border-bottom'>
               <span className='pe-5 me-2'>
-                <AiOutlineUser className='fs-4 mb-1' />
+                <AiOutlineUser className='fs-3 mb-1' />
                 &nbsp;Data User
               </span>
             </Nav.Link>
@@ -44,7 +43,7 @@ export class Sidebaradmin extends Component {
               href='/admin/maintenance'
               className='text-light btn btn-primary border-bottom'>
               <span className='pe-4 me-2'>
-                <AiOutlineSetting className='fs-4 mb-1' />
+                <AiOutlineSetting className='fs-3 mb-1' />
                 &nbsp;Maintenance
               </span>
             </Nav.Link>

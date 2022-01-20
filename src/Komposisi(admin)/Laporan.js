@@ -8,7 +8,7 @@ export class Laporan extends Component {
     super(props);
 
     this.state = {
-      currentUser: AuthService.getCurrentUser(),
+      datauser: [],
     };
   }
   setValueState(event) {
@@ -16,7 +16,18 @@ export class Laporan extends Component {
       [event.target.name]: event.target.value,
     });
   }
-
+  componentDidMount() {
+    fetch("http://localhost:8000/datauser/")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          datauser: res,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
   render() {
     return (
       <div>

@@ -289,23 +289,23 @@ export class Finance extends Component {
 
                   <table class='table table-light table-hover'>
                     <tbody>
-                      <tr className='row fw-bold border-dark mb-3'>
-                        <td className='col-md-2'>Tipe</td>
-                        <td className='col-md-1'>Kategori</td>
-                        <td className='col-md-3'>Keterangan</td>
-                        <td className='col-md-2'>Nominal</td>
-                        <td className='col-md-3' colspan='2'>
+                      <tr className='row fw-bold table-dark border-dark mb-3'>
+                        <td className='col'>Tipe</td>
+                        <td className='col'>Kategori</td>
+                        <td className='col'>Keterangan</td>
+                        <td className='col'>Nominal</td>
+                        <td className='col-3' colspan='2'>
                           Aksi
                         </td>
                       </tr>
 
                       {this.state.keuangan.map((item, index) => (
                         <tr className='row'>
-                          <td className='col-md-2'>{item.tipe}</td>
-                          <td className='col-md-1'>{item.kategori}</td>
-                          <td className='col-md-3'>{item.keterangan}</td>
-                          <td className='col-md-2'>Rp {item.nominal}</td>
-                          <td className='col-md-3'>
+                          <td className='col'>{item.tipe}</td>
+                          <td className='col'>{item.kategori}</td>
+                          <td className='col'>{item.keterangan}</td>
+                          <td className='col'>Rp {item.nominal}</td>
+                          <td className='col-3'>
                             <EditFinance id={item.id} />
                             <DeleteFinance id={item.id} />
                           </td>

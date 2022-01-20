@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import AuthService from "../services/auth.service";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
-
+import { AiOutlineWarning } from "react-icons/ai";
 export class Maintenance extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +27,8 @@ export class Maintenance extends Component {
               <div class='shadow border border-1 rounded-3'>
                 <div className='ms-5 mt-5 me-3 pe-5'>
                   <h2>Pemberitahuan Maintenance</h2>
-                  <p>
+                  <AiOutlineWarning className='fs-2 text-danger' />
+                  <p className='fs-3 mb-1'>
                     Jangan lupa untuk selalu melakukan Maintenance setiap
                     bulannya pada tanggal 4. Dan selalu melakukan backup data
                     setiap hari minggu
