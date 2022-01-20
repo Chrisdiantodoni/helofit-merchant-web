@@ -21,6 +21,16 @@ export class Sidebaruser extends Component {
           </Nav.Item>
           <Nav.Item>
             <Nav.Link
+              href='/welcome/profil'
+              className='text-light btn btn-primary border-bottom'>
+              <span className='pe-5 me-3'>
+                <AiOutlineUser className='fs-4 mb-1' />
+                &nbsp;Profil
+              </span>
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
               href='/welcome/tasks'
               className='text-light ps-3 btn btn-primary border-bottom'>
               <span className='pe-5 me-3'>
@@ -35,16 +45,6 @@ export class Sidebaruser extends Component {
               <span className='pe-5'>
                 <BsWallet2 className='fs-4 mb-1' />
                 &nbsp;Finance
-              </span>
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
-              href='/welcome/profil'
-              className='text-light btn btn-primary border-bottom'>
-              <span className='pe-5 me-4'>
-                <AiOutlineUser className='fs-4 mb-1' />
-                &nbsp;Profil
               </span>
             </Nav.Link>
           </Nav.Item>

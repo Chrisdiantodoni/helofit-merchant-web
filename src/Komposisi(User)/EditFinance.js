@@ -106,7 +106,7 @@ export class EditFinance extends Component {
         currentUser: user,
       });
     }
-    fetch("http://localhost:8000/finances/" + this.props.match.params.id)
+    fetch("http://localhost:8000/editfinances/" + this.props.match.params.id)
       .then((res) => res.json())
       .then((res) => {
         this.setState({

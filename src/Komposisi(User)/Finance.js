@@ -111,14 +111,10 @@ export class Finance extends Component {
     }
   }
   componentDidMount() {
-    const user = AuthService.getCurrentUser();
+    const { currentUser } = this.state;
+    var userid = currentUser.id;
 
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-    }
-    fetch("http://localhost:8000/finances")
+    fetch("http://localhost:8000/finances/" + userid)
       .then((res) => res.json())
       .then((res) => {
         this.setState({
@@ -128,7 +124,7 @@ export class Finance extends Component {
       .catch((err) => {
         console.error(err);
       });
-    fetch("http://localhost:8000/sisa")
+    fetch("http://localhost:8000/sisa/" + userid)
       .then((res) => res.json())
       .then((res) => {
         this.setState({
@@ -138,7 +134,7 @@ export class Finance extends Component {
       .catch((err) => {
         console.error(err);
       });
-    fetch("http://localhost:8000/pemasukan")
+    fetch("http://localhost:8000/pemasukan/" + userid)
       .then((res) => res.json())
       .then((res) => {
         this.setState({
@@ -148,7 +144,7 @@ export class Finance extends Component {
       .catch((err) => {
         console.error(err);
       });
-    fetch("http://localhost:8000/pengeluaran")
+    fetch("http://localhost:8000/pengeluaran/" + userid)
       .then((res) => res.json())
       .then((res) => {
         this.setState({

@@ -7,37 +7,35 @@ import Navbarbefore from "../Komponen/Navbar(before login)";
 import marco from "../Assets/marco.jpg";
 import karim from "../Assets/karim.png";
 import adrian from "../Assets/adrian.png";
-import zulharmin from "../Assets/zulharmin.jpeg";
+import zulharmin from "../Assets/zulharmin.png";
 import christa from "../Assets/christa.png";
+import ilustrasitentang from "../Assets/ilustrasitentang.png";
 class Tentang extends Component {
   render() {
     return (
       <div>
         <Navbarbefore />
         <Container className='text-center mx-auto'>
-          <div className='row g-4 mt-3'>
-            <div className='col-md-8 text-start ms-1'>
+          <div className='row g-4 mt-3 mb-4'>
+            <div className='col-md-6 text-start '>
               <p>
                 <span className='text-primary'>Tentang Kami</span>
                 <h3 className='fw-bold text-black'>Apa sih Taskita itu?</h3>
                 <p className='card-text text-muted'>
-                  Taskita adalah aplikasi berbasis website yang simpel,
-                  <br />
-                  modern, dan ringan bertujuan memudahkan setiap
-                  <br />
-                  pribadi mengatur kegiatan dan mencatat keuangan
+                  Taskita adalah aplikasi berbasis website yang simpel, modern,
+                  dan ringan bertujuan memudahkan setiap pribadi mengatur
+                  kegiatan dan mencatat keuangan
                 </p>
               </p>
             </div>
-            <div className='col-md-2 bg-info me-auto'>
-              <img className='img-fluid rounded-start bg-primary' />
+            <div className='col-md-4 '>
+              <img src={ilustrasitentang} height='auto' width='auto' />
             </div>
-            <div className='col-md-7 text-start ms-1'>
+            <div className='col-md-6  text-start ms-1'>
               <p className='text-muted'>
                 Visi Taskita <br />
                 <h5 className='fw-bold text-dark'>
-                  Puluhan juta pengguna di Indonesia <br />
-                  merasakan manfaat aplikasi
+                  Puluhan juta pengguna di Indonesia merasakan manfaat aplikasi
                 </h5>
               </p>
             </div>
@@ -45,18 +43,17 @@ class Tentang extends Component {
               <p className='text-muted text-start'>
                 Misi Taskita <br />
                 <h5 className='fw-bold text-dark'>
-                  Untuk membuat suatu budaya <br />
-                  setiap individu baru agar lebih <br />
+                  Untuk membuat suatu budaya setiap individu baru agar lebih
                   teratur setiap harinya
                 </h5>
               </p>
             </div>
           </div>
-          <p className='text-muted'>
+          <p className='text-muted pt-4'>
             Keunggulan Kami <br />
             <h3 className='fw-bold text-dark'>Kenapa harus Taskita?</h3>
           </p>
-          <div className='row row-cols-1 row-cols-md-4 g-4'>
+          <div className='row row-cols-1 row-cols-md-4 g-4 pt-4'>
             <div className='col'>
               <div className='card h-100'>
                 <div className='card-body text-start'>
@@ -108,7 +105,7 @@ class Tentang extends Component {
               </div>
             </div>
           </div>
-          <div className='row row-cols-1 row-cols-3 g-4 mt-3'>
+          <div className='row row-cols-1 row-cols-3 g-4 mt-4 pt-4'>
             <div className='col'>
               <div className='pt-5 mt-5'>
                 <p className='text-muted'>

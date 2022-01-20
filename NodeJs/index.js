@@ -174,55 +174,118 @@ app.put("/tasks/:id", (req, res) => {
     }
   );
 });
-app.get("/finances", (req, res) => {
-  var query = "SELECT * FROM finances";
+app.get("/finances/:userid", (req, res) => {
+  var userID = req.params.userid;
+  var query = "SELECT * FROM finances WHERE userID = " + userID;
   conn.query(query, (err, rows) => {
     res.json(rows);
   });
 });
-app.get("/pemasukan", (req, res) => {
+app.get("/pemasukan/:userid", (req, res) => {
+  var userID = req.params.userid;
   var query =
-    "SELECT SUM(nominal) AS pemasukan FROM finances WHERE tipe = 'Pemasukan'";
+    "SELECT SUM(nominal) AS pemasukan FROM finances WHERE tipe = 'Pemasukan' AND userID = " +
+    userID;
   conn.query(query, (err, rows) => {
     const pemasukan = rows[0];
     if (err) res.status(400).json(err);
     else res.json(pemasukan);
   });
 });
-app.get("/pengeluaran", (req, res) => {
+app.get("/pengeluaran/:userid", (req, res) => {
+  var userID = req.params.userid;
   var query =
-    "SELECT SUM(nominal) AS pengeluaran FROM finances WHERE tipe = 'Pengeluaran'";
+    "SELECT SUM(nominal) AS pengeluaran FROM finances WHERE tipe = 'Pengeluaran' AND userID = " +
+    userID;
   conn.query(query, (err, rows) => {
     const pengeluaran = rows[0];
     if (err) res.status(400).json(err);
     else res.json(pengeluaran);
   });
 });
-app.get("/sisa", (req, res) => {
+app.get("/sisa/:userid", (req, res) => {
+  var userID = req.params.userid;
   var query =
-    "SELECT (SELECT SUM(nominal) AS sisa FROM finances WHERE tipe = 'Pemasukan') - (SELECT SUM(nominal) AS sisa FROM `finances` WHERE tipe = 'Pengeluaran') AS sisa";
+    "SELECT coalesce((SELECT SUM(nominal) AS pemasukan FROM finances WHERE tipe = 'Pemasukan' AND userID = " +
+    userID +
+    "),0)" +
+    "- coalesce((SELECT SUM(nominal) AS pengeluaran FROM finances WHERE tipe = 'Pengeluaran' AND userID = " +
+    userID +
+    "),0) AS sisa";
   conn.query(query, (err, rows) => {
     const sisa = rows[0];
     if (err) res.status(400).json(err);
     else res.json(sisa);
   });
 });
-app.get("/finances/:id", (req, res) => {
+app.get("/editfinances/:id", (req, res) => {
   var id = req.params.id;
   var query = "SELECT * FROM finances WHERE id = " + id;
   conn.query(query, (err, rows) => {
     res.json(rows[0]);
   });
 });
-app.get("/tasks", (req, res) => {
+app.get("/deletefinances/:id", (req, res) => {
+  var id = req.params.id;
+  var query = "SELECT * FROM finances WHERE id = " + id;
+  conn.query(query, (err, rows) => {
+    res.json(rows[0]);
+  });
+});
+app.get("/tasks/:userid", (req, res) => {
+  var userID = req.params.userid;
   var query =
-    "SELECT *, DATE_FORMAT(deadline, '%d-%m-%Y') AS deadline FROM tasks ORDER BY STR_TO_DATE(deadline, '%d-%m-%Y'), deadline ASC";
+    "SELECT *,  DATE_FORMAT(deadline, '%d-%m-%Y') AS deadline FROM tasks WHERE userID = '" +
+    userID +
+    "' ORDER BY STR_TO_DATE(deadline, '%d-%m-%Y'), deadline ASC ";
   conn.query(query, (err, result) => {
     res.json(result);
   });
 });
+app.get("/kegiatan/:userid", (req, res) => {
+  var userID = req.params.userid;
+  var query = "SELECT COUNT(*) AS kegiatan FROM tasks WHERE userID = " + userID;
+  conn.query(query, (err, rows) => {
+    const kegiatan = rows[0];
+    if (err) res.status(400).json(err);
+    else res.json(kegiatan);
+  });
+});
+app.put("/user/:id", (req, res) => {
+  var nama_dpn = req.body.nama_dpn;
+  var nama_blkg = req.body.nama_blkg;
+  var email = req.body.email;
+  var id = req.params.id;
+  conn.query(
+    "UPDATE users SET nama_dpn = '" +
+      nama_dpn +
+      "', nama_blkg = '" +
+      nama_blkg +
+      "', email = '" +
+      email +
+      "' WHERE ID = " +
+      id,
+    (err, result) => {
+      res.json(result);
+    }
+  );
+});
+app.get("/user/:id", (req, res) => {
+  var id = req.params.id;
+  var query = "SELECT * FROM users WHERE id = " + id;
+  conn.query(query, (err, rows) => {
+    res.json(rows[0]);
+  });
+});
 
-app.get("/tasks/:id", (req, res) => {
+app.get("/edittasks/:id", (req, res) => {
+  var id = req.params.id;
+  var query = "SELECT * FROM tasks WHERE id = " + id;
+  conn.query(query, (err, rows) => {
+    res.json(rows[0]);
+  });
+});
+app.get("/deletetasks/:id", (req, res) => {
   var id = req.params.id;
   var query = "SELECT * FROM tasks WHERE id = " + id;
   conn.query(query, (err, rows) => {

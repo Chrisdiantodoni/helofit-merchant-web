@@ -117,14 +117,9 @@ export class Tasks extends Component {
     }
   }
   componentDidMount() {
-    const user = AuthService.getCurrentUser();
-
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-    }
-    fetch("http://localhost:8000/tasks")
+    const { currentUser } = this.state;
+    var userid = currentUser.id;
+    fetch("http://localhost:8000/tasks/" + userid)
       .then((res) => res.json())
       .then((res) => {
         this.setState({

@@ -1,18 +1,12 @@
 import React, { Component } from "react";
-import Textarea from "react-validation/build/textarea";
+import AuthService from "../services/auth.service";
+import Navbaruser from "../Komponen/Navbar(login user)";
+import { withRouter } from "react-router-dom";
 import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
-import Select from "react-validation/build/select";
-import AuthService from "../services/auth.service";
-import { withRouter } from "react-router-dom";
-import Navbaruser from "../Komponen/Navbar(login user)";
-import Sidebaruser from "../Komponen/Sidebar(login user)";
 import * as Axios from "axios";
-const status2 = [
-  { value: "Berjalan", label: "Berjalan" },
-  { value: "Selesai", label: "Selesai" },
-];
+import Sidebaruser from "../Komponen/Sidebar(login user)";
 const required = (value) => {
   if (!value) {
     return (
@@ -22,16 +16,6 @@ const required = (value) => {
     );
   }
 };
-const reqdate = (value) => {
-  if (!value) {
-    return (
-      <div className='alert alert-danger w-25' role='alert'>
-        Silakan pilih tanggal deadline!
-      </div>
-    );
-  }
-};
-
 const vfield = (value) => {
   if (value.length < 3 || value.length > 100) {
     return (
@@ -41,43 +25,18 @@ const vfield = (value) => {
     );
   }
 };
-// function Waktu(date) {
-//   var tgl = date;
-//   tgl.toLocaleString("en-US");
-//   return tgl;
-// }
-// function Waktu(date, days) {
-//   var tgl = new Date(date);
-//   tgl.setDate(tgl.getDate() + days);
-//   return tgl;
-// }
-function Waktu(date) {
-  var tgl = new Date(date);
-  // tgl.setHours(tgl.getHours() + 7);
-  var lengkap =
-    ("0" + tgl.getDate()).slice(-2) +
-    "-" +
-    ("0" + tgl.getMonth() + 1).slice(-2) +
-    "-" +
-    tgl.getFullYear();
-  return console.log(lengkap);
-}
-export class EditTasks extends Component {
+class EditProfil extends Component {
   constructor(props) {
     super(props);
-    var today = new Date(),
-      minim =
-        today.getFullYear() +
-        "-" +
-        ("0" + today.getMonth() + 1).slice(-2) +
-        "-" +
-        ("0" + today.getDate()).slice(-2);
+
     this.state = {
       currentUser: AuthService.getCurrentUser(),
-      deadline: "",
-      status: "",
-      mindate: minim,
-      keterangan: "",
+      message: "",
+      successful: false,
+      nama_dpn: "",
+      id: this.props.match.params.id,
+      nama_blkg: "",
+      email: "",
     };
     this.handleEdit = this.handleEdit.bind(this);
   }
@@ -95,14 +54,15 @@ export class EditTasks extends Component {
 
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
-      Axios.put("http://localhost:8000/tasks/" + this.props.match.params.id, {
-        deadline: this.state.deadline,
-        status: this.state.status,
-        keterangan: this.state.keterangan,
+      Axios.put("http://localhost:8000/user/" + this.props.match.params.id, {
+        nama_dpn: this.state.nama_dpn,
+        nama_blkg: this.state.nama_blkg,
+        email: this.state.email,
       }).then(
         (res) => {
+          localStorage.setItem("user", JSON.stringify(this.state));
           this.setState({
-            message: "List berhasil diupdate",
+            message: "Profil berhasil diupdate",
             successful: true,
           });
           setTimeout(() => {
@@ -126,26 +86,25 @@ export class EditTasks extends Component {
     }
   }
   componentDidMount() {
-    fetch("http://localhost:8000/edittasks/" + this.props.match.params.id)
+    fetch("http://localhost:8000/user/" + this.props.match.params.id)
       .then((response) => response.json())
       .then((res) => {
         this.setState({
-          deadline: res.deadline.slice(0, 10),
-          status: res.status,
-          keterangan: res.keterangan,
+          nama_dpn: res.nama_dpn,
+          nama_blkg: res.nama_blkg,
+          email: res.email,
         });
       })
       .catch((error) => {
         console.error(error);
       });
   }
-
   render() {
-    const { mindate } = this.state;
+    const { currentUser } = this.state;
 
     return (
       <div>
-        <Navbaruser konten='Edit to-do List' />
+        <Navbaruser konten='Edit Profil User' />
         <div className='row'>
           <div className='col-2 sidebar-wrapper'>
             <Sidebaruser />
@@ -162,58 +121,45 @@ export class EditTasks extends Component {
                     <table class='table table-borderless'>
                       <tbody>
                         <tr className='row'>
-                          <td className='col-2'>
-                            <label className='fw-bold'>Deadline</label>
-                          </td>
+                          <td className='col-2'>Nama Depan</td>
                           <td className='col'>
                             <Input
-                              type='date'
-                              name='deadline'
-                              value={this.state.deadline}
-                              min={mindate}
-                              className='w-25 border border-1'
-                              validations={[reqdate]}
-                              onChange={this.setValueState.bind(this)}
-                            />
-                          </td>
-                        </tr>
-                        <tr className='row'>
-                          <td className='col-2'>
-                            <label className='fw-bold'>Status</label>
-                          </td>
-                          <td className='col'>
-                            <Select
-                              name='status'
-                              value={this.state.status}
-                              className='w-25 border border-1'
-                              validations={[required]}
-                              onChange={this.setValueState.bind(this)}>
-                              {status2.map((option) => (
-                                <option value={option.value}>
-                                  {option.label}
-                                </option>
-                              ))}
-                            </Select>
-                          </td>
-                        </tr>
-                        <tr className='row'>
-                          <td className='col-2'>
-                            <label className='fw-bold'>List</label>
-                          </td>
-                          <td className='col'>
-                            <Textarea
-                              name='keterangan'
-                              value={this.state.keterangan}
-                              className='w-25 border border-1'
+                              name='nama_dpn'
+                              type='text'
+                              value={this.state.nama_dpn}
+                              className='form-control w-25 border border-1'
                               validations={[required, vfield]}
-                              onChange={this.setValueState.bind(this)}
-                            />
+                              onChange={this.setValueState.bind(this)}></Input>
+                          </td>
+                        </tr>
+                        <tr className='row'>
+                          <td className='col-2'>Nama Belakang</td>
+                          <td className='col'>
+                            <Input
+                              name='nama_blkg'
+                              type='text'
+                              value={this.state.nama_blkg}
+                              className='form-control w-25 border border-1'
+                              validations={[required, vfield]}
+                              onChange={this.setValueState.bind(this)}></Input>
+                          </td>
+                        </tr>
+                        <tr className='row'>
+                          <td className='col-2'>Email</td>
+                          <td className='col'>
+                            <Input
+                              name='email'
+                              type='email'
+                              value={this.state.email}
+                              className='form-control w-25 border border-1'
+                              validations={[required, vfield]}
+                              onChange={this.setValueState.bind(this)}></Input>
                           </td>
                         </tr>
                         <tr className='row'>
                           <td className='col-2'>
-                            <button className='btn btn-success rounded rounded-3'>
-                              Update List
+                            <button className='btn btn-warning text-light fw-normal rounded rounded-3'>
+                              Ubah Profil
                             </button>
                           </td>
                           {this.state.message && (
@@ -236,7 +182,6 @@ export class EditTasks extends Component {
                             }}
                           />
                         </tr>
-                        {Waktu(this.state.deadline)}
                       </tbody>
                     </table>
                   </Form>
@@ -250,4 +195,4 @@ export class EditTasks extends Component {
   }
 }
 
-export default withRouter(EditTasks);
+export default withRouter(EditProfil);

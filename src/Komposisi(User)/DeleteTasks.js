@@ -25,7 +25,7 @@ export class DeleteTasks extends Component {
     });
   }
   componentDidMount() {
-    fetch("http://localhost:8000/tasks/" + this.props.match.params.id)
+    fetch("http://localhost:8000/deletetasks/" + this.props.match.params.id)
       .then((response) => response.json())
       .then((res) => {
         this.setState({

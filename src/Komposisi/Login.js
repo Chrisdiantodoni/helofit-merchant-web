@@ -8,6 +8,7 @@ import "./Login.css";
 import { isEmail } from "validator";
 import { withRouter } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import ilustrasilogin from "../Assets/ilustrasilogin.png";
 const required = (value) => {
   if (!value) {
     return (
@@ -96,8 +97,10 @@ export class Login extends Component {
   render() {
     return (
       <div class='container mx-auto mt-5'>
-        <div class='kanvas row shadow border border-1'>
-          <div class='col-md'></div>
+        <div class='kanvas row shadow border border-1 bg-white '>
+          <div class='col-md'>
+          <img src={ilustrasilogin}  height='auto' width='auto'/>
+          </div>
           <div class='col-md kanan'>
             <Form
               className='container'
@@ -105,7 +108,7 @@ export class Login extends Component {
               ref={(c) => {
                 this.form = c;
               }}>
-              <h3 className='text-center pt-2'>
+              <h3 className='text-center pt-4 mt-3'>
                 Masuk ke Akun Taskita Kamu!
                 <p className='text-muted fs-6 pt-2'>
                   Sudah punya akun Taskita? Yuk masuk untuk mengakses

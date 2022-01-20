@@ -21,21 +21,19 @@ import Finance from "./Komposisi(User)/Finance";
 import EditFinance from "./Komposisi(User)/EditFinance";
 import DeleteFinance from "./Komposisi(User)/DeleteFinance";
 import Profil from "./Komposisi(User)/Profil";
+import EditProfil from "./Komposisi(User)/EditProfil";
 //Setelah Login(Admin)
 import WelcomeAdmin from "./Komposisi(admin)/WelcomeAdmin";
 import Laporan from "./Komposisi(admin)/Laporan";
 import DataUser from "./Komposisi(admin)/DataUser";
 import Maintenance from "./Komposisi(admin)/Maintenance";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.Keluar = this.Keluar.bind(this);
 
     this.state = {
-      showModeratorBoard: false,
-      showAdminBoard: false,
       currentUser: true,
     };
   }
@@ -45,8 +43,6 @@ class App extends React.Component {
     if (user) {
       this.setState({
         currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
   }
@@ -99,6 +95,10 @@ class App extends React.Component {
       {
         path: "/welcome/profil",
         render: () => <Profil />,
+      },
+      {
+        path: "/editprofil/:id",
+        render: () => <EditProfil />,
       },
       {
         path: "/edittasks/:id",
