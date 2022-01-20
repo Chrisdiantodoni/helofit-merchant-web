@@ -44,7 +44,6 @@ export class LoginAdmin extends Component {
 
     this.state = {
       currentUser: true,
-      showAdminBoard: false,
       email: null,
       password: null,
       successful: false,
@@ -64,7 +63,6 @@ export class LoginAdmin extends Component {
     if (user) {
       this.setState({
         currentUser: user,
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
   }
@@ -85,9 +83,10 @@ export class LoginAdmin extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.loginadmin(this.state.email, this.state.password).then(
         () => {
-          setTimeout(() => {
-            this.props.history.push("/admin/dashboard");
-          }, 1500);
+          this.props.history.push("/admin/dashboard");
+          //   setTimeout(() => {
+          //     this.props.history.push("/admin/dashboard");
+          //   }, 1500);
         },
         (error) => {
           const resMessage =

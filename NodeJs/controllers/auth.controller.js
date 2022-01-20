@@ -2,6 +2,7 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
+const Admin = db.admin;
 
 const Op = db.Sequelize.Op;
 
@@ -74,6 +75,41 @@ exports.signin = (req, res) => {
           roles: authorities,
           accessToken: token,
         });
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
+exports.adminsignin = (req, res) => {
+  Admin.findOne({
+    where: {
+      email: req.body.email,
+    },
+  })
+    .then((admin) => {
+      if (!admin) {
+        return res.status(404).send({ message: "Email tidak ditemukan!" });
+      }
+
+      if (req.body.password != admin.password) {
+        return res.status(401).send({
+          accessToken: null,
+          message: "Password Salah!",
+        });
+      }
+
+      var token = jwt.sign({ id: admin.id }, config.secret, {
+        expiresIn: 86400, // 24 hours
+      });
+
+      res.status(200).send({
+        id: admin.id,
+        username: admin.username,
+        email: admin.email,
+        password: admin.password,
+        accessToken: token,
       });
     })
     .catch((err) => {

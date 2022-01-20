@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../services/auth.service";
-import Navbaruser from "../Komponen/Navbar(login user)";
+import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
 
 export class WelcomeAdmin extends Component {
@@ -22,7 +22,7 @@ export class WelcomeAdmin extends Component {
 
     return (
       <div>
-        <Navbaruser konten='Dashboard Admin' />
+        <Navbaradmin konten='Dashboard Admin' />
         <div className='row'>
           <div className='col-2 sidebar-wrapper'>
             <Sidebaradmin />

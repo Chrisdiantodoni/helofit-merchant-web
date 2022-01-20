@@ -36,6 +36,10 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
+  KeluarAdmin() {
+    localStorage.removeItem("admin");
+  }
+
   Pesan(nama, email, pesan) {
     return axios.post(API_URL + "feedback", {
       nama,
@@ -55,6 +59,10 @@ class AuthService {
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
+  }
+
+  getCurrentAdmin() {
+    return JSON.parse(localStorage.getItem("admin"));
   }
 }
 

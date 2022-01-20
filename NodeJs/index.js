@@ -11,7 +11,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const db = require("./models");
-// const { json } = require("sequelize/dist");
 const Role = db.role;
 
 function initial() {
@@ -22,11 +21,6 @@ function initial() {
 
   Role.create({
     id: 2,
-    name: "moderator",
-  });
-
-  Role.create({
-    id: 3,
     name: "admin",
   });
 }
@@ -74,6 +68,13 @@ conn.connect((err) => {
   //   (err, result) => {
   //     if (err) console.error("Error saat membuat tabel " + err);
   //     else console.log("Tabel finances berhasil dibuat");
+  //   }
+  // );
+  // conn.query(
+  //   "CREATE TABLE admins (id INT UNSIGNED AUTO_INCREMENT,username VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, password VARCHAR(30) NOT NULL ,PRIMARY KEY(id))",
+  //   (err, result) => {
+  //     if (err) console.error("Error saat membuat tabel " + err);
+  //     else console.log("Tabel admins berhasil dibuat");
   //   }
   // );
 });
