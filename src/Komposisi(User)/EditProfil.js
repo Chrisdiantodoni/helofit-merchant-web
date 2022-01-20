@@ -17,10 +17,10 @@ const required = (value) => {
   }
 };
 const vfield = (value) => {
-  if (value.length < 3 || value.length > 100) {
+  if (value.length < 3 || value.length > 30) {
     return (
       <div className='alert alert-danger w-25' role='alert'>
-        Field harus berisi antara 3 dan 100 karakter.
+        Field harus berisi antara 3 dan 30 karakter.
       </div>
     );
   }

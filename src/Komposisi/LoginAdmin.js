@@ -8,7 +8,6 @@ import "./Login.css";
 import { isEmail } from "validator";
 import { withRouter } from "react-router-dom";
 import AuthService from "../services/auth.service";
-import ilustrasilogin from "../Assets/ilustrasilogin.png";
 const required = (value) => {
   if (!value) {
     return (
@@ -38,12 +37,14 @@ const vfield = (value) => {
     );
   }
 };
-export class Login extends Component {
+export class LoginAdmin extends Component {
   constructor() {
     super();
     this.handleLogin = this.handleLogin.bind(this);
 
     this.state = {
+      currentUser: true,
+      showAdminBoard: false,
       email: null,
       password: null,
       successful: false,
@@ -57,6 +58,20 @@ export class Login extends Component {
       [event.target.name]: event.target.value,
     });
   }
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+      });
+    }
+  }
+  Keluar() {
+    AuthService.Keluar();
+  }
+
   handleLogin(e) {
     e.preventDefault();
 
@@ -68,10 +83,10 @@ export class Login extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.login(this.state.email, this.state.password).then(
+      AuthService.loginadmin(this.state.email, this.state.password).then(
         () => {
           setTimeout(() => {
-            this.props.history.push("/welcome/user");
+            this.props.history.push("/admin/dashboard");
           }, 1500);
         },
         (error) => {
@@ -81,7 +96,6 @@ export class Login extends Component {
               error.response.data.message) ||
             error.message ||
             error.toString();
-
           this.setState({
             loading: false,
             message: resMessage,
@@ -97,11 +111,8 @@ export class Login extends Component {
   render() {
     return (
       <div class='container mx-auto mt-5'>
-        <div class='kanvas row shadow border border-1 bg-white '>
-          <div class='col-md'>
-            <img src={ilustrasilogin} height='auto' width='auto' />
-          </div>
-          <div class='col-md kanan'>
+        <div class='kanvasadmin row shadow border border-1 bg-white mx-auto'>
+          <div class='col'>
             <Form
               className='container'
               onSubmit={this.handleLogin}
@@ -109,14 +120,14 @@ export class Login extends Component {
                 this.form = c;
               }}>
               <h3 className='text-center pt-4 mt-3'>
-                Masuk ke Akun Taskita Kamu!
+                Masuk ke Akun Admin Taskita Kamu!
                 <p className='text-muted fs-6 pt-2'>
                   Sudah punya akun Taskita? Yuk masuk untuk mengakses
                   <br /> beragam fitur Taskita
                 </p>
               </h3>
               <div class='form-group mb-3'>
-                <label>
+                <label className='text-start'>
                   Alamat Email<span className='text-danger'>*</span>
                 </label>
                 <Input
@@ -141,7 +152,6 @@ export class Login extends Component {
                   validations={[required, vfield]}
                   onChange={this.setValueState.bind(this)}></Input>
               </div>
-              <p className='text-muted text-end'>Lupa password?</p>
               <div className='text-center'>
                 <button
                   type='submit'
@@ -152,12 +162,6 @@ export class Login extends Component {
                   )}
                   <span>Masuk</span>
                 </button>
-                <p className='text-secondary mt-2'>
-                  Belum punya akun? <span> </span>
-                  <a href='/daftar' className='text-decoration-none fw-bold'>
-                    Daftar di sini
-                  </a>
-                </p>
               </div>
               {this.state.message && (
                 <div className='form-group'>
@@ -180,4 +184,4 @@ export class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+export default withRouter(LoginAdmin);

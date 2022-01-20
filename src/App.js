@@ -6,6 +6,7 @@ import React from "react";
 import Beranda from "./Komposisi/Beranda";
 import Daftar from "./Komposisi/Daftar";
 import Login from "./Komposisi/Login";
+import LoginAdmin from "./Komposisi/LoginAdmin";
 import Kontak from "./Komposisi/Kontak";
 import Tentang from "./Komposisi/Tentang";
 import Keuangan from "./Komposisi/Keuangan";
@@ -83,6 +84,10 @@ class App extends React.Component {
       {
         path: "/login",
         render: () => <Login />,
+      },
+      {
+        path: "/loginadmin",
+        render: () => <LoginAdmin />,
       },
       {
         path: "/welcome/user",

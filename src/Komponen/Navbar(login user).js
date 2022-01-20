@@ -46,12 +46,12 @@ export class Navbaruser extends Component {
             </span>
             <Nav className='ms-auto me-5'>
               <span className='d-flex ms-4 mt-2 fs-3 fw-bold '>
-                <AiOutlineUser className='mt-3' />
+                <AiOutlineUser className='mt-3 text-secondary' />
+                {/* {currentUser.nama_dpn} */}
                 <NavDropdown
                   title={currentUser.nama_dpn}
                   id='basic-nav-dropdown'
                   className='text-dark'>
-                  <NavDropdown.Item href='#'>Action</NavDropdown.Item>
                   <NavDropdown.Item href='/' onClick={this.Keluar}>
                     Logout
                   </NavDropdown.Item>
