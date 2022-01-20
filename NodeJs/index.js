@@ -248,7 +248,20 @@ app.get("/datauser", (req, res) => {
     "SELECT CONCAT(nama_dpn,' ',nama_blkg) AS NamaLengkap, password, email FROM users";
   conn.query(query, (err, result) => {
     res.json(result);
-    console.log(result);
+  });
+});
+app.get("/feedbacks", (req, res) => {
+  var query = "SELECT nama, email, pesan FROM feedbacks";
+  conn.query(query, (err, result) => {
+    res.json(result);
+  });
+});
+app.get("/totaldatauser", (req, res) => {
+  var query = "SELECT COUNT(*) AS totaldata FROM users";
+  conn.query(query, (err, rows) => {
+    const totaldata = rows[0];
+    if (err) res.status(400).json(err);
+    else res.json(totaldata);
   });
 });
 app.get("/kegiatan/:userid", (req, res) => {

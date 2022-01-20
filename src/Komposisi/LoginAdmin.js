@@ -83,10 +83,9 @@ export class LoginAdmin extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.loginadmin(this.state.email, this.state.password).then(
         () => {
-          this.props.history.push("/admin/dashboard");
-          //   setTimeout(() => {
-          //     this.props.history.push("/admin/dashboard");
-          //   }, 1500);
+          setTimeout(() => {
+            this.props.history.push("/admin/dashboard");
+          }, 1500);
         },
         (error) => {
           const resMessage =

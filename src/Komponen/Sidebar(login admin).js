@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Nav } from "react-bootstrap";
 import "./style.css";
-import { RiComputerLine } from "react-icons/ri";
+import { RiComputerLine, RiFeedbackLine } from "react-icons/ri";
 import { AiOutlineFile, AiOutlineUser, AiOutlineSetting } from "react-icons/ai";
 import { withRouter } from "react-router";
 export class Sidebaradmin extends Component {
@@ -45,6 +45,17 @@ export class Sidebaradmin extends Component {
               <span className='pe-4 me-2'>
                 <AiOutlineSetting className='fs-3 mb-1' />
                 &nbsp;Maintenance
+              </span>
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              href='/admin/feedback'
+              className='text-light btn btn-primary border-bottom'>
+              <span className='pe-5 me-4'>
+                &ensp; &ensp;
+                <RiFeedbackLine className='fs-3 mb-1' />
+                &nbsp;Feedback
               </span>
             </Nav.Link>
           </Nav.Item>

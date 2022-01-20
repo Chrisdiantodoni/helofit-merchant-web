@@ -28,6 +28,7 @@ import WelcomeAdmin from "./Komposisi(admin)/WelcomeAdmin";
 import Laporan from "./Komposisi(admin)/Laporan";
 import DataUser from "./Komposisi(admin)/DataUser";
 import Maintenance from "./Komposisi(admin)/Maintenance";
+import Feedback from "./Komposisi(admin)/Feedback";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 class App extends React.Component {
   constructor(props) {
@@ -140,6 +141,10 @@ class App extends React.Component {
       {
         path: "/admin/maintenance",
         render: () => <Maintenance />,
+      },
+      {
+        path: "/admin/feedback",
+        render: () => <Feedback />,
       },
     ];
     return (

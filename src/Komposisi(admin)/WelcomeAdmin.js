@@ -7,16 +7,31 @@ export class WelcomeAdmin extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      totaldata: 0,
+    };
+    this.CekNilai = this.CekNilai.bind(this);
+  }
+  CekNilai(nilai) {
+    var result;
+    if (nilai != null) {
+      result = nilai;
+    } else if (nilai == null) {
+      result = 0;
+    }
+    return result;
   }
   componentDidMount() {
-    const admin = AuthService.getCurrentAdmin();
-
-    if (admin) {
-      this.setState({
-        currentAdmin: admin,
+    fetch("http://localhost:8000/totaldatauser/")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          totaldata: res.totaldata,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
       });
-    }
   }
   setValueState(event) {
     this.setState({
@@ -25,6 +40,7 @@ export class WelcomeAdmin extends Component {
   }
 
   render() {
+    const { totaldata } = this.state;
     return (
       <div>
         <Navbaradmin konten='Dashboard Admin' />
@@ -38,7 +54,11 @@ export class WelcomeAdmin extends Component {
                 <div className='ms-5 mt-5 me-3 pe-5'>
                   <div class='col-7 text-bold'>
                     <h2 className='text-secondary fw-bold'>
-                      Sudah 14223 user terhubung <br />
+                      Sudah
+                      <span className='text-dark fw-bold'>
+                        &nbsp;{this.CekNilai(totaldata)}&nbsp;
+                      </span>
+                      user terhubung <br />
                       dengan Taskita, semangat !
                     </h2>
                   </div>

@@ -7,7 +7,7 @@ import AuthService from "../services/auth.service";
 export class Navbaradmin extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentAdmin: true };
+    this.state = { currentAdmin: false };
     this.KeluarAdmin = this.KeluarAdmin.bind(this);
   }
   KeluarAdmin() {
