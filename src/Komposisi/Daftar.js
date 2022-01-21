@@ -169,24 +169,10 @@ export class Daftar extends Component {
                       validations={[required, vfield]}
                       placeholder='Masukkan Password'></Input>
                   </div>
-                  <div class='form-check mb-3'>
-                    <Input
-                      type='checkbox'
-                      className='form-check-input'
-                      id='exampleCheck1'
-                    />
-                    <label class='form-check-label' for='exampleCheck1'>
-                      Saya setuju dengan <span> </span>
-                      <a href='/S&K' className='text-decoration-none'>
-                        Syarat & Ketentuan <span> </span>
-                      </a>
-                      dan
-                      <br />
-                      <a href='/Kebijakan' className='text-decoration-none'>
-                        Kebijakan Privasi
-                      </a>
-                      .
-                    </label>
+                  <div class='mb-4 text-muted'>
+                    Dengan mengklik Daftar, berarti data yang anda masukkan
+                    telah diisi dengan benar untuk dipakai dalam menggunakan
+                    layanan dalam Taskita
                   </div>
                   <div className='text-center'>
                     <button
