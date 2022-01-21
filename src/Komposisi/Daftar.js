@@ -32,6 +32,15 @@ const vfield = (value) => {
     );
   }
 };
+const vpin = (value) => {
+  if (value.length > 6) {
+    return (
+      <div className='alert alert-danger' role='alert'>
+        Field harus berisi 6 angka.
+      </div>
+    );
+  }
+};
 export class Daftar extends Component {
   constructor() {
     super();
@@ -43,6 +52,7 @@ export class Daftar extends Component {
       nama_belakang: null,
       successful: false,
       password: null,
+      pin: null,
       message: "",
     };
   }
@@ -61,7 +71,8 @@ export class Daftar extends Component {
         this.state.email,
         this.state.nama_depan,
         this.state.nama_belakang,
-        this.state.password
+        this.state.password,
+        this.state.pin
       ).then(
         (res) => {
           this.setState({
@@ -169,7 +180,21 @@ export class Daftar extends Component {
                       validations={[required, vfield]}
                       placeholder='Masukkan Password'></Input>
                   </div>
-                  <div class='mb-3 text-muted'>
+                  <div class='form-group mb-3'>
+                    <label>
+                      Pin<span className='text-danger'>*</span>
+                    </label>
+                    <Input
+                      name='pin'
+                      type='number'
+                      min='0'
+                      value={this.state.pin}
+                      className='text-dark rounded-3 form-control rounded-pill'
+                      onChange={this.setValueState.bind(this)}
+                      validations={[required, vpin]}
+                      placeholder='Masukkan Pin untuk dipakai dalam memulihkan password'></Input>
+                  </div>
+                  <div class='mb-3 text-secondary'>
                     Dengan mengklik Daftar, berarti data yang anda masukkan
                     telah diisi dengan benar untuk dipakai dalam menggunakan
                     layanan dalam Taskita

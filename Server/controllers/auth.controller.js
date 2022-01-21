@@ -15,6 +15,7 @@ exports.signup = (req, res) => {
     nama_blkg: req.body.nama_blkg,
     email: req.body.email,
     password: req.body.password,
+    pin: req.body.pin,
   })
     .then((user) => {
       if (req.body.roles) {
@@ -82,6 +83,29 @@ exports.signin = (req, res) => {
     });
 };
 
+exports.recovery = (req, res) => {
+  User.findOne({
+    where: {
+      email: req.body.email,
+    },
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "Email tidak ditemukan!" });
+      }
+
+      if (req.body.pin != user.pin) {
+        return res.status(401).send({
+          accessToken: null,
+          message: "Pin Salah!",
+        });
+      }
+      res.send({ message: "Berhasil terverifikasi!" });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};
 exports.adminsignin = (req, res) => {
   Admin.findOne({
     where: {

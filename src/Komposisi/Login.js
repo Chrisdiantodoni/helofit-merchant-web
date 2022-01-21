@@ -38,6 +38,7 @@ const vfield = (value) => {
     );
   }
 };
+
 export class Login extends Component {
   constructor() {
     super();
@@ -128,7 +129,7 @@ export class Login extends Component {
                   validations={[required, email, vfield]}
                   onChange={this.setValueState.bind(this)}></Input>
               </div>
-              <div class='form-group mb-3'>
+              <div class='form-group mb-1'>
                 <label>
                   Password<span className='text-danger'>*</span>
                 </label>
@@ -141,7 +142,11 @@ export class Login extends Component {
                   validations={[required, vfield]}
                   onChange={this.setValueState.bind(this)}></Input>
               </div>
-              <p className='text-muted text-end'>Lupa password?</p>
+              <p className='text-secondary text-start'>
+                <a href='/lupapass' className='text-decoration-none'>
+                  Lupa password?
+                </a>
+              </p>
               <div className='text-center'>
                 <button
                   type='submit'
@@ -152,7 +157,7 @@ export class Login extends Component {
                   )}
                   <span>Masuk</span>
                 </button>
-                <p className='text-secondary mt-2'>
+                <p className='text-secondary mt-1'>
                   Belum punya akun? <span> </span>
                   <a href='/daftar' className='text-decoration-none fw-bold'>
                     Daftar di sini

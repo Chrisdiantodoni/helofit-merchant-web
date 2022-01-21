@@ -17,5 +17,6 @@ module.exports = function (app) {
   );
 
   app.post("/api/auth/signin", controller.signin);
+  app.post("/api/auth/recovery", controller.recovery);
   app.post("/api/auth/adminsignin", controller.adminsignin);
 };

@@ -43,10 +43,10 @@ conn.connect((err) => {
   if (err) console.log("Masalah dengan MySQL" + err);
   else console.log("Terkoneksi dengan Database");
   // conn.query(
-  //   "CREATE TABLE user (email VARCHAR(30) NOT NULL PRIMARY KEY, nama_dpn VARCHAR(30) NOT NULL, nama_blkg VARCHAR(30) NOT NULL, password VARCHAR(30) NOT NULL)",
+  //   "CREATE TABLE users (email VARCHAR(30) NOT NULL PRIMARY KEY, nama_dpn VARCHAR(30) NOT NULL, nama_blkg VARCHAR(30) NOT NULL, password VARCHAR(30) NOT NULL, pin INT(6) NOT NULL)",
   //   (err, result) => {
   //     if (err) console.error("Error saat membuat tabel " + err);
-  //     else console.log("Tabel user berhasil dibuat");
+  //     else console.log("Tabel users berhasil dibuat");
   //   }
   // );
   // conn.query(

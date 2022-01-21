@@ -42,20 +42,6 @@ const vfield = (value) => {
     );
   }
 };
-// function Waktu(date) {
-//   var tgl = date;
-//   tgl.toLocaleString("en-US");
-//   return tgl;
-// }
-// function Waktu(date, days) {
-//   var tgl = new Date(date);
-//   tgl.setDate(tgl.getDate() + days);
-//   return tgl;
-// }
-function Waktu(date) {
-  var tgl = new Date(date);
-  return moment(tgl).add(17, "hours").format("YYYY-MM-DD");
-}
 export class EditTasks extends Component {
   constructor(props) {
     super(props);
@@ -124,7 +110,7 @@ export class EditTasks extends Component {
       .then((response) => response.json())
       .then((res) => {
         this.setState({
-          deadline: res.deadline.slice(0, 10),
+          deadline: moment(res.deadline).add(17, "hours").format("YYYY-MM-DD"),
           status: res.status,
           keterangan: res.keterangan,
         });
@@ -163,7 +149,7 @@ export class EditTasks extends Component {
                             <Input
                               type='date'
                               name='deadline'
-                              value={Waktu(this.state.deadline)}
+                              value={this.state.deadline}
                               min={mindate}
                               className='w-25 border border-1'
                               validations={[reqdate]}

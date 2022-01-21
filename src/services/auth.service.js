@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Redirect } from "react-router-dom";
 const API_URL = "http://localhost:8000/api/auth/";
 
 class AuthService {
@@ -16,6 +15,12 @@ class AuthService {
 
         return response.data;
       });
+  }
+  recovery(email, pin) {
+    return axios.post(API_URL + "recovery", {
+      email,
+      pin,
+    });
   }
   loginadmin(email, password) {
     return axios
@@ -47,12 +52,13 @@ class AuthService {
     });
   }
 
-  Daftar(email, nama_dpn, nama_blkg, password) {
+  Daftar(email, nama_dpn, nama_blkg, password, pin) {
     return axios.post(API_URL + "signup", {
       email,
       nama_dpn,
       nama_blkg,
       password,
+      pin,
     });
   }
 

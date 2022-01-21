@@ -12,6 +12,7 @@ import Tentang from "./Komposisi/Tentang";
 import Keuangan from "./Komposisi/Keuangan";
 import Manajemen from "./Komposisi/Manajemen";
 import FAQ from "./Komposisi/FAQ";
+import Lupapassword from "./Komposisi/Lupapassword";
 import AuthService from "./services/auth.service";
 //Setelah Login(User)
 import WelcomeUser from "./Komposisi(User)/WelcomeUser";
@@ -85,6 +86,10 @@ class App extends React.Component {
       {
         path: "/login",
         render: () => <Login />,
+      },
+      {
+        path: "/lupapass",
+        render: () => <Lupapassword />,
       },
       {
         path: "/loginadmin",
