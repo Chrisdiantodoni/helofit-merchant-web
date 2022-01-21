@@ -13,17 +13,17 @@ app.use(cors());
 const db = require("./models");
 const Role = db.role;
 
-function initial() {
-  Role.create({
-    id: 1,
-    name: "user",
-  });
+// function initial() {
+//   Role.create({
+//     id: 1,
+//     name: "user",
+//   });
 
-  Role.create({
-    id: 2,
-    name: "admin",
-  });
-}
+//   Role.create({
+//     id: 2,
+//     name: "admin",
+//   });
+// }
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and Resync Db");
 //   initial();
@@ -36,7 +36,7 @@ var conn = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "microdigi",
+  database: "taskita",
 });
 
 conn.connect((err) => {
