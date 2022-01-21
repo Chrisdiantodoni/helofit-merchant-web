@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
+import AuthService from "../services/auth.service";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
 import { AiOutlineWarning } from "react-icons/ai";
 export class Maintenance extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = { currentAdmin: AuthService.getCurrentAdmin() };
   }
   setValueState(event) {
     this.setState({
@@ -15,6 +16,7 @@ export class Maintenance extends Component {
   }
 
   render() {
+    const { currentAdmin } = this.state;
     return (
       <div>
         <Navbaradmin konten='Maintenance' />
@@ -38,6 +40,7 @@ export class Maintenance extends Component {
             </div>
           </div>
         </div>
+        <span className='d-none'>{currentAdmin.username}</span>
       </div>
     );
   }

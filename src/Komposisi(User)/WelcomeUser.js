@@ -52,7 +52,6 @@ class WelcomeUser extends Component {
   }
   render() {
     const { currentUser, sisa, kegiatan } = this.state;
-    const saldo = JSON.stringify(localStorage.getItem("sisa"));
     return (
       <div>
         <Navbaruser konten='Dashboard User' />

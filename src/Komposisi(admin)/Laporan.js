@@ -9,6 +9,7 @@ export class Laporan extends Component {
     super(props);
 
     this.state = {
+      currentAdmin: AuthService.getCurrentAdmin(),
       datauser: [],
     };
   }
@@ -30,7 +31,7 @@ export class Laporan extends Component {
       });
   }
   render() {
-    const { datauser } = this.state;
+    const { currentAdmin } = this.state;
     return (
       <div>
         <Navbaradmin konten='Laporan' />
@@ -78,13 +79,13 @@ export class Laporan extends Component {
                         ))}
                       </tbody>
                     </table>
-                    {/* <button className='btn btn-primary mt-3'>Download</button> */}
                   </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <span className='d-none'>{currentAdmin.username}</span>
       </div>
     );
   }

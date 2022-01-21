@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
+import AuthService from "../services/auth.service";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
 export class Feedback extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { feedbacks: [], nama: "", email: "", pesan: "" };
+    this.state = {
+      currentAdmin: AuthService.getCurrentAdmin(),
+      feedbacks: [],
+      nama: "",
+      email: "",
+      pesan: "",
+    };
   }
   setValueState(event) {
     this.setState({
@@ -25,6 +32,7 @@ export class Feedback extends Component {
       });
   }
   render() {
+    const { currentAdmin } = this.state;
     return (
       <div>
         <Navbaradmin konten='Feedback' />
@@ -57,6 +65,7 @@ export class Feedback extends Component {
             </div>
           </div>
         </div>
+        <span className='d-none'>{currentAdmin.username}</span>
       </div>
     );
   }

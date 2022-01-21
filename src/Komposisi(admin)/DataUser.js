@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
+import AuthService from "../services/auth.service";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
 
 export class DataUser extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { datauser: [], namalengkap: "", password: "", email: "" };
+    this.state = {
+      currentAdmin: AuthService.getCurrentAdmin(),
+      datauser: [],
+      namalengkap: "",
+      password: "",
+      email: "",
+    };
   }
   setValueState(event) {
     this.setState({
@@ -27,6 +34,7 @@ export class DataUser extends Component {
       });
   }
   render() {
+    const { currentAdmin } = this.state;
     return (
       <div>
         <Navbaradmin konten='Data User' />
@@ -60,6 +68,7 @@ export class DataUser extends Component {
             </div>
           </div>
         </div>
+        <span className='d-none'>{currentAdmin.username}</span>
       </div>
     );
   }

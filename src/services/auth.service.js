@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { Redirect } from "react-router-dom";
 const API_URL = "http://localhost:8000/api/auth/";
 
 class AuthService {
@@ -27,7 +27,6 @@ class AuthService {
         if (response.data.accessToken) {
           localStorage.setItem("admin", JSON.stringify(response.data));
         }
-
         return response.data;
       });
   }

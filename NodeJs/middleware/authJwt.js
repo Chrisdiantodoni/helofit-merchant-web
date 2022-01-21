@@ -23,6 +23,26 @@ verifyToken = (req, res, next) => {
   });
 };
 
+verifyTokenAdmin = (req, res, next) => {
+  var token = req.headers["x-access-token"];
+
+  if (!token) {
+    return res.status(403).send({
+      message: "No token provided!",
+    });
+  }
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: "Unauthorized!",
+      });
+    }
+    req.adminId = decoded.id;
+    next();
+  });
+};
+
 isAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
     user.getRoles().then((roles) => {
@@ -43,6 +63,7 @@ isAdmin = (req, res, next) => {
 
 const authJwt = {
   verifyToken: verifyToken,
+  verifyTokenAdmin: verifyTokenAdmin,
   isAdmin: isAdmin,
 };
 module.exports = authJwt;

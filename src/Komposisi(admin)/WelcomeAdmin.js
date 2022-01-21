@@ -8,6 +8,7 @@ export class WelcomeAdmin extends Component {
     super(props);
 
     this.state = {
+      currentAdmin: AuthService.getCurrentAdmin(),
       totaldata: 0,
     };
     this.CekNilai = this.CekNilai.bind(this);
@@ -40,7 +41,7 @@ export class WelcomeAdmin extends Component {
   }
 
   render() {
-    const { totaldata } = this.state;
+    const { currentAdmin, totaldata } = this.state;
     return (
       <div>
         <Navbaradmin konten='Dashboard Admin' />
@@ -66,6 +67,7 @@ export class WelcomeAdmin extends Component {
               </div>
             </div>
           </div>
+          <span className='d-none'>{currentAdmin.username}</span>
         </div>
       </div>
     );
