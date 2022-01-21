@@ -166,9 +166,9 @@ export class Lupapassword extends Component {
                     Submit
                   </button>
                   <p className='text-secondary mt-2'>
-                    Sudah punya akun? <span> </span>
-                    <a href='/login' className='text-decoration-none fw-bold'>
-                      Masuk di sini
+                    Masih Bermasalah? <span> </span>
+                    <a href='/kontak' className='text-decoration-none fw-bold'>
+                      Hubungi Kami
                     </a>
                   </p>
                 </div>
