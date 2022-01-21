@@ -6,6 +6,7 @@ import CheckButton from "react-validation/build/button";
 import Select from "react-validation/build/select";
 import AuthService from "../services/auth.service";
 import { withRouter } from "react-router-dom";
+import moment from "moment";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import * as Axios from "axios";
@@ -53,14 +54,7 @@ const vfield = (value) => {
 // }
 function Waktu(date) {
   var tgl = new Date(date);
-  // tgl.setHours(tgl.getHours() + 7);
-  var lengkap =
-    ("0" + tgl.getDate()).slice(-2) +
-    "-" +
-    ("0" + tgl.getMonth() + 1).slice(-2) +
-    "-" +
-    tgl.getFullYear();
-  return console.log(lengkap);
+  return moment(tgl).add(17, "hours").format("YYYY-MM-DD");
 }
 export class EditTasks extends Component {
   constructor(props) {
@@ -169,7 +163,7 @@ export class EditTasks extends Component {
                             <Input
                               type='date'
                               name='deadline'
-                              value={this.state.deadline}
+                              value={Waktu(this.state.deadline)}
                               min={mindate}
                               className='w-25 border border-1'
                               validations={[reqdate]}
@@ -236,7 +230,6 @@ export class EditTasks extends Component {
                             }}
                           />
                         </tr>
-                        {Waktu(this.state.deadline)}
                       </tbody>
                     </table>
                   </Form>

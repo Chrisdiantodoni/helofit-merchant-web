@@ -29,7 +29,7 @@ export class Navbarbefore extends Component {
               </Nav.Link>
               <NavDropdown
                 title={<span className='text-primary'>Layanan</span>}
-                className='efek fs-6'
+                className='efek fs-6 text-dark'
                 id='basic-nav-dropdown'>
                 <NavDropdown.Item href='/manajemen'>
                   Manajemen Kegiatan

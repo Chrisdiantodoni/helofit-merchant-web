@@ -47,7 +47,6 @@ export class Navbaruser extends Component {
             <Nav className='ms-auto me-5'>
               <span className='d-flex ms-4 mt-2 fs-3 fw-bold '>
                 <AiOutlineUser className='mt-3 text-secondary' />
-                {/* {currentUser.nama_dpn} */}
                 <NavDropdown
                   title={currentUser.nama_dpn}
                   id='basic-nav-dropdown'

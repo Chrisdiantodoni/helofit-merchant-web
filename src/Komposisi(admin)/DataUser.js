@@ -27,7 +27,6 @@ export class DataUser extends Component {
       });
   }
   render() {
-    const datauser = this.state;
     return (
       <div>
         <Navbaradmin konten='Data User' />

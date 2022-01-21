@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AuthService from "../services/auth.service";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 export class Laporan extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ export class Laporan extends Component {
       });
   }
   render() {
+    const { datauser } = this.state;
     return (
       <div>
         <Navbaradmin konten='Laporan' />
@@ -47,7 +49,36 @@ export class Laporan extends Component {
                   </p>
                   <hr />
                   <p>
-                    <i>Rekap semua data user </i>
+                    <i>Rekap semua data user </i> <br />
+                    <ReactHTMLTableToExcel
+                      className='download-table-xls-button btn btn-primary mt-3'
+                      table='laporanuser'
+                      filename='datauser'
+                      sheet='user'
+                      buttonText='Download File Excel'
+                    />
+                    <table
+                      className='table d-none text-center border'
+                      id='laporanuser'>
+                      <tbody className='text-center border'>
+                        <tr className='row' colspan='3'></tr>
+                        <tr className='row'>
+                          <td></td>
+                          <td className='col'>Nama Lengkap</td>
+                          <td className='col'>Password</td>
+                          <td className='col'>Email</td>
+                        </tr>
+                        {this.state.datauser.map((item, index) => (
+                          <tr className='row'>
+                            <td></td>
+                            <td className='col'>{item.NamaLengkap}</td>
+                            <td className='col'>{item.password}</td>
+                            <td className='col'>{item.email}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {/* <button className='btn btn-primary mt-3'>Download</button> */}
                   </p>
                 </div>
               </div>

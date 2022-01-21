@@ -2,7 +2,7 @@ import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Beranda.css";
 import Navbarbefore from "../Komponen/Navbar(before login)";
-import { Container, Nav, Button } from "react-bootstrap";
+import { Container, Nav, Button, Dropdown } from "react-bootstrap";
 import React, { Component } from "react";
 import Beranda_2 from "./Beranda (part 2)";
 import ilustrasi from "../Assets/ilustrasi.png";
@@ -19,15 +19,25 @@ export default class Beranda extends Component {
           <h5 className='text-muted '>
             Membantu Kamu lebih teratur dalam kegiatan dan keuangan
           </h5>
-          <Nav.Link href='#porto' className='d-inline-block mx-auto'>
+          {/* <Nav.Link href='/manajemen' className='d-inline-block mx-auto'>
             <Button variant='primary' className='btn-sm rounded-pill'>
               Lebih Detail
             </Button>
-          </Nav.Link>
+          </Nav.Link> */}
+          <Dropdown className='d-inline-block mx-auto'>
+            <Dropdown.Toggle variant='primary' id='dropdown-basic'>
+              Lebih Detail
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href='/manajemen'>
+                Manajemen Kegiatan
+              </Dropdown.Item>
+              <Dropdown.Item href='/keuangan'>Catatan Keuangan</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           <Nav.Link href='/daftar' className='d-inline-block me-5'>
-            <Button
-              variant='light'
-              className='btn-sm btn-outline-primary rounded-pill'>
+            <Button variant='light' className='btn-outline-primary '>
               Daftar Gratis !
             </Button>
           </Nav.Link>

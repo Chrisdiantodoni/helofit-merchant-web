@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
-import { AiOutlineWarning } from "react-icons/ai";
 export class Feedback extends Component {
   constructor(props) {
     super(props);
