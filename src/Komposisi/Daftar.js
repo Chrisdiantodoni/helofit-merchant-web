@@ -169,7 +169,7 @@ export class Daftar extends Component {
                       validations={[required, vfield]}
                       placeholder='Masukkan Password'></Input>
                   </div>
-                  <div class='mb-4 text-muted'>
+                  <div class='mb-3 text-muted'>
                     Dengan mengklik Daftar, berarti data yang anda masukkan
                     telah diisi dengan benar untuk dipakai dalam menggunakan
                     layanan dalam Taskita
