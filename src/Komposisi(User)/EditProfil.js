@@ -100,8 +100,6 @@ class EditProfil extends Component {
       });
   }
   render() {
-    const { currentUser } = this.state;
-
     return (
       <div>
         <Navbaruser konten='Edit Profil User' />

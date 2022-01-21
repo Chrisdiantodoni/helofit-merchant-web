@@ -4,7 +4,6 @@ import { HiSwitchHorizontal } from "react-icons/hi";
 import { AiOutlineUser } from "react-icons/ai";
 import logo from "../Assets/logo.png";
 import AuthService from "../services/auth.service";
-import { Redirect } from "react-router-dom";
 export class Navbaradmin extends Component {
   constructor(props) {
     super(props);

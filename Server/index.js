@@ -140,6 +140,20 @@ app.put("/finances/:id", (req, res) => {
     }
   );
 });
+app.put("/recovery/:email", (req, res) => {
+  var password = req.body.password;
+  var email = req.params.email;
+  conn.query(
+    "UPDATE users SET password = '" +
+      password +
+      "' WHERE email = '" +
+      email +
+      "'",
+    (err, result) => {
+      res.json(result);
+    }
+  );
+});
 app.delete("/finances/:id", (req, res) => {
   var id = req.params.id;
   var query = "DELETE FROM finances WHERE id = " + id;

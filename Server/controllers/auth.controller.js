@@ -100,7 +100,7 @@ exports.recovery = (req, res) => {
           message: "Pin Salah!",
         });
       }
-      res.send({ message: "Berhasil terverifikasi!" });
+      res.send({ message: "Password telah berhasil diubah!" });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });

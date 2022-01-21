@@ -5,6 +5,7 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import { withRouter } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import * as Axios from "axios";
 const required = (value) => {
   if (!value) {
     return (
@@ -66,6 +67,9 @@ export class Lupapassword extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.recovery(this.state.email, this.state.pin).then(
         (res) => {
+          Axios.put("http://localhost:8000/recovery/" + this.state.email, {
+            password: this.state.password,
+          });
           this.setState({
             message: res.data.message,
             successful: true,
@@ -142,6 +146,19 @@ export class Lupapassword extends Component {
                     validations={[required, vpin]}
                     placeholder='Masukkan Pin Anda'></Input>
                 </div>
+                <div class='form-group mb-3'>
+                  <label>
+                    Password Baru Anda<span className='text-danger'>*</span>
+                  </label>
+                  <Input
+                    name='password'
+                    type='password'
+                    value={this.state.password}
+                    className='text-dark rounded-3 form-control rounded-pill'
+                    onChange={this.setValueState.bind(this)}
+                    validations={[required, vfield]}
+                    placeholder='Masukkan Password Baru Anda'></Input>
+                </div>
                 <div className='text-center'>
                   <button
                     type='submit'
@@ -178,72 +195,6 @@ export class Lupapassword extends Component {
             </Form>
           </div>
         </div>
-        {/* <Modal title='Daftar'>
-          <div className='Judul'>
-            <h5 className='mt-2 text-dark'>Daftar</h5>
-            <hr className='text-secondary' />
-          </div>
-          <div className='Isi text-start'>
-            <table className='table table-borderless m-4'>
-              <tbody>
-                <tr>
-                  <td>
-                    <label className='text-dark'>Username</label>
-                  </td>
-                  <td>:</td>
-                  <td>
-                    <input
-                      className='text-dark'
-                      name='username'
-                      type='text'
-                      value={this.state.username}
-                      onChange={this.setValueState.bind(this)}
-                      className='form-control w-50'></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className='text-dark'>Email</label>
-                  </td>
-                  <td>:</td>
-                  <td>
-                    <input
-                      className='text-dark'
-                      name='email'
-                      type='email'
-                      value={this.state.email}
-                      onChange={this.setValueState.bind(this)}
-                      className='form-control w-50'></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className='text-dark'>Password</label>
-                  </td>
-                  <td>:</td>
-                  <td>
-                    <input
-                      className='text-dark'
-                      name='password'
-                      type='password'
-                      value={this.state.password}
-                      onChange={this.setValueState.bind(this)}
-                      className='form-control w-50'></input>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <hr className='text-secondary' />
-          </div>
-          <div className='Akhir text-start ms-4 mb-3'>
-            <button
-              type='button'
-              className='btn btn-primary me-1'
-              onClick={daftar}>
-              Daftar
-            </button>
-          </div>
-        </Modal> */}
       </div>
     );
   }
