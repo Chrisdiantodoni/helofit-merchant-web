@@ -38,17 +38,17 @@ class Profil extends Component {
                     <tbody>
                       <tr className='row'>
                         <td className='col-2'>Nama Depan</td>
-                        <td className='col-2'>:&emsp;{currentUser.nama_dpn}</td>
+                        <td className='col-6'>:&emsp;{currentUser.nama_dpn}</td>
                       </tr>
                       <tr className='row'>
                         <td className='col-2'>Nama Belakang</td>
-                        <td className='col-2'>
+                        <td className='col-6'>
                           :&emsp;{currentUser.nama_blkg}
                         </td>
                       </tr>
                       <tr className='row'>
                         <td className='col-2'>Email</td>
-                        <td className='col-2'>:&emsp;{currentUser.email}</td>
+                        <td className='col-6'>:&emsp;{currentUser.email}</td>
                       </tr>
                       <tr className='row'>
                         <td className='col-2'>
