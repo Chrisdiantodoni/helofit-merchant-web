@@ -52,10 +52,10 @@ export class Sidebaradmin extends Component {
             <Nav.Link
               href='/admin/feedback'
               className='text-light btn btn-primary border-bottom'>
-              <span className='pe-5 me-4'>
+              <span className='pe-4 me-4'>
                 &ensp; &ensp;
                 <RiFeedbackLine className='fs-3 mb-1' />
-                &nbsp;Feedback
+                &nbsp;Pesan masuk
               </span>
             </Nav.Link>
           </Nav.Item>

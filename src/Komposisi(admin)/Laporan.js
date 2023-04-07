@@ -49,14 +49,14 @@ export class Laporan extends Component {
                     dokumen
                   </p>
                   <hr />
-                  <p>
-                    <i>Rekap semua data user </i> <br />
+                  <h5 className='mb-5'>
+                    <i><b>Rekap semua data user </b></i> <br />
                     <ReactHTMLTableToExcel
                       className='download-table-xls-button btn btn-primary mt-3'
                       table='laporanuser'
                       filename='datauser'
                       sheet='user'
-                      buttonText='Download File Excel'
+                      buttonText='Download File'
                     />
                     <table
                       className='table d-none text-center border'
@@ -79,7 +79,7 @@ export class Laporan extends Component {
                         ))}
                       </tbody>
                     </table>
-                  </p>
+                  </h5>
                 </div>
               </div>
             </div>

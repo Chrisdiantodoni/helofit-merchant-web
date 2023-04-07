@@ -16,3 +16,12 @@
 .ig:hover {
   color: #8a3ab9;
 }
+
+html,
+body {
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+}

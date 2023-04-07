@@ -3,7 +3,11 @@ import "./css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 //Sebelum Login
+
+import EditFasilitas from "./Komposisi(User)/EditFasilitas";
+import Fasilitas from "./Komposisi(User)/Fasilitas";
 import Beranda from "./Komposisi/Beranda";
+import LaporanUser from "./Komposisi(User)/Laporan";
 import Daftar from "./Komposisi/Daftar";
 import Login from "./Komposisi/Login";
 import LoginAdmin from "./Komposisi/LoginAdmin";
@@ -14,23 +18,17 @@ import Manajemen from "./Komposisi/Manajemen";
 import FAQ from "./Komposisi/FAQ";
 import Lupapassword from "./Komposisi/Lupapassword";
 import AuthService from "./services/auth.service";
-//Setelah Login(User)
 import WelcomeUser from "./Komposisi(User)/WelcomeUser";
-import Tasks from "./Komposisi(User)/Tasks";
-import EditTasks from "./Komposisi(User)/EditTasks";
-import DeleteTasks from "./Komposisi(User)/DeleteTasks";
-import Finance from "./Komposisi(User)/Finance";
-import EditFinance from "./Komposisi(User)/EditFinance";
-import DeleteFinance from "./Komposisi(User)/DeleteFinance";
-import Profil from "./Komposisi(User)/Profil";
-import EditProfil from "./Komposisi(User)/EditProfil";
-//Setelah Login(Admin)
 import WelcomeAdmin from "./Komposisi(admin)/WelcomeAdmin";
 import Laporan from "./Komposisi(admin)/Laporan";
 import DataUser from "./Komposisi(admin)/DataUser";
 import Maintenance from "./Komposisi(admin)/Maintenance";
 import Feedback from "./Komposisi(admin)/Feedback";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Fitur from "./Komposisi/Fitur";
+import Dompet from "./Komposisi(User)/Dompet";
+import DompetMerchant from "./Komposisi(User)/DompetMerchant";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -68,6 +66,10 @@ class App extends React.Component {
         render: () => <Daftar />,
       },
       {
+        path: "/Fitur",
+        render: () => <Fitur />,
+      },
+      {
         path: "/kontak",
         render: () => <Kontak />,
       },
@@ -100,37 +102,27 @@ class App extends React.Component {
         render: () => <WelcomeUser />,
       },
       {
-        path: "/welcome/tasks",
-        render: () => <Tasks />,
+        path: "/welcome/laporan",
+        render: () => <LaporanUser />,
+      },
+
+      {
+        path: "/welcome/fasilitas",
+        render: () => <Fasilitas />,
       },
       {
-        path: "/welcome/profil",
-        render: () => <Profil />,
+        path: "/welcome/EditFasilitas",
+        render: () => <EditFasilitas />,
       },
       {
-        path: "/editprofil/:id",
-        render: () => <EditProfil />,
+        path: "/welcome/TarikSaldo",
+        render: () => <DompetMerchant />,
       },
       {
-        path: "/edittasks/:id",
-        render: () => <EditTasks />,
+        path: "/welcome/Dompet",
+        render: () => <Dompet />,
       },
-      {
-        path: "/deletetasks/:id",
-        render: () => <DeleteTasks />,
-      },
-      {
-        path: "/welcome/finance",
-        render: () => <Finance />,
-      },
-      {
-        path: "/editfinance/:id",
-        render: () => <EditFinance />,
-      },
-      {
-        path: "/deletefinance/:id",
-        render: () => <DeleteFinance />,
-      },
+
       {
         path: "/admin/dashboard",
         render: () => <WelcomeAdmin />,

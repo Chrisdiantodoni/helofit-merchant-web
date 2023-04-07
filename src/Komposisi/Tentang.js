@@ -4,100 +4,125 @@ import { Container } from "react-bootstrap";
 import React, { Component } from "react";
 import Footer from "./Footer";
 import Navbarbefore from "../Komponen/Navbar(before login)";
-import marco from "../Assets/marco.jpg";
-import karim from "../Assets/karim.png";
-import adrian from "../Assets/adrian.png";
+import doni from "../Assets/Doni.png";
 import zulharmin from "../Assets/zulharmin.png";
-import christa from "../Assets/christa.png";
 import ilustrasitentang from "../Assets/ilustrasitentang.png";
 class Tentang extends Component {
   render() {
     return (
-      <div>
+      <div style={{ background: "#161616", height: "100%" }}>
         <Navbarbefore />
-        <Container className='text-center mx-auto'>
-          <div className='row g-4 mt-3 mb-4'>
-            <div className='col-md-6 text-start '>
+        <Container className="text-center mx-auto">
+          <div className="row g-4 mt-3 mb-4">
+            <div className="col-md-6 text-start ">
               <p>
-                <span className='text-primary'>Tentang Kami</span>
-                <h3 className='fw-bold text-black'>Apa sih Taskita itu?</h3>
-                <p className='card-text text-muted'>
-                  Taskita adalah aplikasi berbasis website yang simpel, modern,
-                  dan ringan bertujuan memudahkan setiap pribadi mengatur
-                  kegiatan dan mencatat keuangan
+                <h2 className="text-muted">Tentang Kami</h2>
+                <h1 className="fw-bold text-light">Apa sih Helofit itu?</h1>
+                <p className="card-text text-light">
+                  Helofit adalah aplikasi berbasis mobile dan website yang
+                  simple, modern, dan ringan bertujuan untuk menyatukan
+                  orang-orang untuk melakukan olahraga demi menciptakan pola
+                  hidup sehat di seluruh masyarakat Indonesia.
                 </p>
               </p>
             </div>
-            <div className='col-md-4 '>
-              <img src={ilustrasitentang} height='auto' width='auto' />
+            <div className="col-md-4 ">
+              <img src={ilustrasitentang} height="272px" width="632px" />
             </div>
-            <div className='col-md-6  text-start ms-1'>
-              <p className='text-muted'>
-                Visi Taskita <br />
-                <h5 className='fw-bold text-dark'>
+            <div className="col-md-6  text-start ms-1">
+              <p className="text-muted text-start">
+                <h3 className="fw-bold text-light">Visi Helofit</h3>
+                <h2 className="fw-bold" style={{ color: "#7c7c7c" }}>
                   Puluhan juta pengguna di Indonesia merasakan manfaat aplikasi
-                </h5>
+                </h2>
               </p>
             </div>
-            <div className='col-md ms-5'>
-              <p className='text-muted text-start'>
-                Misi Taskita <br />
-                <h5 className='fw-bold text-dark'>
+            <div className="col-md">
+              <p className="text-muted text-start">
+                <h3 className="fw-bold text-light">Misi Taskita</h3>
+                <h2 className="fw-bold" style={{ color: "#7c7c7c" }}>
                   Untuk membuat suatu budaya setiap individu baru agar lebih
-                  teratur setiap harinya
-                </h5>
+                  sehat setiap harinya
+                </h2>
               </p>
             </div>
           </div>
-          <p className='text-muted pt-4'>
-            Keunggulan Kami <br />
-            <h3 className='fw-bold text-dark'>Kenapa harus Taskita?</h3>
+          <p className="text-muted pt-4">
+            <h1 className="fw-bold text-light">Kenapa harus Helofit?</h1>
           </p>
-          <div className='row row-cols-1 row-cols-md-4 g-4 pt-4'>
-            <div className='col'>
-              <div className='card h-100'>
-                <div className='card-body text-start'>
-                  <h5 className='card-title fw-bold text-dark'>
+          <div className="row row-cols-1 row-cols-md-4 g-4 pt-4">
+            <div className="col">
+              <div
+                className="card h-100"
+                style={{
+                  border: "1px solid #FFFFFF",
+                  borderRadius: 16,
+                  background: "#161616",
+                }}
+              >
+                <div className="card-body text-start">
+                  <h5 className="card-title fw-bold text-light">
                     Mudah Digunakan
                   </h5>
-                  <p className='card-text text-muted'>
+                  <p className="card-text text-light">
                     Gak ada kata ribet dalam kamus Taskita, karena aplikasi ini
                     mudah digunakan sesuai kebutuhanmu
                   </p>
                 </div>
               </div>
             </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <div className='card-body text-start'>
-                  <h5 className='card-title fw-bold text-dark'>
+            <div className="col">
+              <div
+                className="card h-100"
+                style={{
+                  border: "1px solid #FFFFFF",
+                  borderRadius: 16,
+                  background: "#161616",
+                }}
+              >
+                <div className="card-body text-start">
+                  <h5 className="card-title fw-bold text-light">
                     Layanan gratis
                   </h5>
-                  <p className='card-text text-muted'>
+                  <p className="card-text text-light">
                     Untuk menggunakan fitur yang ada , kamu tidak perlu khawatir
                     karena semua fitur Taskita gratis
                   </p>
                 </div>
               </div>
             </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <div className='card-body text-start'>
-                  <h5 className='card-title fw-bold text-dark'>
+            <div className="col">
+              <div
+                className="card h-100"
+                style={{
+                  border: "1px solid #FFFFFF",
+                  borderRadius: 16,
+                  background: "#161616",
+                }}
+              >
+                <div className="card-body text-start">
+                  <h5 className="card-title fw-bold text-light">
                     Tampilan Menarik
                   </h5>
-                  <p className='card-text text-muted'>
+                  <p className="card-text text-light">
                     Bukan cuma simpel, Taskita juga bikin kamu gak bosen dan
                     enak dilihat ketika menggunakannya.
                   </p>
                 </div>
               </div>
             </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <div className='card-body text-start'>
-                  <h5 className='card-title fw-bold text-dark'>Kecepatan</h5>
-                  <p className='card-text text-muted'>
+            <div className="col">
+              <div
+                className="card h-100"
+                style={{
+                  border: "1px solid #FFFFFF",
+                  borderRadius: 16,
+                  background: "#161616",
+                }}
+              >
+                <div className="card-body text-start">
+                  <h5 className="card-title fw-bold text-light">Kecepatan</h5>
+                  <p className="card-text text-light">
                     Untuk kecepatan Taskita gak usah diragukan lagi deh,
                     pokoknya anti lelet dan anti nunggu.
                   </p>
@@ -105,77 +130,63 @@ class Tentang extends Component {
               </div>
             </div>
           </div>
-          <div className='row row-cols-1 row-cols-3 g-4 mt-4 pt-4'>
-            <div className='col'>
-              <div className='pt-5 mt-5'>
-                <p className='text-muted'>
-                  Team Kami <br />
-                  <h3 className='fw-bold text-dark'>Berkenalan dengan Team</h3>
+          <div className="row row-cols-1 row-cols-3 g-4 mt-4 pt-4">
+            <div className="col">
+              <div className="pt-5 mt-5 text-start">
+                <p className="text-muted">
+                  <h3 className="fw-bold" style={{ color: "#7c7c7c" }}>
+                    Team Kami
+                  </h3>
+                  <h2 className="fw-bold text-light">Berkenalan dengan Team</h2>
                 </p>
               </div>
             </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <img
-                  className='mx-auto d-inline-block'
-                  src={marco}
-                  height='200px'
-                />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Marco Lukita</h4>
-                  <p className='text-muted d-inline'>Back-end Developer</p>
+            <div className="col">
+              <div
+                className="card h-100"
+                style={{
+                  borderRadius: 16,
+                  border: "1px solid #FFFFFF",
+                  background: "#000000",
+                }}
+              >
+                <div style={{ background: "#dedede" }}>
+                  <img
+                    className="mx-auto d-inline-block"
+                    src={doni}
+                    height="200px"
+                  />
+                </div>
+                <div className="card-body text-start">
+                  <h4 className="card-text text-light fw bold">
+                    Doni Chrisdianto K
+                  </h4>
+                  <p className="text-muted d-inline fw-bold">
+                    Full Stack Developer
+                  </p>
                 </div>
               </div>
             </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <img
-                  className='mx-auto d-inline-block'
-                  src={karim}
-                  height='200px'
-                />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Kevin Karim</h4>
-                  <p className='text-muted d-inline'>Back-end Developer</p>
+
+            <div className="col">
+              <div
+                className="card h-100"
+                style={{
+                  borderRadius: 16,
+                  border: "1px solid #FFFFFF",
+                  background: "#000000",
+                }}
+              >
+                <div style={{ background: "#dedede" }}>
+                  <img
+                    className="mx-auto d-inline-block"
+                    src={zulharmin}
+                    height="200px"
+                  />
                 </div>
-              </div>
-            </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <img
-                  className='mx-auto d-inline-block'
-                  src={adrian}
-                  height='200px'
-                />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Adrian</h4>
-                  <p className='text-muted d-inline'>Front-end Developer</p>
-                </div>
-              </div>
-            </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <img
-                  className='mx-auto d-inline-block'
-                  src={zulharmin}
-                  height='200px'
-                />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Zulharmin</h4>
-                  <p className='text-muted d-inline'>UI Designer</p>
-                </div>
-              </div>
-            </div>
-            <div className='col'>
-              <div className='card h-100'>
-                <img
-                  className='mx-auto d-inline-block'
-                  src={christa}
-                  height='200px'
-                />
-                <div className='card-body text-start'>
-                  <h4 className='card-text'>Christa</h4>
-                  <p className='text-muted d-inline'>Front-end Developer</p>
+                <div className="card-body text-start">
+                  <h4 className="card-text text-light fw-bold">Zulharmin</h4>
+                  <p className="text-muted d-inline fw-bold">UI Designer</p>
                 </div>
               </div>
             </div>

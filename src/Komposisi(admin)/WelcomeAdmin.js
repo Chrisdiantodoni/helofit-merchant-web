@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AuthService from "../services/auth.service";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
-
+import dasboradmin from "../Assets/dasboradmin.png";
 export class WelcomeAdmin extends Component {
   constructor(props) {
     super(props);
@@ -52,16 +52,24 @@ export class WelcomeAdmin extends Component {
           <div className='col-8'>
             <div class='container mx-auto mt-5'>
               <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'>
-                  <div class='col-7 text-bold'>
+                <div className='row ms-4 mt-6 me-3 pe-5'>
+                  <div class='col-6 mt-4 pt-2 text-bold'>
                     <h2 className='text-secondary fw-bold'>
                       Sudah
                       <span className='text-dark fw-bold'>
                         &nbsp;{this.CekNilai(totaldata)}&nbsp;
                       </span>
-                      user terhubung <br />
-                      dengan Taskita, semangat !
+                      user terhubung 
+                      dengan Taskita, semangat terus ya !
                     </h2>
+                  </div>
+                  <div class='col-6 text-bold'>
+                  <img
+                      className='img rounded-3'
+                      src={dasboradmin}
+                      width={350}
+                      height='auto'
+                    />
                   </div>
                 </div>
               </div>

@@ -1,65 +1,107 @@
 import React, { Component } from "react";
-import { Navbar, Container, Nav, Button, NavDropdown } from "react-bootstrap";
+import { Navbar, Container, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import logo from "../Assets/logo.png";
+
 export class Navbarbefore extends Component {
   render() {
     return (
-      <Navbar bg='light' expand='lg'>
+      <Navbar bg="dark" expand="lg" variant="dark">
         <Container>
-          <Navbar.Brand>
-            <img
-              className='img-fluid logo d-inline-block mx-auto'
-              src={logo}
-              width='150px'
-              height='20px'
-            />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='text-center mx-auto me-1'>
-              <Nav.Link className='efek fs-6'>
+          <img
+            src={logo}
+            className="img-fluid logo d-inline-block mx-auto"
+            height="64px"
+            width="218px"
+          />
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mx-auto me-1 ">
+              <Nav.Link className="fs-6">
                 <NavLink
-                  to='/'
-                  className='text-decoration-none'
-                  exact
-                  activeStyle={{ fontWeight: "bold", color: "blue" }}>
+                  to="/"
+                  className="text-decoration-none"
+                  activeClassName="aktif"
+                  style={{
+                    fontWeight: 700,
+                    color: "#ffffff",
+                    fontSize: 20,
+                    paddingRight: 62,
+                  }}
+                >
                   Beranda
                 </NavLink>
               </Nav.Link>
-              <NavDropdown
-                title={<span className='text-primary'>Layanan</span>}
-                className='efek fs-6 text-dark'
-                id='basic-nav-dropdown'>
-                <NavDropdown.Item href='/manajemen'>
-                  Manajemen Kegiatan
-                </NavDropdown.Item>
-                <NavDropdown.Item href='/keuangan'>
-                  Catatan Keuangan
-                </NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link className='efek fs-6'>
+              <Nav.Link className="fs-6">
                 <NavLink
-                  to='/tentang'
-                  className='text-decoration-none'
-                  activeClassName='aktif'>
+                  to="/tentang"
+                  className="text-decoration-none"
+                  activeClassName="aktif"
+                  style={{
+                    fontWeight: 700,
+                    color: "#ffffff",
+                    fontSize: 20,
+                    paddingRight: 62,
+                  }}
+                >
                   Tentang
                 </NavLink>
               </Nav.Link>
-              <Nav.Link className='efek fs-6'>
+              <Nav.Link className="fs-6">
                 <NavLink
-                  to='/kontak'
-                  className='text-decoration-none'
-                  activeClassName='aktif'>
+                  to="/Fitur"
+                  className="text-decoration-none"
+                  style={{
+                    fontWeight: 700,
+                    color: "#ffffff",
+                    fontSize: 20,
+                    paddingRight: 62,
+                  }}
+                >
+                  Fitur
+                </NavLink>
+              </Nav.Link>
+              <Nav.Link className="fs-6">
+                <NavLink
+                  to="/kontak"
+                  className="text-decoration-none"
+                  activeClassName="aktif"
+                  style={{
+                    fontWeight: 700,
+                    color: "#ffffff",
+                    fontSize: 20,
+                    paddingRight: 62,
+                  }}
+                >
                   Kontak
                 </NavLink>
               </Nav.Link>
             </Nav>
-            <Nav className='ms-auto me-5'>
-              <Nav.Link href='/login'>
-                <Button variant='primary' className='rounded-3'>
-                  Masuk
-                </Button>
+            <Nav className="ms-auto me-5 justify-conter-center">
+              <Nav.Link
+                className="fs-6"
+                style={{
+                  backgroundColor: "#C4F601",
+                  borderRadius: 16,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  width: 221,
+                  height: 56,
+                }}
+              >
+                <NavLink
+                  to="/login"
+                  className="text-decoration-none"
+                  style={{
+                    fontWeight: 700,
+                    color: "#000000",
+                    fontSize: 20,
+                    textAlign: "center",
+                  }}
+                >
+                  Mitra Masuk
+                </NavLink>
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

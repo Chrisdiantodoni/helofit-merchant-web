@@ -6,10 +6,11 @@ import { isEmail } from "validator";
 import { withRouter } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import * as Axios from "axios";
+import { Navbarbefore } from "./../Komponen/Navbar(before login)";
 const required = (value) => {
   if (!value) {
     return (
-      <div className='alert alert-danger' role='alert'>
+      <div className="alert alert-danger" role="alert">
         Field perlu diisi!
       </div>
     );
@@ -18,7 +19,7 @@ const required = (value) => {
 const email = (value) => {
   if (!isEmail(value)) {
     return (
-      <div className='alert alert-danger' role='alert'>
+      <div className="alert alert-danger" role="alert">
         Ini bukan email yang valid.
       </div>
     );
@@ -27,7 +28,7 @@ const email = (value) => {
 const vpin = (value) => {
   if (value.length > 6) {
     return (
-      <div className='alert alert-danger' role='alert'>
+      <div className="alert alert-danger" role="alert">
         Field harus berisi 6 angka.
       </div>
     );
@@ -36,7 +37,7 @@ const vpin = (value) => {
 const vfield = (value) => {
   if (value.length < 3 || value.length > 30) {
     return (
-      <div className='alert alert-danger' role='alert'>
+      <div className="alert alert-danger" role="alert">
         Field harus berisi antara 3 dan 30 karakter.
       </div>
     );
@@ -102,86 +103,90 @@ export class Lupapassword extends Component {
 
   render() {
     return (
-      <div>
-        <div className='container mx-auto mt-4'>
-          <div className='container border border-1 w-50 rounded-3 mx-auto mb-1'>
+      <div style={{ background: "#000000" }}>
+        <Navbarbefore />
+        <div className="container mx-auto mt-4">
+          <div
+            className="container  w-50 rounded-3 mx-auto mb-1"
+            style={{ background: "#161616" }}
+          >
             <Form
-              className='ms-5 mt-2 mx-auto text-start me-5 mb-4'
+              className="ms-5 mt-2 mx-auto text-start me-5 mb-4"
               onSubmit={this.handleForget}
               ref={(c) => {
                 this.form = c;
-              }}>
-              <h3 className='text-center mt-3'>
-                Lupa Password?
-                <p className='text-muted fs-6'>
-                  Pastikan kamu adalah pengguna yang sah dan jangan beri tahu
-                  pin kamu ke siapa-siapa
+              }}
+            >
+              <h3 className="text-center text-light mt-3 pt-5">
+                Lupa Kata Sandi?
+                <p className="text-muted fs-6">
+                  Pastikan Anda merupakan pengguna yang sah dan jangan beritahu
+                  PIN Anda kesiapapun termasuk pihak Helofit
                 </p>
               </h3>
               <div>
-                <div class='form-group mb-3'>
-                  <label>
-                    Email<span className='text-danger'>*</span>
-                  </label>
+                <div class="form-group mb-3">
+                  <label className="text-light fw-bold">Alamat Email</label>
                   <Input
-                    name='email'
-                    type='email'
+                    name="email"
+                    type="email"
                     value={this.state.email}
                     onChange={this.setValueState.bind(this)}
-                    className='text-dark rounded-3 form-control rounded-pill'
-                    placeholder='Masukkan Email'
-                    validations={[required, email, vfield]}></Input>
+                    className="text-dark rounded-3 form-control rounded-pill"
+                    placeholder="Masukkan Email"
+                    validations={[required, email, vfield]}
+                  ></Input>
                 </div>
-                <div class='form-group mb-3'>
-                  <label>
-                    Pin<span className='text-danger'>*</span>
-                  </label>
+                <div class="form-group mb-3">
+                  <label className="text-light fw-bold">PIN</label>
                   <Input
-                    name='pin'
-                    type='number'
-                    min='0'
+                    name="pin"
+                    type="number"
+                    min="0"
                     value={this.state.pin}
-                    className='text-dark rounded-3 form-control rounded-pill'
+                    className="text-dark rounded-3 form-control rounded-pill"
                     onChange={this.setValueState.bind(this)}
                     validations={[required, vpin]}
-                    placeholder='Masukkan Pin Anda'></Input>
+                    placeholder="Masukkan Pin Anda"
+                  ></Input>
                 </div>
-                <div class='form-group mb-3'>
-                  <label>
-                    Password Baru Anda<span className='text-danger'>*</span>
-                  </label>
+                <div class="form-group mb-3">
+                  <label className="text-light fw-bold">Kata Sandi Baru</label>
                   <Input
-                    name='password'
-                    type='password'
+                    name="password"
+                    type="password"
                     value={this.state.password}
-                    className='text-dark rounded-3 form-control rounded-pill'
+                    className="text-dark rounded-3 form-control rounded-pill"
                     onChange={this.setValueState.bind(this)}
                     validations={[required, vfield]}
-                    placeholder='Masukkan Password Baru Anda'></Input>
+                    placeholder="Masukkan Password Baru Anda"
+                  ></Input>
                 </div>
-                <div className='text-center'>
+                <div className="text-center">
                   <button
-                    type='submit'
-                    className='btn btn-primary rounded-pill w-100'>
+                    type="submit"
+                    className="btn btn-primary rounded-pill w-100"
+                  >
                     Submit
                   </button>
-                  <p className='text-secondary mt-2'>
-                    Masih Bermasalah? <span> </span>
-                    <a href='/kontak' className='text-decoration-none fw-bold'>
+                  <p className="text-secondary mt-2">
+                    Masih Bermasalah?
+                    <a href="/kontak" className="text-decoration-none fw-bold">
                       Hubungi Kami
                     </a>
                   </p>
                 </div>
               </div>
               {this.state.message && (
-                <div className='form-group'>
+                <div className="form-group">
                   <div
                     className={
                       this.state.successful
                         ? "alert alert-success"
                         : "alert alert-danger"
                     }
-                    role='alert'>
+                    role="alert"
+                  >
                     {this.state.message}
                   </div>
                 </div>

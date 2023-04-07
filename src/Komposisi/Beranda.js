@@ -9,43 +9,60 @@ import ilustrasi from "../Assets/ilustrasi.png";
 export default class Beranda extends Component {
   render() {
     return (
-      <div>
+      <div style={{ background: "#161616" }}>
         <Navbarbefore />
-        <Container className='text-center'>
-          <h1 className='pt-5 text-dark font-weight-bold'>
-            Simple Personal Management <br />
-            Tasks and Finance
+        <Container
+          className="text-center"
+          style={{ marginTop: 56, marginBottom: 16 }}
+        >
+          <h1 className="text-white font-weight-bold pb-1 ">
+            Kini Olahraga Menjadi <br />
+            Jauh Lebih menyenangkan
           </h1>
-          <h5 className='text-muted '>
-            Membantu Kamu lebih teratur dalam kegiatan dan keuangan
+          <h5 className="text-white pb-1 ">
+            Bantu Kamu Temukan Teman Main dan Fasilitas yang Kamu Mau
           </h5>
           {/* <Nav.Link href='/manajemen' className='d-inline-block mx-auto'>
             <Button variant='primary' className='btn-sm rounded-pill'>
               Lebih Detail
             </Button>
           </Nav.Link> */}
-          <Dropdown className='d-inline-block mx-auto'>
-            <Dropdown.Toggle variant='primary' id='dropdown-basic'>
-              Lebih Detail
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item href='/manajemen'>
-                Manajemen Kegiatan
-              </Dropdown.Item>
-              <Dropdown.Item href='/keuangan'>Catatan Keuangan</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          <Nav.Link href='/daftar' className='d-inline-block me-5'>
-            <Button variant='light' className='btn-outline-primary '>
-              Daftar Gratis !
+          <Container className="pt-4" style={{ marginBottom: 40 }}>
+            <Button
+              style={{
+                background: "#C4F601",
+                marginRight: 15,
+                fontWeight: "700",
+                color: "#000000",
+                border: "1px",
+                borderRadius: 16,
+                width: 240,
+                height: 56,
+              }}
+              size="lg"
+            >
+              Download Aplikasi
             </Button>
-          </Nav.Link>
+            <Button
+              style={{
+                marginRight: 15,
+                border: "3px solid #FFFFFF",
+                borderRadius: "16px",
+                width: 240,
+                height: 56,
+              }}
+              variant="dark"
+              size="lg"
+            >
+              Gabung jadi Mitra
+            </Button>
+          </Container>
+
           <img
             src={ilustrasi}
-            className='img-fluid d-block mt-5 mx-auto'
-            width='546px'
-            height='500px'
+            className="img-fluid d-block mt-5 mx-auto"
+            width="854px"
+            height="320px"
           />
           <br />
           <Beranda_2 />

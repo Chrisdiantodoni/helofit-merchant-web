@@ -14,48 +14,48 @@ export class Feedback extends Component {
       pesan: "",
     };
   }
-  setValueState(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
-  componentDidMount() {
-    fetch("http://localhost:8000/feedbacks/")
-      .then((res) => res.json())
-      .then((res) => {
-        this.setState({
-          feedbacks: res,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
+  // setValueState(event) {
+  //   this.setState({
+  //     [event.target.name]: event.target.value,
+  //   });
+  // }
+  // componentDidMount() {
+  //   fetch("http://localhost:8000/feedbacks/")
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       this.setState({
+  //         feedbacks: res,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }
   render() {
     const { currentAdmin } = this.state;
     return (
       <div>
-        <Navbaradmin konten='Feedback' />
-        <div className='row'>
-          <div className='col-2 sidebar-wrapper'>
+        <Navbaradmin konten="Feedback" />
+        <div className="row">
+          <div className="col-2 sidebar-wrapper">
             <Sidebaradmin />
           </div>
-          <div className='col-8'>
-            <div class='container mx-auto mt-5'>
-              <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'>
-                  <table class='table table-light table-hover'>
+          <div className="col-8">
+            <div class="container mx-auto mt-5">
+              <div class="shadow border border-1 rounded-3">
+                <div className="ms-5 mt-5 me-3 pe-5">
+                  <table class="table table-light table-hover">
                     <tbody>
-                      <tr className='row fw-bold table-dark border-dark'>
-                        <td className='col'>Nama</td>
-                        <td className='col'>Email</td>
-                        <td className='col'>Pesan</td>
+                      <tr className="row fw-bold table-dark border-dark">
+                        <td className="col">Nama</td>
+                        <td className="col">Email</td>
+                        <td className="col">Pesan</td>
                       </tr>
                       {this.state.feedbacks.map((item, index) => (
-                        <tr className='row'>
-                          <td className='col'>{item.nama}</td>
-                          <td className='col'>{item.email}</td>
-                          <td className='col'>{item.pesan}</td>
+                        <tr className="row">
+                          <td className="col">Doni</td>
+                          <td className="col">@gmail.com</td>
+                          <td className="col">12131dwd</td>
                         </tr>
                       ))}
                     </tbody>
@@ -65,7 +65,7 @@ export class Feedback extends Component {
             </div>
           </div>
         </div>
-        <span className='d-none'>{currentAdmin.username}</span>
+        <span className="d-none">{currentAdmin.username}</span>
       </div>
     );
   }

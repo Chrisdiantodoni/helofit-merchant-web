@@ -262,6 +262,25 @@ export class Finance extends Component {
                               Tambah Data
                             </button>
                           </td>
+
+                          <div className=' fs-4 text-start mt-4'>
+                            <p>
+                              <span className='text-success'>
+                                Total Pemasukan Rp {this.CekNilai(pemasukan)}{" "}
+                              </span>
+                              <br />
+                              <span className='text-danger'>
+                                Total Pengeluaran Rp{" "}
+                                {this.CekNilai(pengeluaran)}
+                              </span>
+                              <br />
+                              <span className='fw-bold'>
+                                {" "}
+                                Saldo saat ini {this.CekNilai(sisa)}
+                              </span>
+                            </p>
+                          </div>
+
                           {this.state.message && (
                             <div className='form-group'>
                               <div
@@ -311,14 +330,6 @@ export class Finance extends Component {
                           </td>
                         </tr>
                       ))}
-                      <div className='fw-bold fs-4 text-start'>
-                        <p>
-                          Total Pemasukan Rp {this.CekNilai(pemasukan)} <br />
-                          Total Pengeluaran Rp {this.CekNilai(pengeluaran)}
-                          <br />
-                          Sisa Rp {this.CekNilai(sisa)}
-                        </p>
-                      </div>
                     </tbody>
                   </table>
                   {/* <div className='fw-bold fs-3 text-center ms-5 ps-5'>

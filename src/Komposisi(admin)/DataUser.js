@@ -15,51 +15,49 @@ export class DataUser extends Component {
       email: "",
     };
   }
-  setValueState(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
+  // setValueState(event) {
+  //   this.setState({
+  //     [event.target.name]: event.target.value,
+  //   });
+  // }
 
-  componentDidMount() {
-    fetch("http://localhost:8000/datauser/")
-      .then((res) => res.json())
-      .then((res) => {
-        this.setState({
-          datauser: res,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
+  // componentDidMount() {
+  //   fetch("http://localhost:8000/datauser/")
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       this.setState({
+  //         datauser: res,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }
   render() {
     const { currentAdmin } = this.state;
     return (
       <div>
-        <Navbaradmin konten='Data User' />
-        <div className='row'>
-          <div className='col-2 sidebar-wrapper'>
+        <Navbaradmin konten="Data User" />
+        <div className="row">
+          <div className="col-2 sidebar-wrapper">
             <Sidebaradmin />
           </div>
-          <div className='col-8'>
-            <div class='container mx-auto mt-5'>
-              <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'>
-                  <table class='table table-light table-hover'>
+          <div className="col-8">
+            <div class="container mx-auto mt-5">
+              <div class="shadow border border-1 rounded-3">
+                <div className="ms-5 mt-5 me-3 pe-5">
+                  <table class="table table-light table-hover">
                     <tbody>
-                      <tr className='row fw-bold table-dark border-dark'>
-                        <td className='col'>Nama Lengkap</td>
-                        <td className='col'>Password</td>
-                        <td className='col'>Email</td>
+                      <tr className="row fw-bold table-dark border-dark">
+                        <td className="col">Nama Lengkap</td>
+                        <td className="col">Password</td>
+                        <td className="col">Email</td>
                       </tr>
-                      {this.state.datauser.map((item, index) => (
-                        <tr className='row'>
-                          <td className='col'>{item.NamaLengkap}</td>
-                          <td className='col'>{item.password}</td>
-                          <td className='col'>{item.email}</td>
-                        </tr>
-                      ))}
+                      <tr className="row">
+                        <td className="col">Data</td>
+                        <td className="col">1231213</td>
+                        <td className="col">@gmail.com</td>
+                      </tr>
                     </tbody>
                   </table>
                   <br />
@@ -68,7 +66,7 @@ export class DataUser extends Component {
             </div>
           </div>
         </div>
-        <span className='d-none'>{currentAdmin.username}</span>
+        <span className="d-none">{currentAdmin.username}</span>
       </div>
     );
   }
