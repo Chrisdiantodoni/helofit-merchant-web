@@ -128,11 +128,33 @@ class DompetMerchant extends Component {
                     width: "186px",
                     height: "56px",
                     border: "1px solid #C4f601",
-                    borderRadius: 8, 
+                    borderRadius: 8,
                   }}
                 >
                   Periksa
                 </Button>
+              </div>
+              <div className="mt-5">
+                <h3 className="fw-bold">
+                  Ketentuan Penarikan Saldo Dompet Merchant Anda
+                </h3>
+                <ol>
+                  <li className="fw-bold mt-2 fs-5">
+                    Penarikan Kantong Donasimu akan diproses maksimal 2x24 jam
+                    di hari kerja.
+                  </li>
+                  <li className="fw-bold mt-2 fs-5">
+                    Minimal penarikan Rp100.000.
+                  </li>
+                  <li className="fw-bold mt-2 fs-5">
+                    Pengembalian Kantong Donasimu dikenakan biaya admin bank.
+                  </li>
+                  <li className="fw-bold mt-2 fs-5">
+                    Maksimal penarikan Kantong Donasimu Rp2.000.000 dalam 1 kali
+                    transaksi 5. Jika request refund kamu melebihi Rp2.000.000,
+                    hubungi kontak kami
+                  </li>
+                </ol>
               </div>
             </div>
           </div>

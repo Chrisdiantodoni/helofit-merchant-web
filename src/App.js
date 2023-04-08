@@ -3,7 +3,7 @@ import "./css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 //Sebelum Login
-
+import ProfilMerchant from "./Komposisi(User)/ProfilMerchant";
 import EditFasilitas from "./Komposisi(User)/EditFasilitas";
 import Fasilitas from "./Komposisi(User)/Fasilitas";
 import Beranda from "./Komposisi/Beranda";
@@ -28,6 +28,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Fitur from "./Komposisi/Fitur";
 import Dompet from "./Komposisi(User)/Dompet";
 import DompetMerchant from "./Komposisi(User)/DompetMerchant";
+import EditMerchant from "./Komposisi(User)/EditMerchant";
+import EditFasilitasMerchant from "./Komposisi(User)/EditFasilitasMerchant";
 
 class App extends React.Component {
   constructor(props) {
@@ -109,6 +111,18 @@ class App extends React.Component {
       {
         path: "/welcome/fasilitas",
         render: () => <Fasilitas />,
+      },
+      {
+        path: "/welcome/ProfilMerchant",
+        render: () => <ProfilMerchant />,
+      },
+      {
+        path: "/welcome/EditMerchant",
+        render: () => <EditMerchant />,
+      },
+      {
+        path: "/welcome/EditFasilitasMerchant",
+        render: () => <EditFasilitasMerchant />,
       },
       {
         path: "/welcome/EditFasilitas",

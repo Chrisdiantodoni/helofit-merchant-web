@@ -71,7 +71,7 @@ export class Sidebaruser extends Component {
           </Nav.Item>
           <Nav.Item>
             <Nav.Link
-              href="/welcome/tasks"
+              href="/welcome/ProfilMerchant"
               className="text-dark fw-bold ps-3  border-bottom border-dark"
               style={{ background: "#C4f601" }}
             >
