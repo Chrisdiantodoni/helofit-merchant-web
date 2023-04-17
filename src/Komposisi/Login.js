@@ -9,9 +9,10 @@ import "./Login.css";
 import { Container } from "react-bootstrap";
 import { isEmail } from "validator";
 import { withRouter } from "react-router-dom";
-import AuthService from "../services/auth.service";
 import ilustrasilogin from "../Assets/Bhineka.png";
 import { Navbarbefore } from "./../Komponen/Navbar(before login)";
+import AuthenticatonService from "../services/authentication";
+
 const required = (value) => {
   if (!value) {
     return (
@@ -60,45 +61,26 @@ export class Login extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
-    // }
-    // handleLogin(e) {
-    //   e.preventDefault();
-
-    //   this.setState({
-    //     message: "",
-    //     loading: true,
-    //   });
-
-    //   this.form.validateAll();
-
-    //   if (this.checkBtn.context._errors.length === 0) {
-    //     AuthService.login(this.state.email, this.state.password).then(
-    //       () => {
-    //         setTimeout(() => {
-    //           this.props.history.push("/welcome/user");
-    //         }, 1500);
-    //       },
-    //       (error) => {
-    //         const resMessage =
-    //           (error.response &&
-    //             error.response.data &&
-    //             error.response.data.message) ||
-    //           error.message ||
-    //           error.toString();
-
-    //         this.setState({
-    //           loading: false,
-    //           message: resMessage,
-    //         });
-    //       }
-    //     );
-    //   } else {
-    //     this.setState({
-    //       loading: false,
-    //     });
-    //   }
   }
+
+  handleLogin = async (e) => {
+    e.preventDefault();
+
+    const body = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+
+    try {
+      const result = await AuthenticatonService.login(body);
+
+      console.log({ result });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
   render() {
+    console.log(process.env.NODE_ENV);
     return (
       <div style={{ background: "#000000" }}>
         <Navbarbefore />
@@ -116,7 +98,7 @@ export class Login extends Component {
               <div class="col-md kanan" style={{ background: "#161616" }}>
                 <Form
                   className="container"
-                  onSubmit={this.props.history.push("/welcome/user")}
+                  onSubmit={this.handleLogin}
                   ref={(c) => {
                     this.form = c;
                   }}

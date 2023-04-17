@@ -40,15 +40,15 @@ class App extends React.Component {
       currentUser: true,
     };
   }
-  componentDidMount() {
-    const user = AuthService.getCurrentUser();
+  // componentDidMount() {
+  //   const user = AuthService.getCurrentUser();
 
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-    }
-  }
+  //   if (user) {
+  //     this.setState({
+  //       currentUser: user,
+  //     });
+  //   }
+  // }
   Keluar() {
     AuthService.Keluar();
   }

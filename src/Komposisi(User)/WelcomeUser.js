@@ -17,23 +17,9 @@ class WelcomeUser extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      currentUser: AuthService.getCurrentUser(),
-      kegiatan: 0,
-      sisa: 0,
-      nama_dpn: "",
-    };
-    this.CekNilai = this.CekNilai.bind(this);
+    this.state = {};
   }
-  CekNilai(nilai) {
-    var result;
-    if (nilai != null) {
-      result = nilai;
-    } else if (nilai == null) {
-      result = 0;
-    }
-    return result;
-  }
+
   // componentDidMount() {
   //   const { currentUser } = this.state;
   //   var userid = currentUser.id;
@@ -59,7 +45,6 @@ class WelcomeUser extends Component {
   //     });
   // }
   render() {
-    const { currentUser, sisa, kegiatan } = this.state;
     return (
       <div>
         <Navbaruser konten="Dashboard Merchant" />
