@@ -2,15 +2,9 @@ import React, { Component } from "react";
 import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
-import InputGroup from "react-bootstrap/InputGroup";
-
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 
 class DetailPromo extends Component {

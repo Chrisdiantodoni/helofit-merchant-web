@@ -40,7 +40,6 @@ const vfield = (value) => {
 export class LoginAdmin extends Component {
   constructor() {
     super();
-    this.handleLogin = this.handleLogin.bind(this);
 
     this.state = {
       currentUser: true,
