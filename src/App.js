@@ -26,10 +26,16 @@ import Maintenance from "./Komposisi(admin)/Maintenance";
 import Feedback from "./Komposisi(admin)/Feedback";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Fitur from "./Komposisi/Fitur";
+import Promo from "./Komposisi(User)/Promo";
 import Dompet from "./Komposisi(User)/Dompet";
 import DompetMerchant from "./Komposisi(User)/DompetMerchant";
 import EditMerchant from "./Komposisi(User)/EditMerchant";
+import Tasks from "./Komposisi(User)/Tasks";
+import AddTask from "./Komposisi(User)/AddTask";
 import EditFasilitasMerchant from "./Komposisi(User)/EditFasilitasMerchant";
+import DetailTask from "./Komposisi(User)/DetailTask";
+import AddPromo from "./Komposisi(User)/AddPromo";
+import DetailProgressPromo from "./Komposisi(User)/DetailProgressPromo";
 
 class App extends React.Component {
   constructor(props) {
@@ -136,7 +142,30 @@ class App extends React.Component {
         path: "/welcome/Dompet",
         render: () => <Dompet />,
       },
-
+      {
+        path: "/welcome/Tasks",
+        render: () => <Tasks />,
+      },
+      {
+        path: "/welcome/AddTask",
+        render: () => <AddTask />,
+      },
+      {
+        path: "/welcome/DetailTask",
+        render: () => <DetailTask />,
+      },
+      {
+        path: "/welcome/Promo",
+        render: () => <Promo />,
+      },
+      {
+        path: "/welcome/DetailPromo",
+        render: () => <DetailProgressPromo />,
+      },
+      {
+        path: "/welcome/AddPromo",
+        render: () => <AddPromo />,
+      },
       {
         path: "/admin/dashboard",
         render: () => <WelcomeAdmin />,

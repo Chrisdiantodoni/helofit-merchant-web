@@ -8,12 +8,20 @@ import Footer from "./Footer";
 import "./Login.css";
 import { Container } from "react-bootstrap";
 import { isEmail } from "validator";
-import { withRouter } from "react-router-dom";
+import axios from "axios";
+import {
+  Link,
+  Redirect,
+  withRouter,
+  Route,
+  useHistory,
+} from "react-router-dom";
 import ilustrasilogin from "../Assets/Bhineka.png";
 import { Navbarbefore } from "./../Komponen/Navbar(before login)";
 import AuthenticatonService from "../services/authentication";
 import { Axios } from "../utils";
 import e from "cors";
+import WelcomeUser from "../Komposisi(User)/WelcomeUser";
 
 const required = (value) => {
   if (!value) {
@@ -47,28 +55,37 @@ const vfield = (value) => {
 
 const Login = () => {
   // this.handleLogin = this.handleLogin.bind(this);
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [data, setData] = useState({});
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const body = {
-      email,
-      password,
-    };
+    const email = event.target.email.value;
+    const password = event.target.password.value;
     try {
       const response = await Axios.post("/authentication/login", {
-        body,
+        email,
+        password,
       });
-      console.log(response);
-      window.location.href = "/welcome/user";
+      const data = response.data;
+      console.log(data);
+      if (data.message === "OK") {
+        history.push("/welcome/user");
+      }
     } catch (error) {
       console.log(error);
     }
   };
+  // if (isLoggedIn) {
+  //   return (
+  //   );
+  // }
 
   return (
     <div style={{ background: "#000000" }}>

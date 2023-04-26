@@ -1,287 +1,258 @@
 import React, { Component } from "react";
-import Textarea from "react-validation/build/textarea";
-import Input from "react-validation/build/input";
-import Form from "react-validation/build/form";
-import CheckButton from "react-validation/build/button";
-import "../css/bootstrap.min.css";
-import Navbaruser from "../Komponen/Navbar(login user)";
 import AuthService from "../services/auth.service";
+import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
-import Sidebaruser from "../Komponen/Sidebar(login user)";
-import * as Axios from "axios";
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className='alert alert-danger w-25' role='alert'>
-        Field perlu diisi!
-      </div>
-    );
-  }
-};
-const reqdate = (value) => {
-  if (!value) {
-    return (
-      <div className='alert alert-danger w-25' role='alert'>
-        Silakan pilih tanggal deadline!
-      </div>
-    );
-  }
-};
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
+import { ReactComponent as LogoEdit } from "../Assets/Edit-Icon.svg";
 
-const vfield = (value) => {
-  if (value.length < 3 || value.length > 100) {
-    return (
-      <div className='alert alert-danger w-25' role='alert'>
-        Field harus berisi antara 3 dan 100 karakter.
-      </div>
-    );
-  }
-};
-function konversi(str) {
-  return str.split("-").reverse().join("/");
-}
-export class Tasks extends Component {
+import Sidebaruser from "../Komponen/Sidebar(login user)";
+
+class Tasks extends Component {
   constructor(props) {
     super(props);
-    var today = new Date(),
-      date =
-        ("0" + today.getDate()).slice(-2) +
-        "-" +
-        ("0" + today.getMonth() + 1).slice(-2) +
-        "-" +
-        today.getFullYear(),
-      minim =
-        today.getFullYear() +
-        "-" +
-        ("0" + today.getMonth() + 1).slice(-2) +
-        "-" +
-        ("0" + today.getDate()).slice(-2);
-    this.handleTask = this.handleTask.bind(this);
-    this.state = {
-      listtasks: [],
-      deadline: "",
-      status: "Berjalan",
-      sisa: "",
-      keterangan: "",
-      mindate: minim,
-      sekarang: date,
-      currentUser: AuthService.getCurrentUser(),
-      loading: false,
-      successful: false,
-      message: "",
-      date: "",
-    };
-  }
-  setValueState(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
-  handleTask(e) {
-    const { currentUser } = this.state;
-    e.preventDefault();
-    this.setState({
-      message: "",
-      successful: false,
-    });
-    this.form.validateAll();
-    if (this.checkBtn.context._errors.length === 0) {
-      Axios.post("http://localhost:8000/tasks", {
-        userID: currentUser.id,
-        deadline: this.state.deadline,
-        status: this.state.status,
-        keterangan: this.state.keterangan,
-      }).then(
-        (res) => {
-          this.setState({
-            message: res.data.message,
-            successful: true,
-          });
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.setState({
-            successful: false,
-            message: resMessage,
-          });
-        }
-      );
-    }
-  }
-  componentDidMount() {
-    const { currentUser } = this.state;
-    var userid = currentUser.id;
-    fetch("http://localhost:8000/tasks/" + userid)
-      .then((res) => res.json())
-      .then((res) => {
-        this.setState({
-          listtasks: res,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-  Sisa(current, dead) {
-    const awal = new Date(current);
-    const akhir = new Date(konversi(dead));
-    var total = Math.abs(akhir - awal) / 1000;
-    var days = Math.round(total / 86400);
-    total -= days * 86400;
-    const sisa = (akhir - awal) / (1000 * 60 * 60 * 24);
-    return (
-      <div>{sisa < -1 ? <p>Telah Berakhir</p> : <p>{days} hari lagi</p>}</div>
-    );
-  }
-  CekStatus(status) {
-    var pesan;
-    if (status === "Berjalan") {
-      pesan = (
-        <div className='badge bg-warning rounded-pill w-50' role='alert'>
-          Berjalan
-        </div>
-      );
-    } else {
-      pesan = (
-        <div className='badge bg-success rounded-pill w-50' role='alert'>
-          Selesai
-        </div>
-      );
-    }
-    return pesan;
-  }
 
+    this.state = {
+      currentUser: AuthService.getCurrentUser(),
+      kegiatan: 0,
+      sisa: 0,
+      nama_dpn: "",
+    };
+    this.CekNilai = this.CekNilai.bind(this);
+  }
+  CekNilai(nilai) {
+    var result;
+    if (nilai != null) {
+      result = nilai;
+    } else if (nilai == null) {
+      result = 0;
+    }
+    return result;
+  }
+  // componentDidMount() {
+  //   const { currentUser } = this.state;
+  //   var userid = currentUser.id;
+  //   fetch("http://localhost:8000/sisa/" + userid)
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       this.setState({
+  //         sisa: res.sisa,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  //   fetch("http://localhost:8000/kegiatan/" + userid)
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       this.setState({
+  //         kegiatan: res.kegiatan,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }
+  data = [
+    {
+      kode_task: "135780",
+      judul: "Semangat Ma...",
+      berlaku: "18/06/22",
+      banner: "Lapangan 1",
+      Task: ["Main ke 1", "Main ke 2", "Main ke 3"],
+    },
+  ];
+  data1 = [
+    {
+      tanggal: "12/06/22",
+      nama: "hartono Lubis",
+      no_hp: "082164896939",
+      kode_task: "12345",
+      status: "Selesai",
+    },
+  ];
   render() {
-    const { listtasks, mindate } = this.state;
-    const EditTask = withRouter(({ history, id }) => (
-      <button
-        onClick={() => history.push("/edittasks/" + id)}
-        className='btn btn-warning text-light me-3'>
-        Edit Data
-      </button>
-    ));
-    const DeleteTask = withRouter(({ history, id }) => (
-      <button
-        onClick={() => history.push("/deletetasks/" + id)}
-        className='btn btn-danger text-light me-3'>
-        Hapus Data
-      </button>
-    ));
     return (
       <div>
-        <Navbaruser konten='To-do List' />
-        <div className='row'>
-          <div className='col-2 sidebar-wrapper'>
+        <Navbaruser konten="List Task" />
+        <div className="row">
+          <div className="col-2 sidebar-wrapper">
             <Sidebaruser />
           </div>
-          <div className='col-8'>
-            <div class='container mx-auto mt-5'>
-              <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'>
-                  <Form
-                    onSubmit={this.handleTask}
-                    ref={(c) => {
-                      this.form = c;
-                    }}>
-                    <table class='table table-borderless'>
-                      <tbody>
-                        <tr className='row'>
-                          <td className='col-2'>
-                            <label className='fw-bold'>Deadline</label>
-                          </td>
-                          <td className='col'>
-                            <Input
-                              type='date'
-                              name='deadline'
-                              value={this.state.deadline}
-                              min={mindate}
-                              className='w-25 border border-1'
-                              validations={[reqdate]}
-                              onChange={this.setValueState.bind(this)}
-                            />
-                          </td>
-                        </tr>
-                        <tr className='row'>
-                          <td className='col-2'>
-                            <label className='fw-bold'>List</label>
-                          </td>
-                          <td className='col'>
-                            <Textarea
-                              name='keterangan'
-                              value={this.state.keterangan}
-                              className='w-25 border border-1'
-                              validations={[required, vfield]}
-                              onChange={this.setValueState.bind(this)}
-                            />
-                          </td>
-                        </tr>
-                        <tr className='row'>
-                          <td className='col-2'>
-                            <button className='btn btn-primary rounded rounded-3'>
-                              Tambah List
-                            </button>
-                          </td>
-                          {this.state.message && (
-                            <div className='form-group'>
-                              <div
-                                className={
-                                  this.state.successful
-                                    ? "alert alert-success"
-                                    : "alert alert-danger"
-                                }
-                                role='alert'>
-                                {this.state.message}
-                              </div>
-                            </div>
-                          )}
-                          <CheckButton
-                            style={{ display: "none" }}
-                            ref={(c) => {
-                              this.checkBtn = c;
+          <div className="col-10 mt-5">
+            <div class="container">
+              <h5 className="text-dark fw-bold">Daftar Task</h5>
+              <div className="d-flex justify-content-between">
+                <h6 className="text-muted fw-bold">
+                  Berikut adalah list task yang dapat customer kerjakan
+                </h6>
+
+                <Link
+                  to="/welcome/AddTask"
+                  className="fw-bold text-dark btn d-flex"
+                  style={{
+                    background: "#C4f601",
+                    border: "0.5px solid #C4f601",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 8,
+                    paddingLeft: 40,
+                    paddingRight: 40,
+                  }}
+                >
+                  Tambah Data
+                </Link>
+              </div>
+              <div
+                className="mt-4"
+                style={{
+                  background: "#F8f9fa",
+                  padding: 24,
+                  borderRadius: 16,
+                  border: "1px solid #7c7c7c",
+                }}
+              >
+                <div className="d-flex ">
+                  <InputGroup className="mb-3 ">
+                    <Form.Control
+                      placeholder="Ketikkan Kode Reservasi.."
+                      aria-label="Ketikkan Kode Reservasi.."
+                      aria-describedby="basic-addon2"
+                    />
+                    <Button
+                      className="fw-bold"
+                      style={{
+                        background: "#C4f601",
+                        color: "#000000",
+                        border: "1px solid #C4f601",
+                      }}
+                      id="button-addon2"
+                    >
+                      Cari
+                    </Button>
+                  </InputGroup>
+                </div>
+                <Table className="mt-5" borderless={true}>
+                  <thead>
+                    <tr
+                      className="fw-bold"
+                      style={{
+                        background: "#28A745",
+                        color: "#FFFFFF",
+                        borderRadius: 8,
+                      }}
+                    >
+                      <th>Kode Task</th>
+                      <th>Judul</th>
+                      <th>Banner</th>
+                      <th>Berlaku s.d</th>
+                      <th>Task 1</th>
+                      <th>Task 2</th>
+                      <th>Task 3</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  {this.data.map((item, idx) => (
+                    <tbody className="fw-bold">
+                      <tr>
+                        <td>{item.kode_task}</td>
+                        <td>{item.judul}</td>
+                        <td>{item.banner}</td>
+                        <td>{item.berlaku}</td>
+                        <td>{item.Task[0]}</td>
+                        <td>{item.Task[1]}</td>
+                        <td>{item.Task[2]}</td>
+                        <td>
+                          <Button
+                            className="fw-bold text-dark me-4"
+                            style={{
+                              background: "#FFC107",
+                              border: "1px solid #FFC107",
+                              borderRadius: "8px",
+                              height: "40%",
                             }}
-                          />
-                        </tr>
-                      </tbody>
-                    </table>
-                  </Form>
-                  <br />
-                  <table class='table table-light table-hover'>
-                    <tbody>
-                      <tr className='row fw-bold table-dark border-dark'>
-                        <td className='col'>Deadline</td>
-                        <td className='col'>Status</td>
-                        <td className='col'>Sisa Hari</td>
-                        <td className='col'>Keterangan List</td>
-                        <td className='col-3' colspan='2'>
-                          Aksi
+                          >
+                            <LogoEdit />
+                          </Button>
+                          <Button
+                            className="fw-bold text-dark"
+                            style={{
+                              background: "#DC3545",
+                              border: "1px solid #DC3545",
+                              borderRadius: "8px",
+                              height: "40%",
+                            }}
+                          >
+                            <Logo />
+                          </Button>
                         </td>
                       </tr>
-                      {listtasks.map((item, index) => (
-                        <tr className='row' key={index}>
-                          <td className='col'>{item.deadline}</td>
-                          <td className='col'>{this.CekStatus(item.status)}</td>
-                          <td className='col'>
-                            {this.Sisa(mindate, item.deadline)}
-                          </td>
-                          <td className='col'>{item.keterangan}</td>
-                          <td className='col-3'>
-                            <EditTask id={item.id} />
-                            <DeleteTask id={item.id} />
-                          </td>
-                        </tr>
-                      ))}
                     </tbody>
-                  </table>
-                </div>
+                  ))}
+                </Table>
               </div>
+              <div className="mt-5">
+                <h4 className="text-dark fw-bold">Pengerjaan Task</h4>
+                <h5 className="text-muted fw-bold">
+                  Berikut adalah list customer yang mengerjakan task
+                </h5>
+              </div>
+
+              <Table className="mt-5" borderless={true}>
+                <thead>
+                  <tr
+                    className="fw-bold"
+                    style={{
+                      background: "#28A745",
+                      color: "#FFFFFF",
+                      borderRadius: 8,
+                    }}
+                  >
+                    <th>Tanggal</th>
+                    <th>Nama</th>
+                    <th>No Hp</th>
+                    <th>Kode Task</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                {this.data1.map((item, idx) => (
+                  <tbody className="fw-bold">
+                    <tr>
+                      <td>{item.tanggal}</td>
+                      <td>{item.nama}</td>
+                      <td>{item.no_hp}</td>
+                      <td>{item.kode_task}</td>
+                      <td>{item.status}</td>
+                      <td>
+                        <Link
+                          to="/welcome/DetailTask"
+                          className="fw-bold text-dark btn d-flex"
+                          style={{
+                            background: "#C4f601",
+                            border: "0.5px solid #C4f601",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: 8,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                          }}
+                        >
+                          Detail
+                        </Link>
+                      </td>
+                    </tr>
+                  </tbody>
+                ))}
+              </Table>
             </div>
           </div>
         </div>
@@ -289,4 +260,5 @@ export class Tasks extends Component {
     );
   }
 }
-export default Tasks;
+
+export default withRouter(Tasks);
