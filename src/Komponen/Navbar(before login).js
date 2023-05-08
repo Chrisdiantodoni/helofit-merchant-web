@@ -5,6 +5,7 @@ import logo from "../Assets/logo.png";
 
 export class Navbarbefore extends Component {
   render() {
+    const token = localStorage.getItem("token");
     return (
       <Navbar bg="dark" expand="lg" variant="dark">
         <Container>
@@ -91,7 +92,7 @@ export class Navbarbefore extends Component {
                 }}
               >
                 <NavLink
-                  to="/login"
+                  to={!token ? "/login" : "/welcome/user"}
                   className="text-decoration-none"
                   style={{
                     fontWeight: 700,

@@ -53,11 +53,21 @@ const vfield = (value) => {
   }
 };
 
+const StringifyLocalStorage = ({ name = "", value }) => {
+  const result = localStorage.setItem(name, value);
+  if (name && value) {
+    return result;
+  } else {
+    return window.alert("Parsing Gagal");
+  }
+};
+
 const Login = () => {
   // this.handleLogin = this.handleLogin.bind(this);
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState();
   const [successful, setSuccessful] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,9 +83,26 @@ const Login = () => {
         email,
         password,
       });
-      const data = response.data;
+      const data = response.data?.data;
+      setUser(data);
+      localStorage.setItem("user", data);
       console.log(data);
-      if (data.message === "OK") {
+      if (response.data.message === "OK") {
+        const token = response.data?.data?.token;
+        const refreshToken = response.data.data.refreshToken;
+        const dataUser = response.data.data.data;
+        StringifyLocalStorage({
+          name: "token",
+          value: token,
+        });
+        StringifyLocalStorage({
+          name: "refreshToken",
+          value: refreshToken,
+        });
+        StringifyLocalStorage({
+          name: "dataUser",
+          value: JSON.stringify(dataUser),
+        });
         history.push("/welcome/user");
       }
     } catch (error) {

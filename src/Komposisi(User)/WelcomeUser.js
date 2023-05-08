@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import dasboruser from "../Assets/dasboruser.png";
@@ -15,6 +14,9 @@ import Sidebaruser from "../Komponen/Sidebar(login user)";
 
 const WelcomeUser = () => {
   const location = useLocation();
+  const storedData = localStorage.getItem("dataUser");
+  console.log(JSON.parse(storedData));
+
   return (
     <div>
       <Navbaruser konten="Dashboard Merchant" />

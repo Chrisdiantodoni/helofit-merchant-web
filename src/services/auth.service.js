@@ -61,14 +61,6 @@ class AuthService {
       pin,
     });
   }
-
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user"));
-  }
-
-  getCurrentAdmin() {
-    return JSON.parse(localStorage.getItem("admin"));
-  }
 }
 
 export default new AuthService();
