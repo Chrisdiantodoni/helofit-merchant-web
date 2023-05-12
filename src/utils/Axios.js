@@ -2,14 +2,13 @@ import axios from "axios";
 import Cookie from "js-cookie";
 
 const baseURL = "http://localhost:3002/api/v1/admin";
-const timeout = 16000;
+// const timeout = 16000;
 
-let token = Cookie.get("token");
+let token = localStorage.getItem("token");
 let refreshToken = Cookie.get("refreshToken");
 
 const instance = axios.create({
   baseURL,
-  timeout,
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
@@ -13,32 +13,35 @@ import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import { ReactComponent as LogoEdit } from "../Assets/Edit-Icon.svg";
 
 import Sidebaruser from "../Komponen/Sidebar(login user)";
+import { Axios } from "../utils/index";
 
 const ProfilMerchant = () => {
-  // }
-  const data = [
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-  ];
+  const [dataMerchant, setDataMerchant] = useState({});
+  const [merchantDays, setmerchantDays] = useState([]);
+
+  const dataMerchantLocal = () => {
+    const dataUser = localStorage.getItem("dataUser");
+    console.log(JSON.parse(dataUser)?.id);
+    const merchantId = JSON.parse(dataUser)?.id;
+    getDataMerchant(merchantId);
+  };
+
+  useEffect(() => {
+    dataMerchantLocal();
+  }, []);
+
+  const getDataMerchant = async (merchantId) => {
+    const response = await Axios.get(`/merchant/${merchantId}`);
+    const data = response?.data?.data;
+    setDataMerchant(data);
+    setmerchantDays(data?.merchant_time.sunday);
+    console.log(merchantDays);
+    console.log(data);
+  };
+
   return (
     <div>
-      <Navbaruser konten="Dompet Merchant" />
+      <Navbaruser konten="Profil Merchant" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaruser />
@@ -73,20 +76,16 @@ const ProfilMerchant = () => {
               <tbody className="fw-bold">
                 <tr>
                   <td>Nama Merchant</td>
-                  <td>XYZ Futsal</td>
+                  <td>{dataMerchant?.merchant_info?.merchant_name}</td>
                 </tr>
                 <tr>
                   <td>Lokasi</td>
-                  <td>Jl. MH Thamrin No.122 Medan</td>
+                  <td>{dataMerchant?.merchant_info?.address}</td>
                 </tr>
                 <tr>
                   <td>Deskripsi</td>
                   <td style={{ whiteSpace: "break-spaces" }}>
-                    Yuk Main bersama di fasilitias ini Pelanggan Fasilitas
-                    Olahraga yang terhormat Sebelum melakukan Reservasi baca
-                    ketentuan kami sebagai berikut: Wajib menggunakan sepatu
-                    ketika menggunakan fasilitas tidak membawa minuman keras dan
-                    obatan terlarang..
+                    {dataMerchant?.merchant_info?.desc}
                   </td>
                 </tr>
                 <tr>
@@ -96,15 +95,17 @@ const ProfilMerchant = () => {
                 <tr>
                   <td>Prasarana yang tersedia</td>
                   <td>
-                    <h6 className="fw-bold">Sewa Peralatan Olahraga</h6>
-                    <h6 className="fw-bold">Sewa Peralatan Olahraga</h6>
-                    <h6 className="fw-bold">Sewa Peralatan Olahraga</h6>
+                    {dataMerchant?.feature_merchant?.map((item, idx) => (
+                      <h6 className="fw-bold">{item?.feature?.feature_name}</h6>
+                    ))}
                   </td>
                 </tr>
                 <tr>
                   <td>Jadwal buka</td>
                   <td>
-                    <h6 className="fw-bold">Senin - Minggu</h6>
+                    <h6 className="fw-bold">
+                      {/* {dataMerchant?.merchant_time?}- Minggu */}
+                    </h6>
                     <h6 className="fw-bold">09.00 - 20.00</h6>
                   </td>
                 </tr>
