@@ -7,11 +7,11 @@ import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import InputGroup from "react-bootstrap/InputGroup";
-
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
+import { useEffect } from "react";
 
-const AddTask = (props) => {
+const EditTask = (props) => {
   const data = [
     {
       kode_reservasi: "135780",
@@ -39,7 +39,10 @@ const AddTask = (props) => {
   const [listTask1, setListTask1] = useState("");
   const [listTask2, setListTask2] = useState("");
   const [listTask3, setListTask3] = useState("");
+  const [dataTask, setDataTask] = useState({});
   const [price, setPrice] = useState(0);
+  const idTask = props.location.state.id;
+  console.log(idTask);
 
   function handleImageChange(event) {
     const image = event.target.files[0];
@@ -58,6 +61,17 @@ const AddTask = (props) => {
   const handleClick = (event) => {
     hiddenFileInput.current.click();
   };
+
+  const getTask = async () => {
+    const response = await Axios.get(`/task/detail/${idTask}`);
+    const data = response?.data?.data;
+    setDataTask(data);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    getTask();
+  }, []);
 
   const handleAddTask = async () => {
     const formData = new FormData();
@@ -78,6 +92,10 @@ const AddTask = (props) => {
   const totalPoin = (price) => {
     const poin = price / 1000;
     return poin;
+  };
+
+  const handleEditTask = async () => {
+    const response = await Axios.put(`task/`);
   };
 
   return (
@@ -102,7 +120,7 @@ const AddTask = (props) => {
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={taskName}
+                      value={dataTask.task_name}
                       onChange={(e) => setTaskName(e.target.value)}
                     />
                   </td>
@@ -151,7 +169,7 @@ const AddTask = (props) => {
                     {previewImage && (
                       <div>
                         <img
-                          src={previewImage}
+                          src={dataTask.banner_img}
                           style={{ width: 430, height: 130 }}
                           alt="Preview"
                         />
@@ -165,7 +183,7 @@ const AddTask = (props) => {
                     <input
                       style={{ borderRadius: 8 }}
                       type="date"
-                      value={expiredDate}
+                      value={dataTask?.expiredIn}
                       onChange={(e) => setExpiredDate(e.target.value)}
                     />
                   </td>
@@ -175,7 +193,7 @@ const AddTask = (props) => {
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={listTask1}
+                      // value={dataTask.list_task[0].task_name}
                       onChange={(e) => setListTask1(e.target.value)}
                     />
                   </td>
@@ -185,7 +203,7 @@ const AddTask = (props) => {
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={listTask2}
+                      // value={dataTask.list_task[1].task_name}
                       onChange={(e) => setListTask2(e.target.value)}
                     />
                   </td>
@@ -195,7 +213,7 @@ const AddTask = (props) => {
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={listTask3}
+                      // value={listTask3}
                       onChange={(e) => setListTask3(e.target.value)}
                     />
                   </td>
@@ -205,7 +223,7 @@ const AddTask = (props) => {
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={price}
+                      value={dataTask.price}
                       onChange={(e) => setPrice(e.target.value)}
                     />
                     per keseluruhan task
@@ -261,4 +279,4 @@ const AddTask = (props) => {
   );
 };
 
-export default withRouter(AddTask);
+export default withRouter(EditTask);

@@ -36,6 +36,7 @@ import EditFasilitasMerchant from "./Komposisi(User)/EditFasilitasMerchant";
 import DetailTask from "./Komposisi(User)/DetailTask";
 import AddPromo from "./Komposisi(User)/AddPromo";
 import DetailProgressPromo from "./Komposisi(User)/DetailProgressPromo";
+import EditTask from "./Komposisi(User)/EditTask";
 
 class App extends React.Component {
   constructor(props) {
@@ -149,6 +150,10 @@ class App extends React.Component {
       {
         path: "/welcome/AddTask",
         render: () => <AddTask />,
+      },
+      {
+        path: "/welcome/EditTask",
+        render: () => <EditTask />,
       },
       {
         path: "/welcome/DetailTask",

@@ -10,6 +10,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import { ReactComponent as LogoEdit } from "../Assets/Edit-Icon.svg";
 import moment from "moment";
+import AddTask from "./AddTask";
 
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
@@ -33,6 +34,7 @@ const Tasks = () => {
       status: "Selesai",
     },
   ];
+
   const [dataTask, setDataTask] = useState([]);
   const [statusTask, setStatusTask] = useState([]);
   const dataMerchantLocal = () => {
@@ -60,6 +62,20 @@ const Tasks = () => {
     const data = response?.data?.data?.result;
     setStatusTask(data);
     console.log(data);
+  };
+
+  const handleDeleteTask = async (id) => {
+    const body = {
+      merchantId: id.merchantId,
+      taskId: id.taskId,
+    };
+    console.log(body);
+    try {
+      const response = await Axios.delete(`/task`, { data: body });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -138,7 +154,6 @@ const Tasks = () => {
                     <th>Judul</th>
                     <th>Banner</th>
                     <th>Berlaku s.d</th>
-
                     <th></th>
                   </tr>
                 </thead>
@@ -164,7 +179,14 @@ const Tasks = () => {
                             height: "40%",
                           }}
                         >
-                          <LogoEdit />
+                          <Link
+                            to={{
+                              pathname: `/welcome/EditTask`,
+                              state: { id: item.id },
+                            }}
+                          >
+                            <LogoEdit />
+                          </Link>
                         </Button>
                         <Button
                           className="fw-bold text-dark"
@@ -174,6 +196,12 @@ const Tasks = () => {
                             borderRadius: "8px",
                             height: "40%",
                           }}
+                          onClick={() =>
+                            handleDeleteTask({
+                              taskId: item.id,
+                              merchantId: item.merchantId,
+                            })
+                          }
                         >
                           <Logo />
                         </Button>
@@ -214,7 +242,10 @@ const Tasks = () => {
                     <td>{"Belum dibuat"}</td>
                     <td>
                       <Link
-                        to="/welcome/DetailTask"
+                        to={{
+                          pathname: `/welcome/DetailTask/`,
+                          state: { id: item.id },
+                        }}
                         className="fw-bold text-dark btn d-flex"
                         style={{
                           background: "#C4f601",
