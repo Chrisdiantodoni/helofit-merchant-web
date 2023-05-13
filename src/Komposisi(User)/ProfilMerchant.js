@@ -11,31 +11,63 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import { ReactComponent as LogoEdit } from "../Assets/Edit-Icon.svg";
+import { moneyFormat } from "../utils/format";
 
 import Sidebaruser from "../Komponen/Sidebar(login user)";
+import { useQuery } from "react-query";
+import merchantService from "../services/merchant.service";
 
 const ProfilMerchant = () => {
-  // }
-  const data = [
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
+  const getDataUser = () => {
+    if (localStorage.getItem("dataUser")) {
+      return JSON.parse(localStorage.getItem("dataUser"));
+    } else {
+      return {};
+    }
+  };
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["getDetailMerchant"],
+    queryFn: () => {
+      return merchantService.getDetailMerchant(getDataUser()?.id);
     },
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
+    onSuccess: (onSuccess) => {
+      return onSuccess;
     },
-  ];
+    onError: (onError) => onError,
+  });
+
+  const parsingImgMerchant = (dataProps) => {
+    if (dataProps) {
+      return JSON.parse(dataProps?.data?.merchant_info?.img_merchant);
+    } else {
+      return [];
+    }
+  };
+
+  const displayDayOpenMerchant = (merchantTime) => {
+    const saturday = merchantTime["saturday"];
+    const friday = merchantTime["friday"];
+    const monday = merchantTime["monday"];
+    const sunday = merchantTime["sunday"];
+    const thursday = merchantTime["thursday"];
+    const tuesday = merchantTime["tuesday"];
+    const wednesday = merchantTime["wednesday"];
+
+    return (
+      <ul>
+        <li>{monday?.length > 0 ? "monday" : ""}</li>
+        <li>{tuesday?.length > 0 ? "tuesday" : ""}</li>
+        <li>{wednesday?.length > 0 ? "wednesday" : ""}</li>
+        <li>{thursday?.length > 0 ? "thursday" : ""}</li>
+        <li>{friday?.length > 0 ? "friday" : ""}</li>
+        <li>{saturday?.length > 0 ? "saturday" : ""}</li>
+        <li>{sunday?.length > 0 ? "sunday" : ""}</li>
+      </ul>
+    );
+  };
+
+  console.log({ data });
   return (
     <div>
       <Navbaruser konten="Dompet Merchant" />
@@ -43,111 +75,158 @@ const ProfilMerchant = () => {
         <div className="col-2 sidebar-wrapper">
           <Sidebaruser />
         </div>
-        <div className="col-10 mt-5">
-          <div class="container">
-            <h5 className="text-dark fw-bold">Merchant</h5>
-            <div className="d-flex justify-content-between">
-              <h6 className="text-muted fw-bold">
-                Tampilkan informasi tempat olahraga Anda secara akurat
-              </h6>
+        {isLoading ? (
+          <div>Loading.....</div>
+        ) : (
+          <div className="col-10 mt-5 main-content">
+            <div class="container">
+              <h5 className="text-dark fw-bold">Merchant</h5>
+              <div className="d-flex justify-content-between">
+                <h6 className="text-muted fw-bold">
+                  Tampilkan informasi tempat olahraga Anda secara akurat
+                </h6>
 
-              <Link
-                to="/welcome/EditMerchant"
-                className="fw-bold text-dark btn d-flex"
-                style={{
-                  background: "#C4f601",
-                  border: "0.5px solid #C4f601",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 8,
-                  paddingLeft: 40,
-                  paddingRight: 40,
-                }}
-              >
-                Ubah
-              </Link>
+                <Link
+                  to="/welcome/EditMerchant"
+                  className="fw-bold text-dark btn d-flex"
+                  style={{
+                    background: "#C4f601",
+                    border: "0.5px solid #C4f601",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 8,
+                    paddingLeft: 40,
+                    paddingRight: 40,
+                  }}
+                >
+                  Ubah
+                </Link>
+              </div>
+              <Table borderless={true}>
+                <tbody className="fw-bold">
+                  <tr>
+                    <td>Nama Merchant</td>
+                    <td>{data?.data?.merchant_info?.merchant_name || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td>Lokasi</td>
+                    <td>{data?.data?.merchant_info?.address || "-"}</td>
+                  </tr>
+                  <tr>
+                    <td>Deskripsi</td>
+                    <td style={{ whiteSpace: "break-spaces" }}>
+                      {data?.data?.merchant_info?.desc || "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Foto Merchant</td>
+                    <td>
+                      {data?.data?.merchant_info?.img_merchant
+                        ? parsingImgMerchant(data)?.map((item, key) => {
+                            return (
+                              <img
+                                src={item}
+                                key={key}
+                                width="50%"
+                                height={100}
+                                style={{ objectFit: "cover" }}
+                              />
+                            );
+                          })
+                        : null}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Prasarana yang tersedia</td>
+                    <td>
+                      {data?.data?.feature_merchant?.map((item, idx) => {
+                        return (
+                          <h6 className="fw-bold">
+                            > {item?.feature?.feature_name || "-"}
+                          </h6>
+                        );
+                      }) || "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Jadwal buka</td>
+                    <td>
+                      <h6 className="fw-bold">
+                        {displayDayOpenMerchant(data?.data?.merchant_time)}
+                      </h6>
+                      <h6 className="fw-bold">
+                        {data?.data?.merchant_time?.monday[0] || "-"} -{" "}
+                        {data?.data?.merchant_time?.monday[1] || "-"}
+                      </h6>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
             </div>
-            <Table borderless={true}>
-              <tbody className="fw-bold">
-                <tr>
-                  <td>Nama Merchant</td>
-                  <td>XYZ Futsal</td>
-                </tr>
-                <tr>
-                  <td>Lokasi</td>
-                  <td>Jl. MH Thamrin No.122 Medan</td>
-                </tr>
-                <tr>
-                  <td>Deskripsi</td>
-                  <td style={{ whiteSpace: "break-spaces" }}>
-                    Yuk Main bersama di fasilitias ini Pelanggan Fasilitas
-                    Olahraga yang terhormat Sebelum melakukan Reservasi baca
-                    ketentuan kami sebagai berikut: Wajib menggunakan sepatu
-                    ketika menggunakan fasilitas tidak membawa minuman keras dan
-                    obatan terlarang..
-                  </td>
-                </tr>
-                <tr>
-                  <td>Foto Merchant</td>
-                  <td>XYZ Futsal</td>
-                </tr>
-                <tr>
-                  <td>Prasarana yang tersedia</td>
-                  <td>
-                    <h6 className="fw-bold">Sewa Peralatan Olahraga</h6>
-                    <h6 className="fw-bold">Sewa Peralatan Olahraga</h6>
-                    <h6 className="fw-bold">Sewa Peralatan Olahraga</h6>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Jadwal buka</td>
-                  <td>
-                    <h6 className="fw-bold">Senin - Minggu</h6>
-                    <h6 className="fw-bold">09.00 - 20.00</h6>
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
+            <div class="container">
+              <h5 className="text-dark fw-bold">Detail Fasilitas</h5>
+              <div className="d-flex justify-content-between">
+                <h6 className="text-muted fw-bold">
+                  Tampilkan informasi fasilitas olahraga Anda
+                </h6>
+
+                <Link
+                  to="/welcome/EditFasilitasMerchant"
+                  className="fw-bold text-dark btn d-flex"
+                  style={{
+                    background: "#C4f601",
+                    border: "0.5px solid #C4f601",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 8,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                  }}
+                >
+                  Tambah Fasilitas
+                </Link>
+              </div>
+              {data?.data?.category_facility?.map((item, idx) => {
+                if (item?.facility?.length > 0) {
+                  return (
+                    <DisplayListFailitas
+                      category_name={item?.category_name}
+                      facility={item?.facility}
+                    />
+                  );
+                }
+              }) || null}
+            </div>
           </div>
-          <div class="container">
-            <h5 className="text-dark fw-bold">Detail Fasilitas</h5>
-            <div className="d-flex justify-content-between">
-              <h6 className="text-muted fw-bold">
-                Tampilkan informasi fasilitas olahraga Anda
-              </h6>
+        )}
+      </div>
+    </div>
+  );
+};
 
-              <Link
-                to="/welcome/EditFasilitasMerchant"
-                className="fw-bold text-dark btn d-flex"
-                style={{
-                  background: "#C4f601",
-                  border: "0.5px solid #C4f601",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 8,
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                }}
-              >
-                Tambah Fasilitas
-              </Link>
-            </div>
-            <Table borderless={true}>
-              <tbody className="fw-bold">
-                <tr>
-                  <td>Kategori</td>
-                  <td>Badminton</td>
-                </tr>
-                <tr>
-                  <td>Jumlah Fasilitas</td>
-                  <td>2 Fasilitas</td>
-                </tr>
-              </tbody>
-            </Table>
+export default withRouter(ProfilMerchant);
+
+const DisplayListFailitas = ({ category_name, facility }) => {
+  return (
+    <div>
+      <Table borderless={true}>
+        <tbody className="fw-bold">
+          <tr>
+            <td>Kategori</td>
+            <td>{category_name}</td>
+          </tr>
+          <tr>
+            <td>Jumlah Fasilitas</td>
+            <td>{facility?.length} Fasilitas</td>
+          </tr>
+        </tbody>
+      </Table>
+      {facility?.length > 0
+        ? facility?.map((item) => (
             <div
               className="mt-4"
               style={{
@@ -169,16 +248,26 @@ const ProfilMerchant = () => {
                   <tbody className="fw-bold">
                     <tr>
                       <td>Nama Fasilitas</td>
-                      <td>Lapangan 1</td>
+                      <td>{item?.facility_name}</td>
                     </tr>
 
                     <tr>
                       <td>Banner</td>
-                      <td>Banner</td>
+                      <td>
+                        <img
+                          src={item?.banner_img}
+                          alt="banner_img"
+                          width="50%"
+                          height={100}
+                          style={{ objectFit: "cover" }}
+                        />
+                      </td>
                     </tr>
                     <tr>
                       <td>Tarif</td>
-                      <td>100.000/jam</td>
+                      <td>
+                        {moneyFormat.format(item?.price || 0)} / {item?.uom}
+                      </td>
                     </tr>
                   </tbody>
                 </Table>
@@ -215,11 +304,8 @@ const ProfilMerchant = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          ))
+        : null}
     </div>
   );
 };
-
-export default withRouter(ProfilMerchant);

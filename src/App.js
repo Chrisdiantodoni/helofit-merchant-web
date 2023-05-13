@@ -36,6 +36,7 @@ import EditFasilitasMerchant from "./Komposisi(User)/EditFasilitasMerchant";
 import DetailTask from "./Komposisi(User)/DetailTask";
 import AddPromo from "./Komposisi(User)/AddPromo";
 import DetailProgressPromo from "./Komposisi(User)/DetailProgressPromo";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 class App extends React.Component {
   constructor(props) {
@@ -187,14 +188,18 @@ class App extends React.Component {
         render: () => <Feedback />,
       },
     ];
+    // Create a client
+    const queryClient = new QueryClient();
     return (
-      <Router>
-        <Switch>
-          {routes.map((item, index) => (
-            <Route path={item.path} exact={item.exact} render={item.render} />
-          ))}
-        </Switch>
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Switch>
+            {routes.map((item, index) => (
+              <Route path={item.path} exact={item.exact} render={item.render} />
+            ))}
+          </Switch>
+        </Router>
+      </QueryClientProvider>
     );
   }
 }

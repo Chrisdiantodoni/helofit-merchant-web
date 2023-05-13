@@ -1,88 +1,122 @@
 import React, { Component } from "react";
-import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
-import InputGroup from "react-bootstrap/InputGroup";
+import FacilityService from "../services/facility.service";
 
 import Sidebaruser from "../Komponen/Sidebar(login user)";
+import categoryService from "../services/category.service";
 
 class EditMerchant extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentUser: AuthService.getCurrentUser(),
-      kegiatan: 0,
-      sisa: 0,
-      nama_dpn: "",
+      params: {
+        merchantId: "",
+        facility_name: "",
+        banner_img: "",
+        price: "",
+        categoryId: "",
+        time: ["00:00", "00:00"],
+      },
+      options: {
+        category: [],
+      },
     };
-    this.CekNilai = this.CekNilai.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    this.handleTambahFacility = this.handleTambahFacility.bind(this);
   }
-  CekNilai(nilai) {
-    var result;
-    if (nilai != null) {
-      result = nilai;
-    } else if (nilai == null) {
-      result = 0;
+
+  getDataUser = () => {
+    if (localStorage.getItem("dataUser")) {
+      return JSON.parse(localStorage.getItem("dataUser"));
+    } else {
+      return {};
     }
-    return result;
+  };
+
+  getDataCategory = () => {
+    categoryService
+      .getCategory()
+      .then((res) => {
+        console.log({ res });
+        if (res?.message == "OK") {
+          this.setState({
+            options: {
+              ...this.state.options,
+              category: res.data.result?.map((item) => ({
+                value: item?.id,
+                label: item.category_name,
+              })),
+            },
+          });
+        }
+      })
+      .catch((err) => console.log({ err }));
+  };
+
+  componentWillMount() {
+    this.getDataCategory();
+    this.getDataUser();
+    this.setState({
+      params: {
+        ...this.state.params,
+        merchantId: this.getDataUser()?.id || null,
+      },
+    });
   }
-  // componentDidMount() {
-  //   const { currentUser } = this.state;
-  //   var userid = currentUser.id;
-  //   fetch("http://localhost:8000/sisa/" + userid)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       this.setState({
-  //         sisa: res.sisa,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  //   fetch("http://localhost:8000/kegiatan/" + userid)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       this.setState({
-  //         kegiatan: res.kegiatan,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }
-  data = [
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-  ];
+
+  handleSelect(e) {
+    console.log({ e: e.target.value });
+    this.setState({
+      params: {
+        ...this.state.params,
+        categoryId: e.target.value,
+      },
+    });
+  }
+
+  handleInput(e) {
+    console.log({ e: e.target.value });
+    this.setState({
+      params: {
+        ...this.state.params,
+        [e.target.name]: e.target.value,
+      },
+    });
+  }
+
+  handleTambahFacility() {
+    try {
+      const formData = new FormData();
+      formData.append("categoryId", this.state.params.categoryId);
+      formData.append("banner_img", this.state.params.banner_img);
+      formData.append("facility_name", this.state.params.facility_name);
+      formData.append("merchantId", this.state.params.merchantId);
+      formData.append("price", this.state.params.price);
+      formData.append("time", this.state.params.time);
+
+      FacilityService.addFacility(formData).then((res) => {
+        console.log({ res });
+        if (res.message === "OK") {
+          alert("berhasil menambahkan fasilitas");
+          window.location.href = "/welcome/ProfilMerchant";
+        }
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   render() {
-    const { currentUser, sisa, kegiatan } = this.state;
+    const { options } = this.state;
     return (
       <div>
-        <Navbaruser konten="Edit Fasilitas" />
+        <Navbaruser konten="Tambah Fasilitas" />
         <div className="row">
           <div className="col-2 sidebar-wrapper">
             <Sidebaruser />
@@ -100,25 +134,54 @@ class EditMerchant extends Component {
                   <tr>
                     <td>Kategori</td>
                     <td>
-                      <input style={{ borderRadius: 8 }} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Jumlah fasilitas</td>
-                    <td>
-                      <input style={{ borderRadius: 8 }} />
+                      <AutoComplete
+                        options={options.category}
+                        onChange={this.handleSelect}
+                      />
+                      {/* <input style={{ borderRadius: 8 }} /> */}
                     </td>
                   </tr>
                   <tr>
                     <td>Nama Fasilitas</td>
                     <td>
-                      <input style={{ borderRadius: 8 }} />
+                      <input
+                        style={{ borderRadius: 8 }}
+                        onChange={this.handleInput}
+                        value={this.state.params.facility_name}
+                        name="facility_name"
+                      />
                     </td>
                   </tr>
                   <tr>
                     <td>Banner</td>
                     <td>
-                      <Button
+                      <input
+                        type="file"
+                        name=""
+                        accept=".jpg,.jpeg,.png"
+                        id=""
+                        onChange={(e) => {
+                          this.setState({
+                            params: {
+                              ...this.state.params,
+                              banner_img: e.target.files[0],
+                            },
+                          });
+                          const img = document.getElementById("imgBanner");
+                          img.src = URL.createObjectURL(e.target.files[0]);
+                        }}
+                      />
+                      <img
+                        src=""
+                        alt=""
+                        id="imgBanner"
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      {/* <Button
                         className="fw-bold text-dark me-4"
                         style={{
                           background: "#c4f601",
@@ -140,13 +203,20 @@ class EditMerchant extends Component {
                       >
                         <Logo />
                         <img />
-                      </Button>
+                      </Button> */}
                     </td>
                   </tr>
                   <tr>
                     <td>Tarif Fasilitas</td>
                     <td>
-                      <input style={{ borderRadius: 8 }} /> per jam / Sesi
+                      <input
+                        style={{ borderRadius: 8 }}
+                        value={this.state.params.price}
+                        onChange={this.handleInput}
+                        name="price"
+                        type="number"
+                      />{" "}
+                      per jam / Sesi
                     </td>
                   </tr>
                 </tbody>
@@ -174,8 +244,9 @@ class EditMerchant extends Component {
                   width: "157px",
                   height: "48px",
                 }}
+                onClick={this.handleTambahFacility}
               >
-                Ubah
+                Simpan
               </Button>
             </div>
           </div>
@@ -186,3 +257,22 @@ class EditMerchant extends Component {
 }
 
 export default withRouter(EditMerchant);
+
+const AutoComplete = ({ options = [], onChange }) => {
+  return (
+    <div>
+      <select
+        id="opt-datalist"
+        className="form-select"
+        style={{ width: "25%" }}
+        onChange={onChange}
+      >
+        {options.map((item, idx) => (
+          <option key={idx} value={item.value}>
+            {item.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
