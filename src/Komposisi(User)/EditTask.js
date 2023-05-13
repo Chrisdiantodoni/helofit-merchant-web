@@ -10,84 +10,49 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
 import { useEffect } from "react";
+import moment from "moment";
+import { each } from "lodash";
 
 const EditTask = (props) => {
-  const data = [
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-  ];
   const [taskName, setTaskName] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [expiredDate, setExpiredDate] = useState("");
-  const [listTask1, setListTask1] = useState("");
+  const [listTask, setListTask] = useState([]);
   const [listTask2, setListTask2] = useState("");
   const [listTask3, setListTask3] = useState("");
   const [dataTask, setDataTask] = useState({});
   const [price, setPrice] = useState(0);
+  const [point, setPoint] = useState(0);
   const idTask = props.location.state.id;
   console.log(idTask);
 
   function handleImageChange(event) {
     const image = event.target.files[0];
     setSelectedBanner(image);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreviewImage(reader.result);
-    };
-    reader.readAsDataURL(image);
   }
   function handleRemoveClick() {
     setSelectedBanner(null);
     setPreviewImage(null);
   }
   const hiddenFileInput = useRef(null);
-  const handleClick = (event) => {
-    hiddenFileInput.current.click();
-  };
 
   const getTask = async () => {
     const response = await Axios.get(`/task/detail/${idTask}`);
     const data = response?.data?.data;
     setDataTask(data);
-    console.log(data);
+    setTaskName(data.task_name);
+    setSelectedBanner(data.banner_img);
+    setExpiredDate(moment(data?.expiredIn).format("YYYY-MM-DD"));
+    setListTask(data.list_task);
+    setPoint(data.poin);
+    setPrice(parseInt(data.poin) * 1000);
+    console.log({ data });
   };
 
   useEffect(() => {
     getTask();
   }, []);
-
-  const handleAddTask = async () => {
-    const formData = new FormData();
-    const body = {
-      task_name: taskName,
-      expiredIn: expiredDate,
-      poin: totalPoin,
-      "list_task[0].task_name": listTask1,
-      "list_task[1].task_name": listTask2,
-      "list_task[2].task_name": listTask3,
-      banner_img: formData.append("banner_img", selectedBanner),
-    };
-    const response = Axios.post(`/task`, formData);
-    console.log(response);
-    console.log(body);
-  };
 
   const totalPoin = (price) => {
     const poin = price / 1000;
@@ -95,7 +60,40 @@ const EditTask = (props) => {
   };
 
   const handleEditTask = async () => {
-    const response = await Axios.put(`task/`);
+    console.log({ listTask });
+    const formData = new FormData();
+    formData.append("taskId", idTask);
+    formData.append("task_name", taskName);
+    formData.append("expiredIn", expiredDate);
+    formData.append("banner_img", selectedBanner);
+    formData.append("poin", point);
+    formData.append(
+      "list_task",
+      JSON.stringify(
+        listTask.map((item) => ({
+          task_name: item?.task_name,
+          taskDetailId: item?.id,
+        }))
+      )
+    );
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + JSON.stringify(pair[1]));
+    // }
+    await Axios.put(`/task/detail/${dataTask?.merchantId}`, formData)
+      .then((res) => {
+        console.log({ res });
+      })
+      .catch((err) => console.log({ err }));
+    window.alert(`Data ${taskName} berhasil di edit`);
+    window.location.href = "/welcome/tasks";
+  };
+
+  const handleOnChangeTask = (e, index) => {
+    let clone = [...listTask];
+    let obj = clone[index];
+    obj.task_name = e.target.value;
+    clone[index] = obj;
+    setListTask([...clone]);
   };
 
   return (
@@ -120,7 +118,7 @@ const EditTask = (props) => {
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={dataTask.task_name}
+                      value={taskName}
                       onChange={(e) => setTaskName(e.target.value)}
                     />
                   </td>
@@ -159,7 +157,6 @@ const EditTask = (props) => {
                       onClick={handleRemoveClick}
                     >
                       <Logo />
-                      <img />
                     </Button>
                   </td>
                 </tr>
@@ -169,7 +166,11 @@ const EditTask = (props) => {
                     {previewImage && (
                       <div>
                         <img
-                          src={dataTask.banner_img}
+                          src={
+                            selectedBanner
+                              ? URL.createObjectURL(selectedBanner)
+                              : null
+                          }
                           style={{ width: 430, height: 130 }}
                           alt="Preview"
                         />
@@ -183,48 +184,34 @@ const EditTask = (props) => {
                     <input
                       style={{ borderRadius: 8 }}
                       type="date"
-                      value={dataTask?.expiredIn}
+                      value={expiredDate}
                       onChange={(e) => setExpiredDate(e.target.value)}
                     />
                   </td>
                 </tr>
-                <tr>
-                  <td>Task ke-1</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      // value={dataTask.list_task[0].task_name}
-                      onChange={(e) => setListTask1(e.target.value)}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Task ke-2</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      // value={dataTask.list_task[1].task_name}
-                      onChange={(e) => setListTask2(e.target.value)}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Task ke-3</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      // value={listTask3}
-                      onChange={(e) => setListTask3(e.target.value)}
-                    />
-                  </td>
-                </tr>
+                {listTask?.map((item, idx) => (
+                  <tr>
+                    <td>Task ke-{idx + 1}</td>
+                    <td>
+                      <input
+                        style={{ borderRadius: 8 }}
+                        value={listTask[idx].task_name}
+                        onChange={(e) => handleOnChangeTask(e, idx)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+
                 <tr>
                   <td>Biaya yang dikeluarkan customer</td>
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={dataTask.price}
-                      onChange={(e) => setPrice(e.target.value)}
+                      value={price}
+                      onChange={(e) => {
+                        setPrice(e.target.value);
+                        setPoint(parseInt(e.target.value / 1000));
+                      }}
                     />
                     per keseluruhan task
                   </td>
@@ -233,7 +220,7 @@ const EditTask = (props) => {
                   <td>Poin yang didapatkan</td>
                   <td>
                     <input
-                      value={totalPoin(price)}
+                      value={point}
                       disabled={true}
                       style={{
                         borderRadius: 8,
@@ -268,7 +255,7 @@ const EditTask = (props) => {
                 width: "157px",
                 height: "48px",
               }}
-              onClick={handleAddTask}
+              onClick={handleEditTask}
             >
               Simpan
             </Button>

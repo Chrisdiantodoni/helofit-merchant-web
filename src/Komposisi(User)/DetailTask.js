@@ -17,7 +17,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const DetailTask = (props) => {
-  const data = props.location.state.id;
+  const id = props.location.state.id;
+  console.log(id);
 
   const [dataTask, setDataTask] = useState("");
   const [taskName, setTaskName] = useState("");
@@ -26,18 +27,6 @@ const DetailTask = (props) => {
   const [task2, setTask2] = useState("");
   const [task3, setTask3] = useState("");
   const [banner, selectedBanner] = useState(null);
-
-  console.log(data);
-  const dataMerchantLocal = () => {
-    const dataUser = localStorage.getItem("dataUser");
-    console.log(JSON.parse(dataUser)?.id);
-    const merchantId = JSON.parse(dataUser)?.id;
-    getDetailTask(merchantId);
-  };
-
-  useEffect(() => {
-    dataMerchantLocal();
-  }, []);
 
   const getDetailTask = async (id) => {
     const response = await Axios.get(`/task/detail/${id}`);

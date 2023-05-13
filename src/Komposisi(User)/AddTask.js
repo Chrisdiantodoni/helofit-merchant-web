@@ -12,26 +12,10 @@ import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
 
 const AddTask = (props) => {
-  const data = [
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-  ];
+  const dataUser = localStorage.getItem("dataUser");
+  console.log(JSON.parse(dataUser)?.id);
+  const merchantId = JSON.parse(dataUser)?.id;
+
   const [taskName, setTaskName] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
@@ -61,18 +45,36 @@ const AddTask = (props) => {
 
   const handleAddTask = async () => {
     const formData = new FormData();
-    const body = {
-      task_name: taskName,
-      expiredIn: expiredDate,
-      poin: totalPoin,
-      "list_task[0].task_name": listTask1,
-      "list_task[1].task_name": listTask2,
-      "list_task[2].task_name": listTask3,
-      banner_img: formData.append("banner_img", selectedBanner),
-    };
-    const response = Axios.post(`/task`, formData);
-    console.log(response);
-    console.log(body);
+    formData.append("merchantId", merchantId);
+    formData.append("task_name", taskName);
+    formData.append("expiredIn", expiredDate);
+    formData.append("poin", totalPoin(price));
+    formData.append("banner_img", selectedBanner);
+    formData.append(
+      "list_task",
+      JSON.stringify([
+        {
+          task_name: listTask1,
+        },
+        {
+          task_name: listTask2,
+        },
+        {
+          task_name: listTask3,
+        },
+      ])
+    );
+
+    await Axios.post(`/task`, formData)
+      .then((res) => {
+        console.log({ res });
+      })
+      .catch((err) => console.log({ err }));
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + JSON.stringify(pair[1]));
+    // }
+    window.alert("Data tasks berhasil ditambah");
+    window.location.href = "/welcome/tasks";
   };
 
   const totalPoin = (price) => {
@@ -215,7 +217,7 @@ const AddTask = (props) => {
                   <td>Poin yang didapatkan</td>
                   <td>
                     <input
-                      value={totalPoin(price)}
+                      value={parseInt(totalPoin(price)) || 0}
                       disabled={true}
                       style={{
                         borderRadius: 8,

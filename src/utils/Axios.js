@@ -1,7 +1,9 @@
 import axios from "axios";
 import Cookie from "js-cookie";
 
-const baseURL = "http://localhost:3002/api/v1/admin";
+// const baseURL = "http://localhost:3002/api/v1/admin";
+const baseURL = "http://192.168.43.121:3002/api/v1/admin";
+
 // const timeout = 16000;
 
 let token = localStorage.getItem("token");

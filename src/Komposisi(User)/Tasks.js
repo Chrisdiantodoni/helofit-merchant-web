@@ -34,25 +34,42 @@ const Tasks = () => {
       status: "Selesai",
     },
   ];
-
-  const [dataTask, setDataTask] = useState([]);
-  const [statusTask, setStatusTask] = useState([]);
-  const dataMerchantLocal = () => {
+  const dataMerchant = () => {
     const dataUser = localStorage.getItem("dataUser");
-    console.log(JSON.parse(dataUser)?.id);
     const merchantId = JSON.parse(dataUser)?.id;
-    getTask(merchantId);
+    getTask(merchantId, search);
     getTaskStatus(merchantId);
   };
+  const dataUser = localStorage.getItem("dataUser");
+  const merchantId = JSON.parse(dataUser)?.id;
+  const [search, setSearch] = useState("");
+  const [dataTask, setDataTask] = useState([]);
+  const [statusTask, setStatusTask] = useState([]);
 
-  useEffect(() => {
-    dataMerchantLocal();
-  }, []);
+  // const getTask = async () => {
+  //   const response = await Axios.get(
+  //     `/task/${merchantId}?column_name=id&query=${search}`
+  //   );
+  //   const data = response.data?.data?.result;
+  //   setDataTask(data || []);
+  //   console.log(data);
+  // };
+  // const getTaskStatus = async (merchantId) => {
+  //   const response = await Axios.get(
+  //     `/task/list-task-user/${merchantId}?page=1&size=10`
+  //   );
+  //   const data = response?.data?.data?.result;
+  //   setStatusTask(data);
+  //   console.log(data);
+  // };
 
-  const getTask = async (merchantId) => {
-    const response = await Axios.get(`/task/${merchantId}`);
+  const getTask = async (merchantId, search) => {
+    const response = await Axios.get(
+      `/task/${merchantId}?column_name=id&query=${search}`
+    );
     const data = response.data?.data?.result;
     setDataTask(data || []);
+
     console.log(data);
   };
   const getTaskStatus = async (merchantId) => {
@@ -77,6 +94,10 @@ const Tasks = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    dataMerchant();
+  }, []);
 
   return (
     <div>
@@ -126,6 +147,8 @@ const Tasks = () => {
                     placeholder="Ketikkan Kode Reservasi.."
                     aria-label="Ketikkan Kode Reservasi.."
                     aria-describedby="basic-addon2"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                   <Button
                     className="fw-bold"
@@ -135,6 +158,7 @@ const Tasks = () => {
                       border: "1px solid #C4f601",
                     }}
                     id="button-addon2"
+                    onClick={() => getTask(merchantId, search)}
                   >
                     Cari
                   </Button>
@@ -239,7 +263,15 @@ const Tasks = () => {
                   <tr>
                     <td>{item.username}</td>
                     <td>{item.phone_number}</td>
-                    <td>{"Belum dibuat"}</td>
+                    <td>
+                      {/* {console.log(item.list_task.list_user)} */}
+                      {item.list_task.map((item) => {
+                        const user = item.list_user;
+                        return user;
+                      }).length > 0
+                        ? "Sedang Pengerjaan"
+                        : "Selesai"}
+                    </td>
                     <td>
                       <Link
                         to={{
