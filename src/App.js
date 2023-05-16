@@ -21,16 +21,16 @@ import AuthService from "./services/auth.service";
 import WelcomeUser from "./Komposisi(User)/WelcomeUser";
 import WelcomeAdmin from "./Komposisi(admin)/WelcomeAdmin";
 import Laporan from "./Komposisi(admin)/Laporan";
-import DataUser from "./Komposisi(admin)/DataUser";
-import Maintenance from "./Komposisi(admin)/Maintenance";
-import Feedback from "./Komposisi(admin)/Feedback";
+import Reserve from "./Komposisi(admin)/Reserve";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Fitur from "./Komposisi/Fitur";
 import Promo from "./Komposisi(User)/Promo";
+import AdminPromo from "./Komposisi(admin)/Promo";
 import Dompet from "./Komposisi(User)/Dompet";
 import DompetMerchant from "./Komposisi(User)/DompetMerchant";
 import EditMerchant from "./Komposisi(User)/EditMerchant";
 import Tasks from "./Komposisi(User)/Tasks";
+import TasksAdmin from "./Komposisi(admin)/Tasks";
 import AddTask from "./Komposisi(User)/AddTask";
 import EditFasilitasMerchant from "./Komposisi(User)/EditFasilitasMerchant";
 import DetailTask from "./Komposisi(User)/DetailTask";
@@ -38,6 +38,11 @@ import AddPromo from "./Komposisi(User)/AddPromo";
 import DetailProgressPromo from "./Komposisi(User)/DetailProgressPromo";
 import { QueryClientProvider, QueryClient } from "react-query";
 import EditTask from "./Komposisi(User)/EditTask";
+import Messages from "./Komposisi(admin)/Messages";
+import Banner from "./Komposisi(admin)/Banner";
+import UserData from "./Komposisi(admin)/UserData";
+import Merchant from "./Komposisi(admin)/Merchant";
+import Meetup from "./Komposisi(admin)/Meetup";
 
 class App extends React.Component {
   constructor(props) {
@@ -181,16 +186,36 @@ class App extends React.Component {
         render: () => <Laporan />,
       },
       {
-        path: "/admin/datauser",
-        render: () => <DataUser />,
+        path: "/admin/Messages",
+        render: () => <Messages />,
       },
       {
-        path: "/admin/maintenance",
-        render: () => <Maintenance />,
+        path: "/admin/Banner",
+        render: () => <Banner />,
       },
       {
-        path: "/admin/feedback",
-        render: () => <Feedback />,
+        path: "/admin/UserData",
+        render: () => <UserData />,
+      },
+      {
+        path: "/admin/Merchant",
+        render: () => <Merchant />,
+      },
+      {
+        path: "/admin/Promo",
+        render: () => <AdminPromo />,
+      },
+      {
+        path: "/admin/Tasks",
+        render: () => <TasksAdmin />,
+      },
+      {
+        path: "/admin/Reserve",
+        render: () => <Reserve />,
+      },
+      {
+        path: "/admin/Meetup",
+        render: () => <Meetup />,
       },
     ];
     // Create a client

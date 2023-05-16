@@ -1,94 +1,153 @@
 import React, { Component } from "react";
-import AuthService from "../services/auth.service";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
-import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import { HiDownload } from "react-icons/hi";
+import { Button } from "react-bootstrap";
 
-export class Laporan extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentAdmin: AuthService.getCurrentAdmin(),
-      datauser: [],
-    };
-  }
-  setValueState(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
-  componentDidMount() {
-    fetch("http://localhost:8000/datauser/")
-      .then((res) => res.json())
-      .then((res) => {
-        this.setState({
-          datauser: res,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-  render() {
-    const { currentAdmin } = this.state;
-    return (
-      <div>
-        <Navbaradmin konten='Laporan' />
-        <div className='row'>
-          <div className='col-2 sidebar-wrapper'>
-            <Sidebaradmin />
-          </div>
-          <div className='col-8'>
-            <div class='container mx-auto mt-5'>
-              <div class='shadow border border-1 rounded-3'>
-                <div className='ms-5 mt-5 me-3 pe-5'>
-                  <h2>Download Laporan</h2>
-                  <p>
-                    Berikut adalah laporan yang dapat diunduh dalam bentuk
-                    dokumen
-                  </p>
-                  <hr />
-                  <h5 className='mb-5'>
-                    <i><b>Rekap semua data user </b></i> <br />
-                    <ReactHTMLTableToExcel
-                      className='download-table-xls-button btn btn-primary mt-3'
-                      table='laporanuser'
-                      filename='datauser'
-                      sheet='user'
-                      buttonText='Download File'
-                    />
-                    <table
-                      className='table d-none text-center border'
-                      id='laporanuser'>
-                      <tbody className='text-center border'>
-                        <tr className='row' colspan='3'></tr>
-                        <tr className='row'>
-                          <td></td>
-                          <td className='col'>Nama Lengkap</td>
-                          <td className='col'>Password</td>
-                          <td className='col'>Email</td>
-                        </tr>
-                        {this.state.datauser.map((item, index) => (
-                          <tr className='row'>
-                            <td></td>
-                            <td className='col'>{item.NamaLengkap}</td>
-                            <td className='col'>{item.password}</td>
-                            <td className='col'>{item.email}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </h5>
-                </div>
+const Laporan = () => {
+  return (
+    <div>
+      <Navbaradmin konten="Laporan" />
+      <div className="row">
+        <div className="col-2 sidebar-wrapper">
+          <Sidebaradmin />
+        </div>
+        <div className="col-10 mt-5">
+          <div class="container">
+            <h4 className="text-dark fw-bold">Unduh Laporan</h4>
+            <h5 className="text-muted fw-bold">
+              Berikut adalah laporan yang dapat diunduh dalam bentuk dokumen
+            </h5>
+            <div
+              className="mt-4"
+              style={{ background: "#000000", width: "100%", height: "4px" }}
+            ></div>
+            <div className="mt-4 d-flex justify-content-between">
+              <div>
+                <h5 className="text-dark fw-bold">
+                  Rekap keseluruhan transaksi/reservasi
+                </h5>
+              </div>
+              <div className="fs-5 me-1 flex-row fw-bold">
+                <Button
+                  type="button"
+                  className="me-4 text-dark fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    border: "1px solid #C4f601",
+                  }}
+                >
+                  <HiDownload className="fs-5 me-1 mb-1" />
+                  Unduh
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4 d-flex justify-content-between">
+              <div>
+                <h5 className="text-dark fw-bold">
+                  Data user pengguna Aplikasi
+                </h5>
+              </div>
+              <div className="fs-5 me-1 flex-row fw-bold">
+                <Button
+                  type="button"
+                  className="me-4 text-dark fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    border: "1px solid #C4f601",
+                  }}
+                >
+                  <HiDownload className="fs-5 me-1 mb-1" />
+                  Unduh
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4 d-flex justify-content-between">
+              <div>
+                <h5 className="text-dark fw-bold">
+                  Data Merchant yang telah bergabung
+                </h5>
+              </div>
+              <div className="fs-5 me-1 flex-row fw-bold">
+                <Button
+                  type="button"
+                  className="me-4 text-dark fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    border: "1px solid #C4f601",
+                  }}
+                >
+                  <HiDownload className="fs-5 me-1 mb-1" />
+                  Unduh
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4 d-flex justify-content-between">
+              <div>
+                <h5 className="text-dark fw-bold">
+                  Data meetup yang sudah dibuat
+                </h5>
+              </div>
+              <div className="fs-5 me-1 flex-row fw-bold">
+                <Button
+                  type="button"
+                  className="me-4 text-dark fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    border: "1px solid #C4f601",
+                  }}
+                >
+                  <HiDownload className="fs-5 me-1 mb-1" />
+                  Unduh
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4 d-flex justify-content-between">
+              <div>
+                <h5 className="text-dark fw-bold">
+                  Data Tasks yang telah berjalan
+                </h5>
+              </div>
+              <div className="fs-5 me-1 flex-row fw-bold">
+                <Button
+                  type="button"
+                  className="me-4 text-dark fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    border: "1px solid #C4f601",
+                  }}
+                >
+                  <HiDownload className="fs-5 me-1 mb-1" />
+                  Unduh
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4 d-flex justify-content-between">
+              <div>
+                <h5 className="text-dark fw-bold">
+                  Data Promo yang sedang aktif
+                </h5>
+              </div>
+              <div className="fs-5 me-1 flex-row fw-bold">
+                <Button
+                  type="button"
+                  className="me-4 text-dark fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    border: "1px solid #C4f601",
+                  }}
+                >
+                  <HiDownload className="fs-5 me-1 mb-1" />
+                  Unduh
+                </Button>
               </div>
             </div>
           </div>
         </div>
-        <span className='d-none'>{currentAdmin.username}</span>
       </div>
-    );
-  }
-}
+      <span className="d-none">{"Username"}</span>
+    </div>
+  );
+};
 
 export default Laporan;
