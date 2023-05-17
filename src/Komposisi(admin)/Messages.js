@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { Table } from "react-bootstrap";
+import { AxiosAdmin } from "../utils";
 
 const data = [
   {
@@ -18,6 +19,18 @@ const data = [
 ];
 
 const Messages = () => {
+  const [dataMessage, setDataMessage] = useState([]);
+
+  const getMessages = async () => {
+    const result = await AxiosAdmin.get("/message");
+    setDataMessage(result?.data?.data?.message);
+    console.log(result);
+  };
+
+  useEffect(() => {
+    getMessages();
+  }, []);
+
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -50,12 +63,12 @@ const Messages = () => {
                     <th>Pesan</th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
+                {dataMessage.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{item.Nama}</td>
-                      <td>{item.Email}</td>
-                      <td>{item.Pesan}</td>
+                      <td>{item.name}</td>
+                      <td>{item.email}</td>
+                      <td>{item.message}</td>
                     </tr>
                   </tbody>
                 ))}

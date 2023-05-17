@@ -3,6 +3,9 @@ import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { Table } from "react-bootstrap";
+import { useState } from "react";
+import { AxiosAdmin } from "../utils";
+import { useEffect } from "react";
 
 const data = [
   {
@@ -22,6 +25,17 @@ const data = [
 ];
 
 const Merchant = () => {
+  const [merchantData, setMerchantData] = useState([]);
+
+  const getmerchantData = async () => {
+    const response = await AxiosAdmin.get("/merchant");
+    setMerchantData(response?.data?.data?.merchant);
+  };
+
+  useEffect(() => {
+    getmerchantData();
+  }, []);
+
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -56,17 +70,26 @@ const Merchant = () => {
                     <th>Foto Merchant</th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
+                {merchantData.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{item.Nama}</td>
-                      <td>{item.Lokasi}</td>
-                      <td>{item.Deskripsi}</td>
-                      <td>{item.Kategori}</td>
+                      <td>{item.merchant_name}</td>
+                      <td>{item.address}</td>
+                      <td>{item.desc}</td>
+                      <td>
+                        {item?.facilities
+                          ?.map((item) => {
+                            const category = item.category.category_name;
+                            return category;
+                          })
+                          .join(", ")}
+                      </td>
                       <td>
                         <img
-                          src="../Assets/FotoMerchant.png"
-                          style={{ width: 84, height: 39 }}
+                          src={item.img_merchant}
+                          width="100%"
+                          height={100}
+                          style={{ objectFit: "cover" }}
                         />
                       </td>
                     </tr>

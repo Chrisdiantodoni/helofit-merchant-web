@@ -3,6 +3,9 @@ import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { Table } from "react-bootstrap";
+import { useState } from "react";
+import { useEffect } from "react";
+import { AxiosAdmin } from "../utils";
 
 const data = [
   {
@@ -26,6 +29,16 @@ const data = [
 ];
 
 const Reserve = () => {
+  const [reserveData, setReserveData] = useState([]);
+  useEffect(() => {
+    getbooking();
+  });
+
+  const getbooking = async () => {
+    const response = await AxiosAdmin.get("/booking");
+    console.log(response);
+    setReserveData(response.data.data);
+  };
   return (
     <div>
       <Navbaradmin konten="Laporan" />

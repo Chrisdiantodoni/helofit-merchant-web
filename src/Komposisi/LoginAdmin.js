@@ -19,48 +19,9 @@ import {
 import ilustrasilogin from "../Assets/Bhineka.png";
 import { Navbarbefore } from "./../Komponen/Navbar(before login)";
 import AuthenticatonService from "../services/authentication";
-import { Axios } from "../utils";
+import { AxiosAdmin } from "../utils";
 import e from "cors";
 import WelcomeUser from "../Komposisi(User)/WelcomeUser";
-
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Field perlu diisi!
-      </div>
-    );
-  }
-};
-
-const email = (value) => {
-  if (!isEmail(value)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Ini bukan email yang valid.
-      </div>
-    );
-  }
-};
-
-const vfield = (value) => {
-  if (value.length < 3 || value.length > 30) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Field harus berisi antara 3 dan 30 karakter.
-      </div>
-    );
-  }
-};
-
-const StringifyLocalStorage = ({ name = "", value }) => {
-  const result = localStorage.setItem(name, value);
-  if (name && value) {
-    return result;
-  } else {
-    return window.alert("Parsing Gagal");
-  }
-};
 
 const Login = () => {
   // this.handleLogin = this.handleLogin.bind(this);
@@ -76,39 +37,48 @@ const Login = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    history.push("/admin/dashboard");
 
-    // const email = event.target.email.value;
-    // const password = event.target.password.value;
-    // try {
-    //   const response = await Axios.post("/authentication/login", {
-    //     email,
-    //     password,
-    //   });
-    //   const data = response.data?.data;
-    //   setUser(data);
-    //   localStorage.setItem("user", data);
-    //   console.log(data);
-    //   if (response.data.message === "OK") {
-    //     const token = response.data?.data?.token;
-    //     const refreshToken = response.data.data.refreshToken;
-    //     const dataUser = response.data.data.data;
-    //     StringifyLocalStorage({
-    //       name: "token",
-    //       value: token,
-    //     });
-    //     StringifyLocalStorage({
-    //       name: "refreshToken",
-    //       value: refreshToken,
-    //     });
-    //     StringifyLocalStorage({
-    //       name: "dataUser",
-    //       value: JSON.stringify(dataUser),
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    try {
+      const response = await AxiosAdmin.post("/authentication/login", {
+        email,
+        password,
+      });
+      const data = response.data?.data;
+      setUser(data);
+      localStorage.setItem("user", data);
+      console.log(data);
+      if (response.data.message === "OK") {
+        const token = response.data?.data?.token;
+        const refreshToken = response.data.data.refreshToken;
+        const dataUser = response.data.data.data;
+        StringifyLocalStorage({
+          name: "token",
+          value: token,
+        });
+        StringifyLocalStorage({
+          name: "refreshToken",
+          value: refreshToken,
+        });
+        StringifyLocalStorage({
+          name: "dataUser",
+          value: JSON.stringify(dataUser),
+        });
+        history.push("/admin/dashboard");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const StringifyLocalStorage = ({ name = "", value }) => {
+    const result = localStorage.setItem(name, value);
+    if (name && value) {
+      return result;
+    } else {
+      return window.alert("Parsing Gagal");
+    }
   };
   // if (isLoggedIn) {
   //   return (

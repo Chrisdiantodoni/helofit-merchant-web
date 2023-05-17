@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { Table } from "react-bootstrap";
+import { AxiosAdmin } from "../utils";
 
 const data = [
   {
@@ -31,6 +32,17 @@ const data = [
 ];
 
 const Tasks = () => {
+  const [taskData, setTaskData] = useState([]);
+
+  const getTaskData = async () => {
+    const response = await AxiosAdmin.get("/task");
+    console.log(response);
+    setTaskData(response?.data?.data?.task_info);
+  };
+
+  useEffect(() => {
+    getTaskData();
+  }, []);
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -61,27 +73,28 @@ const Tasks = () => {
                     <th>Judul</th>
                     <th>Banner</th>
                     <th>Deadline</th>
-                    <th>Task 1</th>
+                    {/* <th>Task 1</th>
                     <th>Task 2</th>
-                    <th>Task 3</th>
+                    <th>Task 3</th> */}
                     <th>Merchant</th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
+                {taskData?.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{item.Judul}</td>
+                      <td>{item.task_name}</td>
                       <td>
                         <img
-                          src="../Assets/FotoMerchant.png"
-                          style={{ width: 84, height: 39 }}
+                          src={item.banner_img}
+                          width="100%"
+                          height={100}
+                          style={{ objectFit: "cover" }}
                         />
                       </td>
-                      <td>{item.Deadline}</td>
-                      <td>{item.Task.Task1}</td>
-                      <td>{item.Task.Task2}</td>
-                      <td>{item.Task.Task3}</td>
-                      <td>{item.Merchant}</td>
+                      <td>{item.expiredIn}</td>
+                      {/* <td>{item.Task.Task1}</td>
+                       */}
+                      <td>{item.merchant?.merchant_name}</td>
                     </tr>
                   </tbody>
                 ))}

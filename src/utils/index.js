@@ -1,4 +1,5 @@
 import Axios from "./Axios";
+import AxiosAdmin from "./AxiosAdmin";
 import * as Format from "./format";
 
-export { Axios, Format };
+export { Axios, AxiosAdmin, Format };

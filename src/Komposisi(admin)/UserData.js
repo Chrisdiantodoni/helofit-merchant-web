@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { Table } from "react-bootstrap";
+import { AxiosAdmin } from "../utils";
 
 const data = [
   {
@@ -22,6 +23,17 @@ const data = [
 ];
 
 const UserData = () => {
+  const [dataUser, setDataUser] = useState([]);
+
+  const getUserData = async () => {
+    const result = await AxiosAdmin.get("/user");
+    setDataUser(result?.data?.data?.user);
+    console.log(result);
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -49,21 +61,19 @@ const UserData = () => {
                       borderRadius: 8,
                     }}
                   >
-                    <th>Nama</th>
+                    <th>Username</th>
                     <th>Jenis Kelamin</th>
-                    <th>Umur</th>
                     <th>No Handphone</th>
                     <th>Email</th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
+                {dataUser.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{item.Nama}</td>
-                      <td>{item.Jenis_Kelamin}</td>
-                      <td>{item.Umur}</td>
-                      <td>{item.No_handphone}</td>
-                      <td>{item.Email}</td>
+                      <td>{item.username}</td>
+                      <td>{item.gender}</td>
+                      <td>{item.phone_number}</td>
+                      <td>{item.email}</td>
                     </tr>
                   </tbody>
                 ))}
