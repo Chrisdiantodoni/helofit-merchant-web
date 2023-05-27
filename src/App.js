@@ -39,7 +39,6 @@ import DetailProgressPromo from "./Komposisi(User)/DetailProgressPromo";
 import { QueryClientProvider, QueryClient } from "react-query";
 import EditTask from "./Komposisi(User)/EditTask";
 import Messages from "./Komposisi(admin)/Messages";
-import Banner from "./Komposisi(admin)/Banner";
 import UserData from "./Komposisi(admin)/UserData";
 import Merchant from "./Komposisi(admin)/Merchant";
 import Meetup from "./Komposisi(admin)/Meetup";
@@ -188,10 +187,6 @@ class App extends React.Component {
       {
         path: "/admin/Messages",
         render: () => <Messages />,
-      },
-      {
-        path: "/admin/Banner",
-        render: () => <Banner />,
       },
       {
         path: "/admin/UserData",

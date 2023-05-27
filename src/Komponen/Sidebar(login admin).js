@@ -61,20 +61,6 @@ export class Sidebaradmin extends Component {
           </Nav.Item>
           <Nav.Item>
             <Nav.Link
-              href="/admin/Banner"
-              className="text-dark fw-bold border-bottom border-dark"
-              style={{ background: "#C4f601" }}
-            >
-              <div className="mt-2 mb-2">
-                <span className="pl-5">
-                  <AiOutlinePicture className="fs-3 mb-1 me-2" />
-                  Banner
-                </span>
-              </div>
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
               href="/admin/UserData"
               className="text-dark fw-bold ps-3  border-bottom border-dark"
               style={{ background: "#C4f601" }}

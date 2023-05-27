@@ -144,8 +144,8 @@ const Tasks = () => {
               <div className="d-flex ">
                 <InputGroup className="mb-3 ">
                   <Form.Control
-                    placeholder="Ketikkan Kode Reservasi.."
-                    aria-label="Ketikkan Kode Reservasi.."
+                    placeholder="Ketikkan Kode Task.."
+                    aria-label="Ketikkan Kode Task.."
                     aria-describedby="basic-addon2"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -258,13 +258,13 @@ const Tasks = () => {
                   <th></th>
                 </tr>
               </thead>
-              {statusTask.map((item, idx) => (
+              {/* {statusTask.map((item, idx) => (
                 <tbody className="fw-bold">
                   <tr>
                     <td>{item.username}</td>
                     <td>{item.phone_number}</td>
                     <td>
-                      {/* {console.log(item.list_task.list_user)} */}
+                      {console.log(item.list_task.list_user)}
                       {item.list_task.map((item) => {
                         const user = item.list_user;
                         return user;
@@ -296,7 +296,7 @@ const Tasks = () => {
                     </td>
                   </tr>
                 </tbody>
-              ))}
+              ))} */}
             </Table>
           </div>
         </div>

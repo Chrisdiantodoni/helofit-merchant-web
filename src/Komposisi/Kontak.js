@@ -57,16 +57,21 @@ const Kontak = () => {
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const handleKontak = async () => {
-    const body = {
-      name,
-      message,
-      email,
-    };
-    const response = await axios.post(
-      "http://localhost:3002/api/v1/public/message",
-      body
-    );
-    console.log(response);
+    try {
+      const body = {
+        name,
+        message,
+        email,
+      };
+      const response = await axios.post(
+        "http://localhost:3002/api/v1/public/message",
+        body
+      );
+      console.log(response);
+      window.alert("Pesan Berhasil di kirim");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div

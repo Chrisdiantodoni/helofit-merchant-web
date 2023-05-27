@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Navbar, Container, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../Assets/logo.png";
 
 export class Navbarbefore extends Component {
@@ -9,12 +9,15 @@ export class Navbarbefore extends Component {
     return (
       <Navbar bg="dark" expand="lg" variant="dark">
         <Container>
-          <img
-            src={logo}
-            className="img-fluid logo d-inline-block mx-auto"
-            height="64px"
-            width="218px"
-          />
+          <Link to="/">
+            <img
+              src={logo}
+              className="img-fluid logo d-inline-block mx-auto"
+              height="64px"
+              width="218px"
+            />
+          </Link>
+
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto me-1 ">
