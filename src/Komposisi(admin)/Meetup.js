@@ -1,31 +1,26 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { Table } from "react-bootstrap";
-
-const data = [
-  {
-    Tanggal: "12/05/2023",
-    Judul: "Gak Perlu jago",
-    Kuota: 15,
-    Host_Room: "Handoyo S",
-    Jenis_Olahraga: "XYZ Futsal",
-    Merchant: "XYZ Futsal",
-    price: "Rp 100.000",
-  },
-  {
-    Tanggal: "12/05/2023",
-    Judul: "10.00",
-    Kuota: 10,
-    Host_Room: "Handoyo S",
-    Jenis_Olahraga: "XYZ Futsal",
-    Merchant: "XYZ Futsal",
-    price: "Rp 100.000",
-  },
-];
+import { AxiosAdmin } from "../utils";
+import moment from "moment";
 
 const Meetup = () => {
+  const [meetupData, setMeetupData] = useState([]);
+
+  const getMeetup = async () => {
+    const response = await AxiosAdmin.get("/room");
+    if (response?.data?.message === "OK") {
+      const data = response?.data?.data?.room_info;
+      setMeetupData(data);
+      console.log(data);
+    }
+  };
+
+  useEffect(() => {
+    getMeetup();
+  }, []);
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -62,16 +57,16 @@ const Meetup = () => {
                     <th>Total Biaya</th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
+                {meetupData.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{item.Tanggal}</td>
-                      <td>{item.Judul}</td>
-                      <td>{item.Kuota}</td>
-                      <td>{item.Host_Room}</td>
+                      <td>{moment(item.createdAt).format("DD/MM/YYYY")}</td>
+                      <td>{item.room_name}</td>
+                      <td>{item.max_capacity}</td>
+                      <td>{item?.user?.username}</td>
                       <td>{item.Jenis_Olahraga}</td>
                       <td>{item.Merchant}</td>
-                      <td>{item.price}</td>
+                      <td>{item.booking?.total}</td>
                     </tr>
                   </tbody>
                 ))}

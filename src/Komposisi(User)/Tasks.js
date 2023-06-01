@@ -16,24 +16,6 @@ import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
 
 const Tasks = () => {
-  const data = [
-    {
-      kode_task: "135780",
-      judul: "Semangat Ma...",
-      berlaku: "18/06/22",
-      banner: "Lapangan 1",
-      Task: ["Main ke 1", "Main ke 2", "Main ke 3"],
-    },
-  ];
-  const data1 = [
-    {
-      tanggal: "12/06/22",
-      nama: "hartono Lubis",
-      no_hp: "082164896939",
-      kode_task: "12345",
-      status: "Selesai",
-    },
-  ];
   const dataMerchant = () => {
     const dataUser = localStorage.getItem("dataUser");
     const merchantId = JSON.parse(dataUser)?.id;
@@ -68,7 +50,9 @@ const Tasks = () => {
       `/task/${merchantId}?column_name=id&query=${search}`
     );
     const data = response.data?.data?.result;
-    setDataTask(data || []);
+    if (response.data?.message === "OK") {
+      setDataTask(data || []);
+    }
 
     console.log(data);
   };

@@ -1,14 +1,11 @@
 import React, { Component, useState } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
 import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./Footer";
 import "./Login.css";
 import { Container } from "react-bootstrap";
-import { isEmail } from "validator";
-import axios from "axios";
 import {
   Link,
   Redirect,
@@ -16,12 +13,8 @@ import {
   Route,
   useHistory,
 } from "react-router-dom";
-import ilustrasilogin from "../Assets/Bhineka.png";
 import { Navbarbefore } from "./../Komponen/Navbar(before login)";
-import AuthenticatonService from "../services/authentication";
 import { AxiosAdmin } from "../utils";
-import e from "cors";
-import WelcomeUser from "../Komposisi(User)/WelcomeUser";
 
 const Login = () => {
   // this.handleLogin = this.handleLogin.bind(this);
@@ -52,7 +45,7 @@ const Login = () => {
       if (response.data.message === "OK") {
         const token = response.data?.data?.token;
         const refreshToken = response.data.data.refreshToken;
-        const dataUser = response.data.data.data;
+        const dataAdmin = response.data.data.data;
         StringifyLocalStorage({
           name: "token",
           value: token,
@@ -62,8 +55,8 @@ const Login = () => {
           value: refreshToken,
         });
         StringifyLocalStorage({
-          name: "dataUser",
-          value: JSON.stringify(dataUser),
+          name: "dataAdmin",
+          value: JSON.stringify(dataAdmin),
         });
         history.push("/admin/dashboard");
       }
@@ -89,24 +82,10 @@ const Login = () => {
     <div style={{ background: "#000000" }}>
       <Navbarbefore />
       <Container>
-        <div class="container mx-auto mt-5">
+        <div class="container mt-5">
           <div class="row shadow" style={{ background: "#161616" }}>
-            <div class="col-md col-sm-12">
-              <img
-                src={ilustrasilogin}
-                height="664px"
-                width="100%"
-                style={{ objectFit: "cover", borderRadius: 16 }}
-              />
-            </div>
             <div class="col-md kanan" style={{ background: "#161616" }}>
-              <Form
-                className="container"
-                onSubmit={handleLogin}
-                // ref={(c) => {
-                //   this.form = c;
-                // }}
-              >
+              <Form className="container" onSubmit={handleLogin}>
                 <h3 className="text-light text-center pt-4 mt-3">
                   Masuk ke akun Admin Helofit
                 </h3>
@@ -150,16 +129,8 @@ const Login = () => {
                     onChange={(event) => setPassword(event.target.value)}
                   ></Input>
                 </div>
-                <p className="text-secondary text-end fw-bold mt-2">
-                  <a
-                    href="/lupapass"
-                    className="text-decoration-none"
-                    style={{ color: "#C4F601", fontSize: 20 }}
-                  >
-                    Lupa Kata Sandi?
-                  </a>
-                </p>
-                <div className="text-center">
+
+                <div className="text-center pt-5">
                   <button
                     style={{ background: "#C4F601", borderRadius: 16 }}
                     type="submit"
@@ -179,20 +150,6 @@ const Login = () => {
                       Masuk
                     </span>
                   </button>
-                  <p className="text-secondary mt-1 fw-bold mt-2">
-                    Belum memiliki akun akun? <span> </span>
-                    <a
-                      href="/daftar"
-                      className="text-decoration-none"
-                      style={{
-                        color: "#C4F601",
-                        fontSize: 20,
-                        fontWeight: "700",
-                      }}
-                    >
-                      Daftar di sini
-                    </a>
-                  </p>
                 </div>
                 {message && (
                   <div className="form-group">

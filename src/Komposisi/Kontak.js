@@ -123,57 +123,99 @@ const Kontak = () => {
               <Form className="container" onSubmit={handleKontak}>
                 <div>
                   <div class="form-group mb-2">
-                    <label className="text-light">
+                    <label
+                      className="text-light"
+                      style={{ fontSize: 24, fontweight: "700" }}
+                    >
                       Nama Kamu<span className="text-danger">*</span>
                     </label>
                     <Input
-                      className="text-dark rounded-3 form-control rounded-pill"
+                      className="text-dark form-control w-100"
                       name="nama"
                       type="text"
                       placeholder="Masukkan Nama Anda"
                       value={name}
                       // validations={[required, vfield]}
                       onChange={(e) => setName(e.target.value)}
+                      style={{
+                        height: "56px",
+                        borderRadius: 16,
+                        backgroundColor: "#7c7c7c",
+                        border: "1px solid #7c7c7c",
+                        fontSize: 20,
+                        color: "#ffffff",
+                        paddingLeft: 5,
+                      }}
                     ></Input>
                   </div>
                   <div class="form-group mb-2">
-                    <label className="text-light">
+                    <label
+                      className="text-light"
+                      style={{ fontSize: 24, fontweight: "700" }}
+                    >
                       Email Kamu<span className="text-danger">*</span>
                     </label>
                     <Input
-                      className="text-dark rounded-3 form-control rounded-pill"
+                      className="text-dark form-control w-100"
                       name="email"
                       type="email"
                       placeholder="Masukkan Email Anda"
                       value={email}
                       // validations={[required, email, vfield]}
                       onChange={(e) => setEmail(e.target.value)}
+                      style={{
+                        height: "56px",
+                        borderRadius: 16,
+                        backgroundColor: "#7c7c7c",
+                        border: "1px solid #7c7c7c",
+                        fontSize: 20,
+                        color: "#ffffff",
+                        paddingLeft: 5,
+                      }}
                     ></Input>
                   </div>
                   <div class="form-group mb-3">
-                    <label className="text-light">
+                    <label
+                      className="text-light"
+                      style={{ fontSize: 24, fontweight: "700" }}
+                    >
                       Pesan<span className="text-danger">*</span>
                     </label>
                     <Input
-                      className="text-dark rounded-3 form-control rounded-pill"
+                      className="text-dark form-control w-100"
                       name="pesan"
                       type="text"
                       placeholder="Masukkan Pesan Anda"
                       value={message}
                       // validations={[required, vpesan]}
                       onChange={(e) => setMessage(e.target.value)}
+                      style={{
+                        height: "56px",
+                        borderRadius: 16,
+                        backgroundColor: "#7c7c7c",
+                        border: "1px solid #7c7c7c",
+                        fontSize: 20,
+                        color: "#ffffff",
+                        paddingLeft: 5,
+                      }}
                     ></Input>
                   </div>
-                  <div className="text-center">
+                  <div className="text-dark fw-bold" style={{ fontSize: 24 }}>
                     <button
                       type="submit"
-                      className="btn btn-primary rounded-pill w-100 mb-5"
+                      className="btn w-100 mb-5"
+                      style={{
+                        height: "56px",
+                        borderRadius: 16,
+                        background: "#C4f601",
+                        fontSize: 24,
+                      }}
                       // disabled={this.state.loading}
                     >
                       {/* {this.state.loading && (
                         <span className="spinner-border spinner-border-sm"></span>
                       )} */}
-                      <span>Kirim Pesan</span>
+                      <h4>Kirim Pesan</h4>
                     </button>
                   </div>
                 </div>

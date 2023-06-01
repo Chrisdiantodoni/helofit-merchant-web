@@ -3,7 +3,7 @@ import { Accordion } from "react-bootstrap";
 import Navbarbefore from "../Komponen/Navbar(before login)";
 import Footer from "./Footer";
 
-const FAQ = () => {
+const Syarat = () => {
   const data = [
     {
       item: "Menggunakan Layanan dengan cara yang melanggar hukum, atau untuk tujuan yang melanggar hukum atau penipuan, atau dengan cara apa pun yang tidak konsisten dengan Ketentuan Penggunaan;",
@@ -35,51 +35,23 @@ const FAQ = () => {
     <div style={{ background: "#000000" }}>
       <Navbarbefore />
       <div className="container text-start">
-        <h1 className="pt-5 text-light">Frequently Asked Questions (FAQ)</h1>
+        <h1 className="pt-5 text-light">Syarat dan Ketentuan</h1>
         <p className="fw-700" style={{ color: "#7c7c7c", fontWeight: "700" }}>
-          Berikut adalah pertnyaan yang sering ditanyakan, semoga membantu
+          Berikut adalah *contoh syarat dan ketentuan yang harus dipatuhi semua
+          pengguna
         </p>
-        <Accordion defaultActiveKey="0">
-          <Accordion.Item eventKey="0">
-            <Accordion.Header
-              style={{ background: "#000000", color: "#FFFFFF" }}
-            >
-              Q: Apakah aplikasi mobile yang digunakan itu berbayar?
-            </Accordion.Header>
-            <Accordion.Body>
-              A: Mengunduh aplikasi itu GRATIS, kamu akan bayar ketika akan
-              melakukan meetup atau reservasi sesuai tarif fasilitas olahraga
-              yang digunakan
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="1">
-            <Accordion.Header
-              style={{ background: "#000000", color: "#FFFFFF" }}
-            >
-              Q: Apakah mitra fasilitas yang ingin bergabung dikenakan biaya?
-            </Accordion.Header>
-            <Accordion.Body>
-              A: Mitra fasilitas tidak dikenakan biaya, tapi tim akan survey
-              langsung ke tempat untuk memeriksa kelayakan fasilitas
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="2">
-            <Accordion.Header
-              style={{ background: "#000000", color: "#FFFFFF" }}
-            >
-              Q: Untuk apa Aplikasi mobile dan website Helofit dibuat?
-            </Accordion.Header>
-            <Accordion.Body>
-              A: Untuk memudahkan masyarakat Indonesia dalam menemukan teman
-              olahraga dan sebagai syarat ketentuan Tugas Akhir Tim yang terkait
-              (Zulharmin & Doni Chrisdianto)
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
+        <h5 className="fw-700" style={{ color: "#ffffff", fontWeight: "700" }}>
+          Anda Dilarang Untuk :
+        </h5>
+        {data?.map((item, index) => (
+          <h5 className="pt-3" style={{ color: "#FFFFFF" }}>
+            {index + 1}. {item.item}
+          </h5>
+        ))}
       </div>
       <Footer />
     </div>
   );
 };
 
-export default FAQ;
+export default Syarat;

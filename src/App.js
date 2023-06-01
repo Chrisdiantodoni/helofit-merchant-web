@@ -42,6 +42,7 @@ import Messages from "./Komposisi(admin)/Messages";
 import UserData from "./Komposisi(admin)/UserData";
 import Merchant from "./Komposisi(admin)/Merchant";
 import Meetup from "./Komposisi(admin)/Meetup";
+import Syarat from "./Komposisi/Syarat";
 
 class App extends React.Component {
   constructor(props) {
@@ -90,6 +91,10 @@ class App extends React.Component {
       {
         path: "/faq",
         render: () => <FAQ />,
+      },
+      {
+        path: "/Syarat",
+        render: () => <Syarat />,
       },
       {
         path: "/manajemen",

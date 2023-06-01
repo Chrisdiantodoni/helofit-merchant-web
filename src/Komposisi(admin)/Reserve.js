@@ -6,6 +6,7 @@ import { Table } from "react-bootstrap";
 import { useState } from "react";
 import { useEffect } from "react";
 import { AxiosAdmin } from "../utils";
+import moment from "moment";
 
 const data = [
   {
@@ -32,13 +33,37 @@ const Reserve = () => {
   const [reserveData, setReserveData] = useState([]);
   useEffect(() => {
     getbooking();
-  });
+  }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordPerPage = 5;
+  const lastIndex = currentPage * recordPerPage;
+  const firstIndex = lastIndex - recordPerPage;
+  const npage = Math.ceil(reserveData.length / recordPerPage);
+  const numbers = [...Array(npage + 1).keys()].slice(1);
 
   const getbooking = async () => {
     const response = await AxiosAdmin.get("/booking");
-    console.log(response);
-    setReserveData(response.data.data);
+    const data = response.data.data?.booking;
+    if (response.data?.message === "OK") {
+      setReserveData(data);
+      console.log(data);
+    }
   };
+
+  const prePage = () => {
+    if (currentPage !== firstIndex) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  const changeCPage = (id) => {
+    setCurrentPage(id);
+  };
+  const nextPage = () => {
+    if (currentPage !== lastIndex) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  const records = reserveData.slice(firstIndex, lastIndex);
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -75,21 +100,53 @@ const Reserve = () => {
                     <th>Biaya</th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
+                {records.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{item.Tanggal}</td>
-                      <td>{item.Jam}</td>
-                      <td>{item.Fasilitas}</td>
-                      <td>{item.User}</td>
-                      <td>{item.No_hp}</td>
-                      <td>{item.Merchant}</td>
-                      <td>{item.price}</td>
+                      <td>{moment(item.createdAt).format("DD/MM/YYYY")}</td>
+                      <td>
+                        {item?.time
+                          ? JSON.parse(item?.time)[0]
+                          : JSON.parse(item?.time)[0]}
+                      </td>
+                      <td>{item.facility?.facility_name}</td>
+                      <td>{item.user?.username}</td>
+                      <td>{item.user?.phone_number}</td>
+                      <td>{"Belum"}</td>
+                      <td>{item.total}</td>
                     </tr>
                   </tbody>
                 ))}
               </Table>
             </div>
+            <nav>
+              <ul className="pagination">
+                <li className="page-item">
+                  <a href="#" className="page-link" onClick={prePage}>
+                    Prev
+                  </a>
+                </li>
+                {numbers.map((n, i) => (
+                  <li
+                    className={`page-item ${currentPage === n ? "active" : ""}`}
+                    key={i}
+                  >
+                    <a
+                      href="#"
+                      className="page-link"
+                      onClick={() => changeCPage(n)}
+                    >
+                      {n}
+                    </a>
+                  </li>
+                ))}
+                <li className="page-item">
+                  <a href="#" className="page-link" onClick={nextPage}>
+                    Next
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

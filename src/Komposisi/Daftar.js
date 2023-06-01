@@ -202,7 +202,7 @@ const Daftar = () => {
                 Dengan mengklik daftar, Anda telah <br /> membaca dan paham akan{" "}
                 <span> </span>
                 <a
-                  href="/login"
+                  href="/Syarat"
                   className="text-decoration-none fw-bold"
                   style={{ color: "#C4f601" }}
                 >
@@ -236,20 +236,6 @@ const Daftar = () => {
                 </p>
               </div>
             </div>
-            {/* {this.state.message && (
-              <div className="form-group">
-                <div
-                  className={
-                    this.state.successful
-                      ? "alert alert-success"
-                      : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
-                </div>
-              </div>
-            )} */}
           </Form>
         </div>
       </div>

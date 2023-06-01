@@ -2,43 +2,38 @@ import React, { Component, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table } from "react-bootstrap";
+import { Table, Pagination } from "react-bootstrap";
 import { AxiosAdmin } from "../utils";
-
-const data = [
-  {
-    Judul: "Hartono Lubis",
-    Banner: "Laki-laki",
-    Deadline: "12/05/2023",
-    Task: {
-      Task1: "Main ke 1",
-      Task2: "Main ke 2",
-      Task3: "Main ke 3",
-    },
-    Merchant: "XYZ Futsal",
-  },
-  {
-    Judul: "Hartono Lubis",
-    Banner: "Laki-laki",
-    Deadline: "12/05/2023",
-
-    Task: {
-      Task1: "Main ke 1",
-      Task2: "Main ke 2",
-      Task3: "Main ke 3",
-    },
-    Merchant: "XYZ Futsal",
-  },
-];
+import moment from "moment";
 
 const Tasks = () => {
   const [taskData, setTaskData] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordPerPage = 5;
+  const lastIndex = currentPage * recordPerPage;
+  const firstIndex = lastIndex - recordPerPage;
+  const npage = Math.ceil(taskData.length / recordPerPage);
+  const numbers = [...Array(npage + 1).keys()].slice(1);
   const getTaskData = async () => {
     const response = await AxiosAdmin.get("/task");
     console.log(response);
     setTaskData(response?.data?.data?.task_info);
   };
+
+  const prePage = () => {
+    if (currentPage !== firstIndex) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  const changeCPage = (id) => {
+    setCurrentPage(id);
+  };
+  const nextPage = () => {
+    if (currentPage !== lastIndex) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  const records = taskData.slice(firstIndex, lastIndex);
 
   useEffect(() => {
     getTaskData();
@@ -51,9 +46,9 @@ const Tasks = () => {
           <Sidebaradmin />
         </div>
         <div className="col-8 mt-5">
-          <div class="container">
+          <div class="container justify-content-center">
             <h5 className="text-dark fw-bold">Data Task</h5>
-            <div className="d-flex justify-content-between">
+            <div className="justify-content-between">
               <h6 className="text-muted fw-bold">
                 Berikut adalah data mitra yang sudah bergabung
               </h6>
@@ -79,7 +74,7 @@ const Tasks = () => {
                     <th>Merchant</th>
                   </tr>
                 </thead>
-                {taskData?.map((item, idx) => (
+                {records?.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
                       <td>{item.task_name}</td>
@@ -91,7 +86,7 @@ const Tasks = () => {
                           style={{ objectFit: "cover" }}
                         />
                       </td>
-                      <td>{item.expiredIn}</td>
+                      <td>{moment(item.expiredIn).format("DD/MM/YYYY")}</td>
                       {/* <td>{item.Task.Task1}</td>
                        */}
                       <td>{item.merchant?.merchant_name}</td>
@@ -100,6 +95,34 @@ const Tasks = () => {
                 ))}
               </Table>
             </div>
+            <nav>
+              <ul className="pagination">
+                <li className="page-item">
+                  <a href="#" className="page-link" onClick={prePage}>
+                    Prev
+                  </a>
+                </li>
+                {numbers.map((n, i) => (
+                  <li
+                    className={`page-item ${currentPage === n ? "active" : ""}`}
+                    key={i}
+                  >
+                    <a
+                      href="#"
+                      className="page-link"
+                      onClick={() => changeCPage(n)}
+                    >
+                      {n}
+                    </a>
+                  </li>
+                ))}
+                <li className="page-item">
+                  <a href="#" className="page-link" onClick={nextPage}>
+                    Next
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

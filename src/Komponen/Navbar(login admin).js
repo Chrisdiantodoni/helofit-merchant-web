@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { HiSwitchHorizontal } from "react-icons/hi";
 import { AiOutlineUser } from "react-icons/ai";
@@ -7,6 +7,14 @@ import logo from "../Assets/Helofit-logo.png";
 const Navbaradmin = (props) => {
   const [data, setData] = useState({});
 
+  const dataAdmin = () => {
+    const storedUserData = localStorage.getItem("dataAdmin");
+    console.log(storedUserData);
+    setData(JSON.parse(storedUserData));
+  };
+  useEffect(() => {
+    dataAdmin();
+  }, []);
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -31,7 +39,7 @@ const Navbaradmin = (props) => {
             <span className="d-flex ms-4 mt-2 fs-7 fw-bold text-dark">
               {data ? (
                 <NavDropdown
-                  // title={data?.merchant_name}
+                  title={data?.username}
                   id="basic-nav-dropdown"
                   className="text-dark fw-bold"
                 >
