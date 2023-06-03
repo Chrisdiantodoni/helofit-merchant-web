@@ -39,7 +39,7 @@ class Tentang extends Component {
             </div>
             <div className="col-md">
               <p className="text-muted text-start">
-                <h3 className="fw-bold text-light">Misi Taskita</h3>
+                <h3 className="fw-bold text-light">Misi Helofit</h3>
                 <h2 className="fw-bold" style={{ color: "#7c7c7c" }}>
                   Untuk membuat suatu budaya setiap individu baru agar lebih
                   sehat setiap harinya

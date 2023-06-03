@@ -12,6 +12,10 @@ const Navbaradmin = (props) => {
     console.log(storedUserData);
     setData(JSON.parse(storedUserData));
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("dataAdmin");
+  };
   useEffect(() => {
     dataAdmin();
   }, []);
@@ -43,7 +47,7 @@ const Navbaradmin = (props) => {
                   id="basic-nav-dropdown"
                   className="text-dark fw-bold"
                 >
-                  <NavDropdown.Item href="/" onClick={"handleLogout"}>
+                  <NavDropdown.Item href="/" onClick={handleLogout}>
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>

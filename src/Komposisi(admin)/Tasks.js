@@ -2,42 +2,54 @@ import React, { Component, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
+import { InputGroup, Form, Button } from "react-bootstrap";
 import { Table, Pagination } from "react-bootstrap";
 import { AxiosAdmin } from "../utils";
 import moment from "moment";
 
 const Tasks = () => {
   const [taskData, setTaskData] = useState([]);
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const recordPerPage = 5;
-  const lastIndex = currentPage * recordPerPage;
-  const firstIndex = lastIndex - recordPerPage;
-  const npage = Math.ceil(taskData.length / recordPerPage);
-  const numbers = [...Array(npage + 1).keys()].slice(1);
-  const getTaskData = async () => {
-    const response = await AxiosAdmin.get("/task");
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
+
+  const getTaskData = async (search = "", page = 1) => {
+    const response = await AxiosAdmin.get(
+      `/task/?page=${page}&size=${pageSize}&column_name=task_name&query=${search}`
+    );
     console.log(response);
-    setTaskData(response?.data?.data?.task_info);
-  };
-
-  const prePage = () => {
-    if (currentPage !== firstIndex) {
-      setCurrentPage(currentPage - 1);
+    if (response.data.message === "OK") {
+      const data = response?.data?.data?.task_info?.result;
+      const { totalPages } = response?.data?.data?.task_info;
+      setTotalPages(totalPages);
+      setTaskData(data);
     }
   };
-  const changeCPage = (id) => {
-    setCurrentPage(id);
+  const changePage = (page) => {
+    setCurrentPage(page);
+    getTaskData(search, page);
   };
-  const nextPage = () => {
-    if (currentPage !== lastIndex) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  const records = taskData.slice(firstIndex, lastIndex);
-
   useEffect(() => {
     getTaskData();
   }, []);
+
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -53,8 +65,29 @@ const Tasks = () => {
                 Berikut adalah data mitra yang sudah bergabung
               </h6>
             </div>
-
-            <div className="justify-content-center d-flex mt-5">
+            <div className="d-flex mt-5">
+              <InputGroup className="mb-3 ">
+                <Form.Control
+                  placeholder="Ketikkan Nama Task.."
+                  aria-label="Ketikkan Nama Task.."
+                  aria-describedby="basic-addon2"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <Button
+                  className="fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    color: "#000000",
+                    border: "1px solid #C4f601",
+                  }}
+                  id="button-addon2"
+                >
+                  Cari
+                </Button>
+              </InputGroup>
+            </div>
+            <div className="justify-content-center d-flex mt-2">
               <Table borderless={true}>
                 <thead>
                   <tr
@@ -65,6 +98,7 @@ const Tasks = () => {
                       borderRadius: 8,
                     }}
                   >
+                    <th>No</th>
                     <th>Judul</th>
                     <th>Banner</th>
                     <th>Deadline</th>
@@ -74,9 +108,10 @@ const Tasks = () => {
                     <th>Merchant</th>
                   </tr>
                 </thead>
-                {records?.map((item, idx) => (
+                {taskData?.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
+                      <td>{(currentPage - 1) * pageSize + idx + 1}</td>
                       <td>{item.task_name}</td>
                       <td>
                         <img
@@ -97,29 +132,30 @@ const Tasks = () => {
             </div>
             <nav>
               <ul className="pagination">
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={prePage}>
-                    Prev
-                  </a>
-                </li>
-                {numbers.map((n, i) => (
-                  <li
-                    className={`page-item ${currentPage === n ? "active" : ""}`}
-                    key={i}
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage - 1)}
+                    disabled={currentPage === 1}
                   >
-                    <a
-                      href="#"
-                      className="page-link"
-                      onClick={() => changeCPage(n)}
-                    >
-                      {n}
-                    </a>
-                  </li>
-                ))}
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={nextPage}>
+                    Prev
+                  </button>
+                </li>
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
                     Next
-                  </a>
+                  </button>
                 </li>
               </ul>
             </nav>

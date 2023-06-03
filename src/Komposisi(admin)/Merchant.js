@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import { Table, Button, Modal, Form, InputGroup } from "react-bootstrap";
 
 import { useState } from "react";
 import { AxiosAdmin } from "../utils";
@@ -10,36 +10,27 @@ import { useEffect } from "react";
 
 const Merchant = () => {
   const [merchantData, setMerchantData] = useState([]);
+  const [search, setSearch] = useState("");
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
   const [id, setId] = useState("");
   const handleClose = () => setShow(false);
+  const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
-  const recordPerPage = 5;
-  const lastIndex = currentPage * recordPerPage;
-  const firstIndex = lastIndex - recordPerPage;
-  const npage = Math.ceil(merchantData.length / recordPerPage);
-  const numbers = [...Array(npage + 1).keys()].slice(1);
-  const getmerchantData = async () => {
-    const response = await AxiosAdmin.get("/merchant");
-    setMerchantData(response?.data?.data?.merchant);
-  };
-
-  const prePage = () => {
-    if (currentPage !== firstIndex) {
-      setCurrentPage(currentPage - 1);
+  const [totalPages, setTotalPages] = useState(0);
+  const getmerchantData = async (search = "", page = 1) => {
+    const response = await AxiosAdmin.get(
+      `/merchant/?page=${page}&size=${pageSize}&column_name=merchant_name&query=${search}`
+    );
+    if (response.data?.message === "OK") {
+      const data = response?.data?.data?.merchant.result;
+      const { totalPages } = response?.data?.data?.merchant;
+      console.log(response?.data);
+      setTotalPages(totalPages);
+      setMerchantData(data);
     }
   };
-  const changeCPage = (id) => {
-    setCurrentPage(id);
-  };
-  const nextPage = () => {
-    if (currentPage !== lastIndex) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  const records = merchantData.slice(firstIndex, lastIndex);
 
   useEffect(() => {
     getmerchantData();
@@ -67,6 +58,28 @@ const Merchant = () => {
     setStatus(status);
   };
 
+  const changePage = (page) => {
+    setCurrentPage(page);
+    getmerchantData(search, page);
+  };
+
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
+
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -82,8 +95,28 @@ const Merchant = () => {
                 Berikut adalah data mitra yang sudah bergabung
               </h6>
             </div>
-
-            <div className="justify-content-center d-flex mt-5">
+            <InputGroup className="mb-3 mt-5 ">
+              <Form.Control
+                placeholder="Ketikkan Nama Merchant.."
+                aria-label="Ketikkan Nama Merchant.."
+                aria-describedby="basic-addon2"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button
+                className="fw-bold"
+                style={{
+                  background: "#C4f601",
+                  color: "#000000",
+                  border: "1px solid #C4f601",
+                }}
+                id="button-addon2"
+                onClick={() => getmerchantData(search)}
+              >
+                Cari
+              </Button>
+            </InputGroup>
+            <div className="justify-content-center d-flex mt-2">
               <Table borderless={true}>
                 <thead>
                   <tr
@@ -94,6 +127,7 @@ const Merchant = () => {
                       borderRadius: 8,
                     }}
                   >
+                    <th>No</th>
                     <th>Nama Merchant</th>
                     <th>Lokasi</th>
                     <th>Deskripsi</th>
@@ -103,9 +137,10 @@ const Merchant = () => {
                     <th></th>
                   </tr>
                 </thead>
-                {records.map((item, idx) => (
+                {merchantData.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
+                      <td>{(currentPage - 1) * pageSize + idx + 1}</td>
                       <td>{item.merchant_name}</td>
                       <td>{item.address}</td>
                       <td>{item.desc}</td>
@@ -185,27 +220,29 @@ const Merchant = () => {
             </div>
             <nav>
               <ul className="pagination">
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={prePage}>
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <a
+                    href="#"
+                    className="page-link"
+                    onClick={() => changePage(currentPage - 1)}
+                  >
                     Prev
                   </a>
                 </li>
-                {numbers.map((n, i) => (
-                  <li
-                    className={`page-item ${currentPage === n ? "active" : ""}`}
-                    key={i}
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <a
+                    href="#"
+                    className="page-link"
+                    onClick={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
                   >
-                    <a
-                      href="#"
-                      className="page-link"
-                      onClick={() => changeCPage(n)}
-                    >
-                      {n}
-                    </a>
-                  </li>
-                ))}
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={nextPage}>
                     Next
                   </a>
                 </li>

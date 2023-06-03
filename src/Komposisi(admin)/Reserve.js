@@ -2,68 +2,63 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table } from "react-bootstrap";
+import { Table, InputGroup, Form } from "react-bootstrap";
 import { useState } from "react";
 import { useEffect } from "react";
-import { AxiosAdmin } from "../utils";
+import { AxiosAdmin, currency } from "../utils";
 import moment from "moment";
-
-const data = [
-  {
-    Tanggal: "12/05/2023",
-    Jam: "10.00",
-    Fasilitas: "Lapangan 1",
-    User: "Handoyo S",
-    No_hp: "XYZ Futsal",
-    Merchant: "XYZ Futsal",
-    price: "Rp 100.000",
-  },
-  {
-    Tanggal: "12/05/2023",
-    Jam: "12/05/2023",
-    Fasilitas: "Lapangan 2",
-    User: "Handoyo S",
-    No_hp: "XYZ Futsal",
-    Merchant: "XYZ Futsal",
-    price: "Rp 100.000",
-  },
-];
 
 const Reserve = () => {
   const [reserveData, setReserveData] = useState([]);
-  useEffect(() => {
-    getbooking();
-  }, []);
+
+  const [fromDate, setFromDate] = useState(
+    moment().subtract(1, "month").format("YYYY-MM-DD")
+  );
+  const [toDate, setTodate] = useState(moment().format("YYYY-MM-DD"));
   const [currentPage, setCurrentPage] = useState(1);
-  const recordPerPage = 5;
-  const lastIndex = currentPage * recordPerPage;
-  const firstIndex = lastIndex - recordPerPage;
-  const npage = Math.ceil(reserveData.length / recordPerPage);
-  const numbers = [...Array(npage + 1).keys()].slice(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
 
-  const getbooking = async () => {
-    const response = await AxiosAdmin.get("/booking");
-    const data = response.data.data?.booking;
+  useEffect(() => {
+    getbooking(fromDate, toDate, currentPage);
+  }, []);
+
+  const getbooking = async (fromDate, toDate, page = 1) => {
+    const formattedFromDate = moment(fromDate).format("YYYY-MM-DD");
+    const formattedToDate = moment(toDate).format("YYYY-MM-DD");
+
+    const response = await AxiosAdmin.get(
+      `/booking/?page=${page}&size=${pageSize}&column_name=booking_date&fromDate=${formattedFromDate}&toDate=${formattedToDate}`
+    );
+    console.log(response);
     if (response.data?.message === "OK") {
+      const { totalPages } = response.data.data?.booking;
+      const data = response.data.data?.booking.result;
+      setTotalPages(totalPages);
       setReserveData(data);
-      console.log(data);
     }
+  };
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
+  const changePage = (page) => {
+    setCurrentPage(page);
+    getbooking(fromDate, toDate, page);
   };
 
-  const prePage = () => {
-    if (currentPage !== firstIndex) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-  const changeCPage = (id) => {
-    setCurrentPage(id);
-  };
-  const nextPage = () => {
-    if (currentPage !== lastIndex) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  const records = reserveData.slice(firstIndex, lastIndex);
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -79,8 +74,29 @@ const Reserve = () => {
                 Berikut adalah data reservasi yang user lakukan
               </h6>
             </div>
-
-            <div className="justify-content-center d-flex mt-5">
+            <InputGroup className="mb-3 mt-5">
+              <InputGroup.Text>From Date</InputGroup.Text>
+              <Form.Control
+                type="date"
+                placeholder="Select From Date"
+                value={fromDate}
+                onChange={(e) => {
+                  setFromDate(moment(e.target.value).format("YYYY-MM-DD"));
+                  getbooking(fromDate, toDate, 1);
+                }}
+              />
+              <InputGroup.Text>To Date</InputGroup.Text>
+              <Form.Control
+                type="date"
+                placeholder="Select To Date"
+                value={toDate}
+                onChange={(e) => {
+                  setTodate(moment(e.target.value).format("YYYY-MM-DD"));
+                  getbooking(fromDate, toDate, 1);
+                }}
+              />
+            </InputGroup>
+            <div className="justify-content-center d-flex mt-2">
               <Table borderless={true}>
                 <thead>
                   <tr
@@ -91,6 +107,7 @@ const Reserve = () => {
                       borderRadius: 8,
                     }}
                   >
+                    <th>No</th>
                     <th>Tanggal</th>
                     <th>Jam</th>
                     <th>Fasilitas</th>
@@ -100,9 +117,10 @@ const Reserve = () => {
                     <th>Biaya</th>
                   </tr>
                 </thead>
-                {records.map((item, idx) => (
+                {reserveData.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
+                      <td>{(currentPage - 1) * pageSize + idx + 1}</td>
                       <td>{moment(item.createdAt).format("DD/MM/YYYY")}</td>
                       <td>
                         {item?.time
@@ -112,8 +130,8 @@ const Reserve = () => {
                       <td>{item.facility?.facility_name}</td>
                       <td>{item.user?.username}</td>
                       <td>{item.user?.phone_number}</td>
-                      <td>{"Belum"}</td>
-                      <td>{item.total}</td>
+                      <td>{item?.facility?.merchant?.merchant_name}</td>
+                      <td>Rp. {currency(item.total)}</td>
                     </tr>
                   </tbody>
                 ))}
@@ -121,29 +139,30 @@ const Reserve = () => {
             </div>
             <nav>
               <ul className="pagination">
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={prePage}>
-                    Prev
-                  </a>
-                </li>
-                {numbers.map((n, i) => (
-                  <li
-                    className={`page-item ${currentPage === n ? "active" : ""}`}
-                    key={i}
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage - 1)}
+                    disabled={currentPage === 1}
                   >
-                    <a
-                      href="#"
-                      className="page-link"
-                      onClick={() => changeCPage(n)}
-                    >
-                      {n}
-                    </a>
-                  </li>
-                ))}
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={nextPage}>
+                    Prev
+                  </button>
+                </li>
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
                     Next
-                  </a>
+                  </button>
                 </li>
               </ul>
             </nav>

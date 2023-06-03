@@ -2,26 +2,32 @@ import React, { Component, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import { Table, Button, Modal, Form, InputGroup } from "react-bootstrap";
 import { AxiosAdmin } from "../utils";
 
 const UserData = () => {
   const [dataUser, setDataUser] = useState([]);
+  const [search, setSearch] = useState("");
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const recordPerPage = 5;
-  const lastIndex = currentPage * recordPerPage;
-  const firstIndex = lastIndex - recordPerPage;
-  const npage = Math.ceil(dataUser.length / recordPerPage);
-  const numbers = [...Array(npage + 1).keys()].slice(1);
-  const getUserData = async () => {
-    const result = await AxiosAdmin.get("/user");
-    setDataUser(result?.data?.data?.user);
-    console.log(result);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
+
+  const getUserData = async (search = "", page = 1) => {
+    const result = await AxiosAdmin.get(
+      `/user/?page=${page}&size=${pageSize}&column_name=username&query=${search}`
+    );
+    console.log(result?.data?.data?.result);
+    if (result?.data.message === "OK") {
+      const { totalPages } = result?.data?.data;
+      const data = result?.data?.data?.result;
+      setDataUser(data);
+      setTotalPages(totalPages);
+    }
   };
 
   const handleShowModal = (id, status, name) => {
@@ -30,20 +36,11 @@ const UserData = () => {
     setName(name);
     setId(id);
   };
-  const prePage = () => {
-    if (currentPage !== firstIndex) {
-      setCurrentPage(currentPage - 1);
-    }
+
+  const changePage = (page) => {
+    setCurrentPage(page);
+    getUserData(search, page);
   };
-  const changeCPage = (id) => {
-    setCurrentPage(id);
-  };
-  const nextPage = () => {
-    if (currentPage !== lastIndex) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  const records = dataUser.slice(firstIndex, lastIndex);
 
   const blockUser = async (id) => {
     await AxiosAdmin.put(`/user/${id}`, {
@@ -58,10 +55,26 @@ const UserData = () => {
       })
       .catch((res) => console.log(res));
   };
-
   useEffect(() => {
     getUserData();
   }, []);
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
+
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -77,8 +90,33 @@ const UserData = () => {
                 Berikut adalah data pengguna aplikasi mobile
               </h6>
             </div>
-
-            <div className="justify-content-center d-flex mt-5">
+            <div className="d-flex mt-5">
+              <InputGroup className="mb-3 ">
+                <Form.Control
+                  placeholder="Ketikkan Nama User.."
+                  aria-label="Ketikkan Nama User.."
+                  aria-describedby="basic-addon2"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <Button
+                  className="fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    color: "#000000",
+                    border: "1px solid #C4f601",
+                  }}
+                  id="button-addon2"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    getUserData(search, 1);
+                  }}
+                >
+                  Cari
+                </Button>
+              </InputGroup>
+            </div>
+            <div className="justify-content-center d-flex mt-2">
               <Table borderless={true}>
                 <thead>
                   <tr
@@ -89,6 +127,8 @@ const UserData = () => {
                       borderRadius: 8,
                     }}
                   >
+                    <th>No</th>
+
                     <th>Username</th>
                     <th>Jenis Kelamin</th>
                     <th>No Handphone</th>
@@ -97,9 +137,10 @@ const UserData = () => {
                     <th></th>
                   </tr>
                 </thead>
-                {records.map((item, idx) => (
+                {dataUser?.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
+                      <td>{(currentPage - 1) * pageSize + idx + 1}</td>
                       <td>{item.username}</td>
                       <td>{item.gender}</td>
                       <td>{item.phone_number}</td>
@@ -163,29 +204,30 @@ const UserData = () => {
             </div>
             <nav>
               <ul className="pagination">
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={prePage}>
-                    Prev
-                  </a>
-                </li>
-                {numbers.map((n, i) => (
-                  <li
-                    className={`page-item ${currentPage === n ? "active" : ""}`}
-                    key={i}
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage - 1)}
+                    disabled={currentPage === 1}
                   >
-                    <a
-                      href="#"
-                      className="page-link"
-                      onClick={() => changeCPage(n)}
-                    >
-                      {n}
-                    </a>
-                  </li>
-                ))}
-                <li className="page-item">
-                  <a href="#" className="page-link" onClick={nextPage}>
+                    Prev
+                  </button>
+                </li>
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
                     Next
-                  </a>
+                  </button>
                 </li>
               </ul>
             </nav>
