@@ -17,8 +17,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const DetailTask = (props) => {
-  const id = props.location.state.id;
-  console.log(id);
+  const idUser = props.location.state.id;
+  console.log(idUser);
 
   const [dataTask, setDataTask] = useState("");
   const [taskName, setTaskName] = useState("");
@@ -29,15 +29,27 @@ const DetailTask = (props) => {
   const [banner, selectedBanner] = useState(null);
 
   const getDetailTask = async (id) => {
-    const response = await Axios.get(`/task/detail/${id}`);
-    const data = response?.data?.data?.result;
-    setDataTask(data || {});
-    console.log(data);
+    const response = await Axios.get(`/task/list-task-user/detail/${id}`);
+    const data = response?.data?.data;
+    setDataTask(data);
+    console.log({ data });
   };
 
   useEffect(() => {
-    getDetailTask();
+    getDetailTask(idUser);
   }, []);
+
+  const handleOnChangeTask = async (id) => {
+    const body = {
+      taskDetailId: id,
+    };
+    const { data } = await Axios.put(
+      `/task/list-task-user/detail/${idUser}`,
+      body
+    );
+    console.log(data);
+    getDetailTask(idUser);
+  };
   return (
     <div>
       <Navbaruser konten="Add Fasilitas" />
@@ -80,7 +92,7 @@ const DetailTask = (props) => {
                         fontWeight: "bold",
                         color: "#7C7C7C",
                       }}
-                      value={""}
+                      value={dataTask?.user?.username}
                     />
                   </td>
                 </tr>
@@ -94,7 +106,7 @@ const DetailTask = (props) => {
                         fontWeight: "bold",
                         color: "#7C7C7C",
                       }}
-                      value={"082134567890"}
+                      value={dataTask?.user?.phone_number}
                     />
                   </td>
                 </tr>
@@ -108,7 +120,7 @@ const DetailTask = (props) => {
                         fontWeight: "bold",
                         color: "#7C7C7C",
                       }}
-                      value={"12345"}
+                      value={dataTask?.taskId}
                     />
                   </td>
                 </tr>
@@ -116,12 +128,21 @@ const DetailTask = (props) => {
                   <td>List Task</td>
                   <td>
                     <Form>
-                      {["Main ke 1", "Main ke 2", "Main ke 3"].map((type) => (
+                      {dataTask?.list_task?.map((item) => (
                         <div key={"default-checkbox"} className="mb-3">
                           <Form.Check
                             type={"checkbox"}
-                            id={`{type}`}
-                            label={`${type}`}
+                            id={item.id}
+                            label={`${item.task_name}`}
+                            checked={
+                              dataTask?.taskDetailId
+                                ?.split(",")
+                                ?.map((item) => parseInt(item))
+                                ?.includes(item?.id)
+                                ? true
+                                : false
+                            }
+                            onChange={() => handleOnChangeTask(item?.id)}
                           />
                         </div>
                       ))}
