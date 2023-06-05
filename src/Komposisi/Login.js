@@ -19,7 +19,7 @@ import {
 import ilustrasilogin from "../Assets/Bhineka.png";
 import { Navbarbefore } from "./../Komponen/Navbar(before login)";
 import AuthenticatonService from "../services/authentication";
-import { Axios } from "../utils";
+import Axios from "../services/axios";
 import e from "cors";
 import WelcomeUser from "../Komposisi(User)/WelcomeUser";
 

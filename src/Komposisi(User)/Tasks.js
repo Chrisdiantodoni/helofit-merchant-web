@@ -59,7 +59,7 @@ const Tasks = () => {
     );
     const data = response?.data?.data?.result;
     setStatusTask(data);
-    console.log(data);
+    console.log({ getTaskStatus: data });
   };
 
   const handleDeleteTask = async (id) => {
@@ -243,16 +243,8 @@ const Tasks = () => {
                 <tbody className="fw-bold">
                   <tr>
                     <td>{item.username}</td>
-                    <td>{item.phone_number}</td>
-                    <td>
-                      {console.log(item.list_task.list_user)}
-                      {item.list_task.map((item) => {
-                        const user = item.list_user;
-                        return user;
-                      }).length > 0
-                        ? "Sedang Pengerjaan"
-                        : "Selesai"}
-                    </td>
+                    <td>{item.phone_number || "-"}</td>
+                    <td>{item.task?.status || "-"}</td>
                     <td>
                       <Link
                         to={{
