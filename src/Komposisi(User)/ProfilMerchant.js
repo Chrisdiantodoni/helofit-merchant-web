@@ -46,23 +46,23 @@ const ProfilMerchant = () => {
   };
 
   const displayDayOpenMerchant = (merchantTime) => {
-    const saturday = merchantTime["saturday"];
-    const friday = merchantTime["friday"];
-    const monday = merchantTime["monday"];
-    const sunday = merchantTime["sunday"];
-    const thursday = merchantTime["thursday"];
-    const tuesday = merchantTime["tuesday"];
-    const wednesday = merchantTime["wednesday"];
+    const saturday = merchantTime?.saturday;
+    const friday = merchantTime?.friday;
+    const monday = merchantTime?.monday;
+    const sunday = merchantTime?.sunday;
+    const thursday = merchantTime?.thursday;
+    const tuesday = merchantTime?.tuesday;
+    const wednesday = merchantTime?.wednesday;
 
     return (
       <ul>
-        <li>{monday?.length > 0 ? "monday" : ""}</li>
-        <li>{tuesday?.length > 0 ? "tuesday" : ""}</li>
-        <li>{wednesday?.length > 0 ? "wednesday" : ""}</li>
-        <li>{thursday?.length > 0 ? "thursday" : ""}</li>
-        <li>{friday?.length > 0 ? "friday" : ""}</li>
-        <li>{saturday?.length > 0 ? "saturday" : ""}</li>
-        <li>{sunday?.length > 0 ? "sunday" : ""}</li>
+        <li>{monday?.length > 0 ? "monday" : "libur"}</li>
+        <li>{tuesday?.length > 0 ? "tuesday" : "libur"}</li>
+        <li>{wednesday?.length > 0 ? "wednesday" : "libur"}</li>
+        <li>{thursday?.length > 0 ? "thursday" : "libur"}</li>
+        <li>{friday?.length > 0 ? "friday" : "libur"}</li>
+        <li>{saturday?.length > 0 ? "saturday" : "libur"}</li>
+        <li>{sunday?.length > 0 ? "sunday" : "libur"}</li>
       </ul>
     );
   };
@@ -144,7 +144,7 @@ const ProfilMerchant = () => {
                       {data?.data?.feature_merchant?.map((item, idx) => {
                         return (
                           <h6 className="fw-bold">
-                            > {item?.feature?.feature_name || "-"}
+                            {item?.feature?.feature_name || "-"}
                           </h6>
                         );
                       }) || "-"}

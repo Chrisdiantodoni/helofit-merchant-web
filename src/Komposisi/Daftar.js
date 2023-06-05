@@ -43,7 +43,7 @@ const Daftar = () => {
           Ayo Menjadi Bagian dari Kami
         </p>
         <div
-          className="container w-50 rounded-3 mx-auto mb-3"
+          className="container w-md-50 rounded-3 mx-auto mb-3"
           style={{ background: "#161616" }}
         >
           <Form
@@ -73,7 +73,7 @@ const Daftar = () => {
                   // validations={[required, vfield]}
                   className="text-light form-control"
                   style={{
-                    width: "515px",
+                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     backgroundColor: "#7c7c7c",
@@ -96,7 +96,7 @@ const Daftar = () => {
                 value={selectedOlahraga}
                 onChange={(e) => setSelectedOlahraga(e.target.value)}
                 style={{
-                  width: "515px",
+                  maxWidth: "515px",
                   height: "56px",
                   borderRadius: 16,
                   backgroundColor: "#7c7c7c",
@@ -132,7 +132,7 @@ const Daftar = () => {
                   placeholder="Masukkan Email"
                   // validations={[required, email, vfield]}
                   style={{
-                    width: "515px",
+                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     backgroundColor: "#7c7c7c",
@@ -159,7 +159,7 @@ const Daftar = () => {
                   // validations={[required, vfield]}
                   placeholder="Masukkan Password"
                   style={{
-                    width: "515px",
+                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     backgroundColor: "#7c7c7c",
@@ -187,7 +187,7 @@ const Daftar = () => {
                   // validations={[required, vpin]}
                   placeholder="Masukkan Pin untuk dipakai dalam memulihkan password"
                   style={{
-                    width: "515px",
+                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     border: "1px solid #7c7c7c",
@@ -214,7 +214,7 @@ const Daftar = () => {
                 <button
                   type="submit"
                   style={{
-                    width: "515px",
+                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     background: "#C4f601",

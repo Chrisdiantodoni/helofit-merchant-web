@@ -70,8 +70,8 @@ const Meetup = () => {
             <div className="d-flex mt-5">
               <InputGroup className="mb-3 ">
                 <Form.Control
-                  placeholder="Ketikkan Nama User.."
-                  aria-label="Ketikkan Nama User.."
+                  placeholder="Ketikkan Nama Meetup.."
+                  aria-label="Ketikkan Nama Meetup.."
                   aria-describedby="basic-addon2"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -116,7 +116,7 @@ const Meetup = () => {
                 {meetupData?.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{moment(item.createdAt).format("DD/MM/YYYY")}</td>
+                      <td>{moment(item.booking_date).format("DD/MM/YYYY")}</td>
                       <td>{item.room_name}</td>
                       <td>{item.max_capacity}</td>
                       <td>{item?.user?.username}</td>

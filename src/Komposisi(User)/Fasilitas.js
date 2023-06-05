@@ -1,138 +1,108 @@
-import React, { Component } from "react";
-import AuthService from "../services/auth.service";
+import React, { Component, useState, useEffect, useContext } from "react";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
+import moment from "moment";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
+import { Axios } from "../utils";
+import { Context } from "../context/index";
 
-class Fasilitas extends Component {
-  constructor(props) {
-    super(props);
+const Fasilitas = () => {
+  const [dates, setDates] = useState([]);
+  const [facility, setFacility] = useState([]);
+  const { merchantId } = useContext(Context);
+  const [selectedFacility, setSelectedFacility] = useState(null);
+  const [selectedDates, setSelectedDates] = useState({});
+  const [clocks, setClocks] = useState({});
 
-    this.state = {
-      currentUser: AuthService.getCurrentUser(),
-      kegiatan: 0,
-      sisa: 0,
-      nama_dpn: "",
-    };
-    this.CekNilai = this.CekNilai.bind(this);
-  }
-  CekNilai(nilai) {
-    var result;
-    if (nilai != null) {
-      result = nilai;
-    } else if (nilai == null) {
-      result = 0;
+  useEffect(() => {
+    let today = new Date();
+    let newDates = [];
+    for (let i = 0; i < 7; i++) {
+      let date = new Date(today);
+      date.setDate(today.getDate() + i);
+      newDates.push(date);
     }
-    return result;
-  }
-  // componentDidMount() {
-  //   const { currentUser } = this.state;
-  //   var userid = currentUser.id;
-  //   fetch("http://localhost:8000/sisa/" + userid)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       this.setState({
-  //         sisa: res.sisa,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  //   fetch("http://localhost:8000/kegiatan/" + userid)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       this.setState({
-  //         kegiatan: res.kegiatan,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }
-  data = [
-    {
-      jam: "09:00",
-      status: "Terisi",
-      Nama: "Andi Sanjaya",
-      no_hp: "085297614911",
-    },
-    {
-      jam: "09:00",
-      status: "Terisi",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Terisi",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-    {
-      jam: "09:00",
-      status: "Tersedia",
-      Nama: "Andi Sanjaya",
-    },
-  ];
-  render() {
-    const { currentUser, sisa, kegiatan } = this.state;
-    return (
-      <div>
-        <Navbaruser konten="Fasilitas Merchant" />
-        <div className="row">
-          <div className="col-2 sidebar-wrapper">
-            <Sidebaruser />
-          </div>
-          <div className="col-10 mt-5">
-            <div class="container">
-              <h4 className="text-dark fw-bold">Daftar Fasilitas</h4>
-              <h5 className="text-muted fw-bold">
-                Pantau aktivitas terkini dari fasilitas yang kamu miliki
-              </h5>
+    setDates(newDates);
+  }, []);
 
+  const getFacility = async () => {
+    try {
+      const response = await Axios.get(`/facility/${merchantId}`);
+      console.log(response.data);
+
+      if (response.data.message === "OK") {
+        const data = response.data.data;
+        setFacility(data);
+        data.forEach((item) => {
+          if (item) {
+            getHour(item.id);
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getHour = async (facilityId) => {
+    console.log({
+      date: moment(selectedDates[facilityId]).format("YYYY-MMM-DD"),
+      merchantId,
+      facilityId,
+    });
+    const response = await Axios.post(`/facility/time/${facilityId}`, {
+      merchantId,
+      selected_date: moment(selectedDates[facilityId]).format("YYYY-MM-DD"),
+    }).catch((err) => {
+      console.log({ err });
+    });
+
+    const data = response?.data?.data || [];
+    setClocks((prevClocks) => ({
+      ...prevClocks,
+      [facilityId]: data,
+    }));
+  };
+  useEffect(() => {
+    getFacility();
+  }, []);
+
+  useEffect(() => {
+    facility.forEach((item) => {
+      if (!selectedDates[item.id]) {
+        setSelectedDates((prevSelectedDates) => ({
+          ...prevSelectedDates,
+          [item.id]: moment().format("YYYY-MM-DD"),
+        }));
+      }
+    });
+  }, [facility]);
+
+  useEffect(() => {
+    facility.forEach((item) => {
+      if (selectedFacility === item.id) {
+        getHour(selectedFacility);
+      }
+    });
+  }, [selectedFacility, selectedDates]);
+
+  return (
+    <div>
+      <Navbaruser konten="Fasilitas Merchant" />
+      <div className="row">
+        <div className="col-2 sidebar-wrapper">
+          <Sidebaruser />
+        </div>
+        <div className="col-10 mt-5">
+          <div className="container">
+            <h4 className="text-dark fw-bold">Daftar Fasilitas</h4>
+            <h5 className="text-muted fw-bold">
+              Pantau aktivitas terkini dari fasilitas yang kamu miliki
+            </h5>
+
+            {facility?.map((item, idx) => (
               <div
                 className="mt-4"
                 style={{
@@ -141,10 +111,11 @@ class Fasilitas extends Component {
                   borderRadius: 16,
                   border: "1px solid #7c7c7c",
                 }}
+                key={idx}
               >
                 <div className="d-flex ">
                   <h5 className="fw-bold text-dark col-8 md-6">
-                    Badminton - Lapangan 1
+                    {item.facility_name}
                   </h5>
                   <Dropdown className="col-2 sm-2 md-5">
                     <Dropdown.Toggle
@@ -155,16 +126,32 @@ class Fasilitas extends Component {
                         border: "0.5px solid #7c7c7c",
                       }}
                     >
-                      Minggu 1
+                      {moment(selectedDates[item.id]).format("DD-MM-YYYY")}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Minggu 1</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Minggu 2</Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">Minggu 3</Dropdown.Item>
+                      {dates.map((date, idx) => (
+                        <Dropdown.Item
+                          key={idx}
+                          onClick={() => {
+                            setSelectedDates((prevSelectedDates) => ({
+                              ...prevSelectedDates,
+                              [item.id]: moment(date).format("YYYY-MM-DD"),
+                            }));
+                            setSelectedFacility(item.id);
+                            getHour(item.id);
+                          }}
+                        >
+                          {moment(date).format("DD-MM-YYYY").toUpperCase()}
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
+
                   <Link
-                    to="/welcome/EditFasilitas"
+                    to={{
+                      pathname: `/welcome/EditFasilitas`,
+                      state: { id: item.id, selected_date: selectedDates },
+                    }}
                     className="fw-bold text-dark btn"
                     style={{
                       background: "#C4f601",
@@ -182,16 +169,18 @@ class Fasilitas extends Component {
                     flexDirection: "column",
                   }}
                 >
-                  {this.data.map((item, idx) => (
+                  {clocks[item.id]?.list_time?.map((timeItem, idx) => (
                     <div
                       style={{
                         padding: "10px",
                       }}
+                      key={idx}
                     >
                       <div
                         style={{
-                          background:
-                            item.status === "Terisi" ? "#7c7c7c" : "#28A745",
+                          background: timeItem.available
+                            ? "#28A745"
+                            : "#7c7c7c",
                           borderRadius: 8,
                           width: "110px",
                           height: "55px",
@@ -200,7 +189,7 @@ class Fasilitas extends Component {
                           justifyContent: "center",
                         }}
                       >
-                        <h5 className="text-light fw-bold">{item.jam}</h5>
+                        <h5 className="text-light fw-bold">{timeItem.time}</h5>
                       </div>
                       <div
                         style={{
@@ -213,7 +202,7 @@ class Fasilitas extends Component {
                           className="mt-2 fw-bold"
                           style={{ textAlign: "center" }}
                         >
-                          {item.status === "Terisi" ? item.Nama : item.status}
+                          {timeItem.available ? "Tersedia" : timeItem?.username}
                         </h6>
                       </div>
                       <div
@@ -227,19 +216,19 @@ class Fasilitas extends Component {
                           className="mt-2 fw-bold"
                           style={{ textAlign: "center" }}
                         >
-                          {item.no_hp}
+                          {timeItem?.phone_number}
                         </h6>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default withRouter(Fasilitas);

@@ -1,16 +1,13 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { Table, InputGroup, Form } from "react-bootstrap";
-import { useState } from "react";
-import { useEffect } from "react";
 import { AxiosAdmin, currency } from "../utils";
 import moment from "moment";
 
 const Reserve = () => {
   const [reserveData, setReserveData] = useState([]);
-
   const [fromDate, setFromDate] = useState(
     moment().subtract(1, "month").format("YYYY-MM-DD")
   );
@@ -20,10 +17,10 @@ const Reserve = () => {
   const pageSize = 10;
 
   useEffect(() => {
-    getbooking(fromDate, toDate, currentPage);
+    getBooking(fromDate, toDate, currentPage);
   }, []);
 
-  const getbooking = async (fromDate, toDate, page = 1) => {
+  const getBooking = async (fromDate, toDate, page = 1) => {
     const formattedFromDate = moment(fromDate).format("YYYY-MM-DD");
     const formattedToDate = moment(toDate).format("YYYY-MM-DD");
 
@@ -38,6 +35,7 @@ const Reserve = () => {
       setReserveData(data);
     }
   };
+
   const getPaginationNumbers = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -54,20 +52,21 @@ const Reserve = () => {
     }
     return pageNumbers;
   };
+
   const changePage = (page) => {
     setCurrentPage(page);
-    getbooking(fromDate, toDate, page);
+    getBooking(fromDate, toDate, page);
   };
 
   return (
     <div>
       <Navbaradmin konten="Laporan" />
       <div className="row">
-        <div className="col-2 sidebar-wrapper">
+        <div className="col-12 col-md-2 sidebar-wrapper">
           <Sidebaradmin />
         </div>
-        <div className="col-8 mt-5">
-          <div class="container">
+        <div className="col-12 col-md-8 mt-5">
+          <div className="container">
             <h5 className="text-dark fw-bold">Data Reservasi</h5>
             <div className="d-flex justify-content-between">
               <h6 className="text-muted fw-bold">
@@ -81,8 +80,11 @@ const Reserve = () => {
                 placeholder="Select From Date"
                 value={fromDate}
                 onChange={(e) => {
-                  setFromDate(moment(e.target.value).format("YYYY-MM-DD"));
-                  getbooking(fromDate, toDate, 1);
+                  const selectedDate = moment(e.target.value).format(
+                    "YYYY-MM-DD"
+                  );
+                  setFromDate(selectedDate);
+                  getBooking(selectedDate, toDate, 1);
                 }}
               />
               <InputGroup.Text>To Date</InputGroup.Text>
@@ -91,16 +93,19 @@ const Reserve = () => {
                 placeholder="Select To Date"
                 value={toDate}
                 onChange={(e) => {
-                  setTodate(moment(e.target.value).format("YYYY-MM-DD"));
-                  getbooking(fromDate, toDate, 1);
+                  const selectedDate = moment(e.target.value).format(
+                    "YYYY-MM-DD"
+                  );
+                  setTodate(selectedDate);
+                  getBooking(fromDate, selectedDate, 1);
                 }}
               />
             </InputGroup>
-            <div className="justify-content-center d-flex mt-2">
-              <Table borderless={true}>
+            <div className="table-responsive">
+              <Table hover borderless>
                 <thead>
                   <tr
-                    className="fw-bold"
+                    className="text-white"
                     style={{
                       background: "#28A745",
                       color: "#FFFFFF",
@@ -117,9 +122,9 @@ const Reserve = () => {
                     <th>Biaya</th>
                   </tr>
                 </thead>
-                {reserveData.map((item, idx) => (
-                  <tbody className="fw-bold">
-                    <tr>
+                <tbody>
+                  {reserveData.map((item, idx) => (
+                    <tr key={idx}>
                       <td>{(currentPage - 1) * pageSize + idx + 1}</td>
                       <td>{moment(item.createdAt).format("DD/MM/YYYY")}</td>
                       <td>
@@ -133,12 +138,12 @@ const Reserve = () => {
                       <td>{item?.facility?.merchant?.merchant_name}</td>
                       <td>Rp. {currency(item.total)}</td>
                     </tr>
-                  </tbody>
-                ))}
+                  ))}
+                </tbody>
               </Table>
             </div>
             <nav>
-              <ul className="pagination">
+              <ul className="pagination justify-content-center">
                 <li
                   className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
                 >

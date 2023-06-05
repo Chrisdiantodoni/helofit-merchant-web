@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import { InputGroup, Form, Button } from "react-bootstrap";
-import { Table, Pagination } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { AxiosAdmin } from "../utils";
 import moment from "moment";
 
@@ -80,6 +80,10 @@ const Tasks = () => {
                     background: "#C4f601",
                     color: "#000000",
                     border: "1px solid #C4f601",
+                  }}
+                  onClick={() => {
+                    setCurrentPage(1);
+                    getTaskData(search, 1);
                   }}
                   id="button-addon2"
                 >

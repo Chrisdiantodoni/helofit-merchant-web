@@ -1,8 +1,15 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table, Button, Modal, Form, InputGroup } from "react-bootstrap";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  InputGroup,
+  Container,
+} from "react-bootstrap";
 import { AxiosAdmin } from "../utils";
 
 const UserData = () => {
@@ -55,9 +62,11 @@ const UserData = () => {
       })
       .catch((res) => console.log(res));
   };
+
   useEffect(() => {
     getUserData();
   }, []);
+
   const getPaginationNumbers = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -79,11 +88,11 @@ const UserData = () => {
     <div>
       <Navbaradmin konten="Laporan" />
       <div className="row">
-        <div className="col-2 sidebar-wrapper">
+        <div className="col-12 col-md-2 sidebar-wrapper">
           <Sidebaradmin />
         </div>
-        <div className="col-8 mt-5">
-          <div class="container">
+        <div className="col-12 col-md-10 mt-5">
+          <Container>
             <h5 className="text-dark fw-bold">Data User</h5>
             <div className="d-flex justify-content-between">
               <h6 className="text-muted fw-bold">
@@ -91,7 +100,7 @@ const UserData = () => {
               </h6>
             </div>
             <div className="d-flex mt-5">
-              <InputGroup className="mb-3 ">
+              <InputGroup className="mb-3">
                 <Form.Control
                   placeholder="Ketikkan Nama User.."
                   aria-label="Ketikkan Nama User.."
@@ -117,7 +126,7 @@ const UserData = () => {
               </InputGroup>
             </div>
             <div className="justify-content-center d-flex mt-2">
-              <Table borderless={true}>
+              <Table responsive borderless>
                 <thead>
                   <tr
                     className="fw-bold"
@@ -128,7 +137,6 @@ const UserData = () => {
                     }}
                   >
                     <th>No</th>
-
                     <th>Username</th>
                     <th>Jenis Kelamin</th>
                     <th>No Handphone</th>
@@ -137,9 +145,9 @@ const UserData = () => {
                     <th></th>
                   </tr>
                 </thead>
-                {dataUser?.map((item, idx) => (
-                  <tbody className="fw-bold">
-                    <tr>
+                <tbody>
+                  {dataUser?.map((item, idx) => (
+                    <tr key={idx}>
                       <td>{(currentPage - 1) * pageSize + idx + 1}</td>
                       <td>{item.username}</td>
                       <td>{item.gender}</td>
@@ -153,13 +161,12 @@ const UserData = () => {
                             style={{
                               background: "#C4f601",
                               border: "1px solid #C4f601",
-                              borderRadius: "8px",
-                              width: "117px",
-                              height: "30px",
+                              borderRadius: 8,
+                              width: 117,
+                              height: 30,
                               justifyContent: "center",
                               display: "flex",
                               alignItems: "center",
-                              justifyContent: "center",
                             }}
                             onClick={() =>
                               handleShowModal(
@@ -177,13 +184,12 @@ const UserData = () => {
                             style={{
                               background: "#F3594F",
                               border: "1px solid #F3594F",
-                              borderRadius: "8px",
-                              width: "117px",
-                              height: "30px",
+                              borderRadius: 8,
+                              width: 117,
+                              height: 30,
                               justifyContent: "center",
                               display: "flex",
                               alignItems: "center",
-                              justifyContent: "center",
                             }}
                             onClick={() =>
                               handleShowModal(
@@ -198,8 +204,8 @@ const UserData = () => {
                         )}
                       </td>
                     </tr>
-                  </tbody>
-                ))}
+                  ))}
+                </tbody>
               </Table>
             </div>
             <nav>
@@ -231,7 +237,7 @@ const UserData = () => {
                 </li>
               </ul>
             </nav>
-          </div>
+          </Container>
         </div>
       </div>
       <Modal
@@ -258,7 +264,6 @@ const UserData = () => {
               : " ingin memblokir"}{" "}
             {name}?
           </h5>
-
           <Button
             className="fw-bold"
             style={{
@@ -267,9 +272,9 @@ const UserData = () => {
                 status === "blocked"
                   ? "1px solid #28A745"
                   : "1px solid #F3594F",
-              borderRadius: "8px",
-              width: "117px",
-              height: "48px",
+              borderRadius: 8,
+              width: 117,
+              height: 48,
               justifyContent: "center",
               display: "flex",
               alignItems: "center",
@@ -288,13 +293,12 @@ const UserData = () => {
                 status === "blocked"
                   ? "1px solid #28A745"
                   : "1px solid #F3594F",
-              borderRadius: "8px",
-              width: "117px",
-              height: "48px",
+              borderRadius: 8,
+              width: 117,
+              height: 48,
               justifyContent: "center",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
             }}
             onClick={() => blockUser(id)}
           >

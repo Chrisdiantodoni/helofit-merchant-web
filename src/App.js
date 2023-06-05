@@ -1,7 +1,7 @@
 import "./App.css";
 import "./css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React from "react";
+import React, { Component, useContext } from "react";
 //Sebelum Login
 import ProfilMerchant from "./Komposisi(User)/ProfilMerchant";
 import EditFasilitas from "./Komposisi(User)/EditFasilitas";
@@ -43,6 +43,7 @@ import UserData from "./Komposisi(admin)/UserData";
 import Merchant from "./Komposisi(admin)/Merchant";
 import Meetup from "./Komposisi(admin)/Meetup";
 import Syarat from "./Komposisi/Syarat";
+import ContextProvider, { Context } from "./context";
 
 class App extends React.Component {
   constructor(props) {
@@ -222,13 +223,19 @@ class App extends React.Component {
     const queryClient = new QueryClient();
     return (
       <QueryClientProvider client={queryClient}>
-        <Router>
-          <Switch>
-            {routes.map((item, index) => (
-              <Route path={item.path} exact={item.exact} render={item.render} />
-            ))}
-          </Switch>
-        </Router>
+        <ContextProvider>
+          <Router>
+            <Switch>
+              {routes.map((item, index) => (
+                <Route
+                  path={item.path}
+                  exact={item.exact}
+                  render={item.render}
+                />
+              ))}
+            </Switch>
+          </Router>
+        </ContextProvider>
       </QueryClientProvider>
     );
   }

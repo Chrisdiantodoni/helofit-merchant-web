@@ -1,31 +1,40 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table } from "react-bootstrap";
+import { Table, Button, Form, Modal } from "react-bootstrap";
 import { AxiosAdmin } from "../utils";
-import { Button, Form } from "react-bootstrap";
-import { Modal } from "react-bootstrap";
-
-const data = [
-  {
-    Nama: "Hartono Lubis",
-    Email: "hartono.lbs@gmail.com",
-    Pesan: "Keren banget websitenya",
-  },
-  {
-    Nama: "Hartono Lubis",
-    Email: "hartono.lbs@gmail.com",
-    Pesan: "Keren banget websitenya",
-  },
-];
 
 const Messages = () => {
   const [dataMessage, setDataMessage] = useState([]);
   const [show, setShow] = useState(false);
+  const [to, setTo] = useState("");
+  const [subject, setSubject] = useState("from Helofit");
+  const [text, setText] = useState("");
+  const [emailUser, setEmailUser] = useState("");
+  const [id, setId] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  const sendEmail = (id) => {
+    try {
+      AxiosAdmin.post("/email", { to: emailUser, subject, text })
+        .then((response) => {
+          console.log(response.data);
+          updateStatusEmail(id);
+          setShow(false);
+          window.location.reload();
+          window.alert("Pesan berhasil dikirim");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
   const getMessages = async () => {
     const result = await AxiosAdmin.get("/message");
     setDataMessage(result?.data?.data?.message);
@@ -36,24 +45,52 @@ const Messages = () => {
     getMessages();
   }, []);
 
+  const handleShowModal = (id, email) => {
+    setShow(true);
+    setId(id);
+    setEmailUser(email);
+  };
+
+  useEffect(() => {
+    function simulateNetworkRequest() {
+      return new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+
+    if (isLoading) {
+      simulateNetworkRequest().then(() => {
+        setLoading(false);
+      });
+    }
+  }, [isLoading]);
+
+  const updateStatusEmail = async (id) => {
+    try {
+      const res = await AxiosAdmin.put(`/email/${id}`, {
+        status: "responded",
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <Navbaradmin konten="Laporan" />
       <div className="row">
-        <div className="col-2 sidebar-wrapper">
+        <div className="col-12 col-md-2 sidebar-wrapper">
           <Sidebaradmin />
         </div>
-        <div className="col-8 mt-5">
-          <div class="container">
+        <div className="col-12 col-md-8 mt-5">
+          <div className="container">
             <h5 className="text-dark fw-bold">Pesan Masuk</h5>
             <div className="d-flex justify-content-between">
               <h6 className="text-muted fw-bold">
                 Pesan yang dikirimkan melalui halaman kontak
               </h6>
             </div>
-
             <div className="justify-content-center d-flex mt-5">
-              <Table borderless={true}>
+              <Table responsive borderless>
                 <thead>
                   <tr
                     className="fw-bold"
@@ -66,15 +103,21 @@ const Messages = () => {
                     <th>Nama</th>
                     <th>Email</th>
                     <th>Pesan</th>
+                    <th>Status</th>
                     <th></th>
                   </tr>
                 </thead>
-                {dataMessage.map((item, idx) => (
-                  <tbody className="fw-bold">
-                    <tr>
+                <tbody className="fw-bold">
+                  {dataMessage.map((item, idx) => (
+                    <tr key={idx}>
                       <td>{item.name}</td>
                       <td>{item.email}</td>
                       <td>{item.message}</td>
+                      <td>
+                        {item.status === "ignored"
+                          ? "Belum dibalas"
+                          : "Sudah dibalas"}
+                      </td>
                       <td>
                         <Button
                           className="fw-bold text-dark"
@@ -82,21 +125,24 @@ const Messages = () => {
                             background: "#C4f601",
                             border: "1px solid #C4f601",
                             borderRadius: "8px",
-                            width: "117px",
+                            width: "200px",
                             height: "30px",
                             justifyContent: "center",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                           }}
-                          onClick={() => setShow(true)}
+                          disabled={item.status === "responded"}
+                          onClick={() => handleShowModal(item.id, item.email)}
                         >
-                          Balas
+                          {item.status === "responded"
+                            ? "Sudah dibalas"
+                            : "Balas"}
                         </Button>
                       </td>
                     </tr>
-                  </tbody>
-                ))}
+                  ))}
+                </tbody>
               </Table>
             </div>
           </div>
@@ -111,6 +157,8 @@ const Messages = () => {
               <Form.Control
                 type="email"
                 placeholder="name@example.com"
+                value={emailUser}
+                disabled
                 autoFocus
               />
             </Form.Group>
@@ -119,7 +167,12 @@ const Messages = () => {
               controlId="exampleForm.ControlTextarea1"
             >
               <Form.Label>Pesan</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -155,9 +208,13 @@ const Messages = () => {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onClick={handleClose}
+            disabled={isLoading}
+            onClick={() => {
+              sendEmail(id);
+              setLoading(true);
+            }}
           >
-            kirim
+            {isLoading ? "Loading…" : "Balas"}
           </Button>
         </Modal.Footer>
       </Modal>

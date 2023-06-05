@@ -1,5 +1,4 @@
 import React, { Component, useEffect, useState } from "react";
-import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
@@ -10,8 +9,6 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import { ReactComponent as LogoEdit } from "../Assets/Edit-Icon.svg";
 import moment from "moment";
-import AddTask from "./AddTask";
-
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
 
