@@ -1,36 +1,44 @@
 import React, { Component, useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
 import Navbarbefore from "../Komponen/Navbar(before login)";
 import { Axios } from "../utils";
+import { useHistory } from "react-router-dom";
 
 const Daftar = () => {
+  const history = useHistory();
   const [nama, setNama] = useState("");
   const [selectedOlahraga, setSelectedOlahraga] = useState("Basket");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pin, setPin] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    // const pin = e.target.value;
-    try {
-      const email = e.target.email.value;
-      const password = e.target.password.value;
-      const response = await Axios.post("/authentication/register", {
-        merchant_name: nama,
-        email,
-        password,
-        // pin,
+    await Axios.post("/authentication/register", {
+      merchant_name: nama,
+      email,
+      password,
+      pin: pin,
+    })
+      .then((res) => {
+        setShowSuccessModal(true);
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowErrorModal(true);
       });
-      const data = response.data;
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
   };
+
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+    history.push("/login");
+  };
+  const handleCloseErrorModal = () => setShowErrorModal(false);
 
   return (
     <div style={{ background: "#000000" }}>
@@ -178,20 +186,19 @@ const Daftar = () => {
                   PIN (untuk pemulihan sandi)
                 </label>
                 <Input
-                  name="pin"
-                  type="number"
-                  min="0"
+                  name="password"
+                  type="password"
                   value={pin}
                   className="text-light form-control"
                   onChange={(e) => setPin(e.target.value)}
-                  // validations={[required, vpin]}
-                  placeholder="Masukkan Pin untuk dipakai dalam memulihkan password"
+                  // validations={[required, vfield]}
+                  placeholder="Masukkan Password"
                   style={{
                     maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
-                    border: "1px solid #7c7c7c",
                     backgroundColor: "#7c7c7c",
+                    border: "1px solid #7c7c7c",
                     fontSize: 20,
                     color: "#ffffff",
                     paddingLeft: 5,
@@ -239,6 +246,29 @@ const Daftar = () => {
           </Form>
         </div>
       </div>
+      <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Daftar</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Pendaftaran Mitra Berhasil</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseSuccessModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Daftar</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Pendaftaran Mitra gagal</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseErrorModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

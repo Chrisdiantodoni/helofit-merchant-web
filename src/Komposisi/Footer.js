@@ -44,11 +44,11 @@ export class Footer extends Component {
             <div className="col-md-2 text-light mt-4 text-start">
               <h3>Pintasan</h3>
               <p>
-                <a className="aktif-footer" href="/manajemen">
+                <a className="aktif-footer" href="/Fitur">
                   Fitur Helofit
                 </a>
                 <br />
-                <a className="aktif-footer" href="/keuangan">
+                <a className="aktif-footer" href="/daftar">
                   Gabung Mitra
                 </a>
               </p>

@@ -1,208 +1,195 @@
-import React, { Component } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import AuthService from "../services/auth.service";
-import * as Axios from "axios";
+import { Axios } from "../utils";
 import { Navbarbefore } from "./../Komponen/Navbar(before login)";
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Field perlu diisi!
-      </div>
-    );
-  }
-};
-const email = (value) => {
-  if (!isEmail(value)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Ini bukan email yang valid.
-      </div>
-    );
-  }
-};
-const vpin = (value) => {
-  if (value.length > 6) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Field harus berisi 6 angka.
-      </div>
-    );
-  }
-};
-const vfield = (value) => {
-  if (value.length < 3 || value.length > 30) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Field harus berisi antara 3 dan 30 karakter.
-      </div>
-    );
-  }
-};
-export class Lupapassword extends Component {
-  constructor() {
-    super();
-    this.handleForget = this.handleForget.bind(this);
+import Footer from "./Footer";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  InputGroup,
+  FormControl,
+  Button,
+} from "react-bootstrap";
 
-    this.state = {
-      email: null,
-      successful: false,
-      pin: null,
-      message: "",
-    };
-  }
+const Lupapassword = () => {
+  const [email, setEmail] = useState("");
+  const [pin, setPin] = useState("");
+  const [password, setPassword] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [verifiedError, setVerifiedError] = useState("");
 
-  handleForget(e) {
+  const handleForgetPassword = async (e) => {
     e.preventDefault();
-    this.setState({
-      message: "",
-      successful: false,
-    });
-
-    this.form.validateAll();
-
-    if (this.checkBtn.context._errors.length === 0) {
-      AuthService.recovery(this.state.email, this.state.pin).then(
-        (res) => {
-          Axios.put("http://localhost:8000/recovery/" + this.state.email, {
-            password: this.state.password,
-          });
-          this.setState({
-            message: res.data.message,
-            successful: true,
-          });
-          setTimeout(() => {
-            this.props.history.push("/login");
-          }, 1500);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          this.setState({
-            successful: false,
-            message: resMessage,
-          });
-        }
+    const body = {
+      email,
+      pin,
+      newPassword: password,
+    };
+    try {
+      const response = await Axios.post(
+        "/authentication/update-password",
+        body
       );
+      if (response.data) {
+        console.log(response);
+      } else {
+        console.log("Gagal Update Password");
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }
-  setValueState(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
 
-  render() {
-    return (
-      <div style={{ background: "#000000" }}>
-        <Navbarbefore />
-        <div className="container mx-auto mt-4">
-          <div
-            className="container  w-50 rounded-3 mx-auto mb-1"
-            style={{ background: "#161616" }}
-          >
-            <Form
-              className="ms-5 mt-2 mx-auto text-start me-5 mb-4"
-              onSubmit={this.handleForget}
-              ref={(c) => {
-                this.form = c;
-              }}
-            >
-              <h3 className="text-center text-light mt-3 pt-5">
-                Lupa Kata Sandi?
-                <p className="text-muted fs-6">
-                  Pastikan Anda merupakan pengguna yang sah dan jangan beritahu
-                  PIN Anda kesiapapun termasuk pihak Helofit
-                </p>
-              </h3>
-              <div>
-                <div class="form-group mb-3">
-                  <label className="text-light fw-bold">Alamat Email</label>
-                  <Input
+    console.log(body);
+  };
+
+  const handleVerifyAccount = async (e) => {
+    e.preventDefault();
+    const body = {
+      email,
+      pin,
+    };
+    try {
+      const response = await Axios.post(
+        "/authentication/find-account-by-pin",
+        body
+      );
+      if (response.data) {
+        setIsVerified(true);
+      } else {
+        setIsVerified(false);
+        setVerifiedError("Incorrect email or PIN");
+      }
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      setIsVerified(false);
+      setVerifiedError("An error occurred during verification");
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleForgetPassword(e);
+  };
+
+  return (
+    <div style={{ background: "#000000" }}>
+      <Navbarbefore />
+      <Container className="mx-auto mt-4">
+        <div
+          className="container w-50 rounded-3 mx-auto mb-1"
+          style={{ background: "#161616" }}
+        >
+          <Form className="ms-5 mt-2 mx-auto text-start me-5 mb-4">
+            <h3 className="text-center text-light mt-3 pt-5">
+              Lupa Kata Sandi?
+              <p className="text-muted fs-6">
+                Pastikan Anda merupakan pengguna yang sah dan jangan beritahu
+                PIN Anda kesiapapun termasuk pihak Helofit
+              </p>
+            </h3>
+            <Row>
+              <Col md={12}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-light fw-bold">
+                    Alamat Email
+                  </Form.Label>
+                  <Form.Control
                     name="email"
                     type="email"
-                    value={this.state.email}
-                    onChange={this.setValueState.bind(this)}
-                    className="text-dark rounded-3 form-control rounded-pill"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setIsVerified(false);
+                    }}
+                    className="text-dark rounded-3 rounded-pill"
                     placeholder="Masukkan Email"
-                    validations={[required, email, vfield]}
-                  ></Input>
-                </div>
-                <div class="form-group mb-3">
-                  <label className="text-light fw-bold">PIN</label>
-                  <Input
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={12}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-light fw-bold">PIN</Form.Label>
+                  <Form.Control
                     name="pin"
-                    type="number"
-                    min="0"
-                    value={this.state.pin}
-                    className="text-dark rounded-3 form-control rounded-pill"
-                    onChange={this.setValueState.bind(this)}
-                    validations={[required, vpin]}
-                    placeholder="Masukkan Pin Anda"
-                  ></Input>
-                </div>
-                <div class="form-group mb-3">
-                  <label className="text-light fw-bold">Kata Sandi Baru</label>
-                  <Input
-                    name="password"
                     type="password"
-                    value={this.state.password}
-                    className="text-dark rounded-3 form-control rounded-pill"
-                    onChange={this.setValueState.bind(this)}
-                    validations={[required, vfield]}
-                    placeholder="Masukkan Password Baru Anda"
-                  ></Input>
-                </div>
-                <div className="text-center">
-                  <button
-                    type="submit"
-                    className="btn btn-primary rounded-pill w-100"
-                  >
-                    Submit
-                  </button>
-                  <p className="text-secondary mt-2">
-                    Masih Bermasalah?
-                    <a href="/kontak" className="text-decoration-none fw-bold">
-                      Hubungi Kami
-                    </a>
-                  </p>
-                </div>
+                    min="0"
+                    value={pin}
+                    className="text-dark rounded-3 rounded-pill"
+                    onChange={(e) => {
+                      setPin(e.target.value);
+                      setIsVerified(false);
+                    }}
+                    placeholder="Masukkan Pin Anda"
+                  />
+                </Form.Group>
+              </Col>
+              <div className="text-center">
+                <Button
+                  className="btn btn-primary rounded-pill w-100"
+                  onClick={handleVerifyAccount}
+                  type="button"
+                >
+                  Verifying Account
+                </Button>
               </div>
-              {this.state.message && (
-                <div className="form-group">
-                  <div
-                    className={
-                      this.state.successful
-                        ? "alert alert-success"
-                        : "alert alert-danger"
-                    }
-                    role="alert"
-                  >
-                    {this.state.message}
-                  </div>
-                </div>
+              {isVerified && (
+                <Col md={12}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="text-light fw-bold">
+                      Kata Sandi Baru
+                    </Form.Label>
+                    <InputGroup>
+                      <FormControl
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        className="text-dark rounded-3 rounded-pill"
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Masukkan Password Baru Anda"
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="rounded-3 rounded-pill"
+                      >
+                        {showPassword ? "Hide" : "Show"}
+                      </Button>
+                    </InputGroup>
+                  </Form.Group>
+                </Col>
               )}
-              <CheckButton
-                style={{ display: "none" }}
-                ref={(c) => {
-                  this.checkBtn = c;
-                }}
-              />
-            </Form>
-          </div>
+              <div className="text-center">
+                {isVerified && (
+                  <>
+                    <Button
+                      type="submit"
+                      className="btn btn-primary rounded-pill w-100"
+                      onClick={(e) => handleSubmit(e)}
+                    >
+                      Submit
+                    </Button>
+                  </>
+                )}
+              </div>
+            </Row>
+            <div className="text-center">
+              <p className="text-secondary mt-2">
+                Masih Bermasalah?
+                <a href="/kontak" className="text-decoration-none fw-bold">
+                  Hubungi Kami
+                </a>
+              </p>
+            </div>
+          </Form>
         </div>
-      </div>
-    );
-  }
-}
+      </Container>
+      <Footer />
+    </div>
+  );
+};
 
 export default withRouter(Lupapassword);

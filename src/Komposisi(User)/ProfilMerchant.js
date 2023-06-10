@@ -66,7 +66,26 @@ const ProfilMerchant = () => {
       </ul>
     );
   };
+  const excludedProperties = ["createdAt", "updatedAt", "id", "merchantId"];
+  const filteredData = Object.fromEntries(
+    Object.entries(
+      data?.data?.merchant_time ? data?.data?.merchant_time : {}
+    ).filter(
+      ([key, value]) => Boolean(value) && !excludedProperties.includes(key)
+    )
+  );
 
+  let days = null;
+  for (const key in filteredData) {
+    if (filteredData[key].length > 0) {
+      days = key;
+      break;
+    }
+  }
+
+  console.log({ days });
+
+  console.log({ filteredData });
   console.log({ data });
   return (
     <div>
@@ -157,8 +176,15 @@ const ProfilMerchant = () => {
                         {displayDayOpenMerchant(data?.data?.merchant_time)}
                       </h6>
                       <h6 className="fw-bold">
-                        {data?.data?.merchant_time?.monday[0] || "-"} -{" "}
-                        {data?.data?.merchant_time?.monday[1] || "-"}
+                        {(filteredData &&
+                          filteredData[days] &&
+                          filteredData[days][0]) ||
+                          "-"}{" "}
+                        -{" "}
+                        {(filteredData &&
+                          filteredData[days] &&
+                          filteredData[days][1]) ||
+                          "-"}
                       </h6>
                     </td>
                   </tr>

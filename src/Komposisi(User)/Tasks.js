@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useContext, useEffect, useState } from "react";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
@@ -11,16 +11,16 @@ import { ReactComponent as LogoEdit } from "../Assets/Edit-Icon.svg";
 import moment from "moment";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
+import { Context } from "./../context/index";
 
 const Tasks = () => {
+  const { merchantId } = useContext(Context);
+
   const dataMerchant = () => {
-    const dataUser = localStorage.getItem("dataUser");
-    const merchantId = JSON.parse(dataUser)?.id;
     getTask(merchantId, search);
     getTaskStatus(merchantId);
   };
   const dataUser = localStorage.getItem("dataUser");
-  const merchantId = JSON.parse(dataUser)?.id;
   const [search, setSearch] = useState("");
   const [dataTask, setDataTask] = useState([]);
   const [statusTask, setStatusTask] = useState([]);
@@ -239,7 +239,7 @@ const Tasks = () => {
                   <th></th>
                 </tr>
               </thead>
-              {/* {statusTask.map((item, idx) => (
+              {statusTask.map((item, idx) => (
                 <tbody className="fw-bold">
                   <tr>
                     <td>{item.username}</td>
@@ -269,7 +269,7 @@ const Tasks = () => {
                     </td>
                   </tr>
                 </tbody>
-              ))} */}
+              ))}
             </Table>
           </div>
         </div>

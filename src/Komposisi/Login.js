@@ -6,7 +6,7 @@ import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./Footer";
 import "./Login.css";
-import { Container } from "react-bootstrap";
+import { Container, Modal, Button } from "react-bootstrap";
 import { isEmail } from "validator";
 import axios from "axios";
 import {
@@ -73,6 +73,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [data, setData] = useState({});
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -103,16 +105,18 @@ const Login = () => {
           name: "dataUser",
           value: JSON.stringify(dataUser),
         });
-        history.push("/welcome/user");
       }
+      setShowSuccessModal(true);
     } catch (error) {
       console.log(error);
     }
   };
-  // if (isLoggedIn) {
-  //   return (
-  //   );
-  // }
+
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+    history.push("/welcome/user");
+  };
+  const handleCloseErrorModal = () => setShowErrorModal(false);
 
   return (
     <div style={{ background: "#000000" }}>
@@ -246,6 +250,29 @@ const Login = () => {
         </div>
       </Container>
       <Footer />
+      <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Login</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Berhasil Login</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseSuccessModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Login</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Username & Password Salah</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseErrorModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -13,8 +13,9 @@ import { Axios } from "../utils";
 import { useHistory } from "react-router-dom";
 
 const EditFasilitas = (props) => {
-  const idFacility = props.location.state.id;
-  const facilityName = props.location.state.facilityName;
+  const idFacility = props.location?.state.id;
+  const facilityName = props.location?.state.facilityName;
+  const price = props.location?.state.price;
   const { merchantId } = useContext(Context);
   const [clocks, setClocks] = useState([]);
   const [selectedDates, setSelectedDates] = useState({});
@@ -62,6 +63,32 @@ const EditFasilitas = (props) => {
     });
   };
   const history = useHistory();
+
+  const selectedTimes = clocks
+    .filter((item, index) => checked[index])
+    .map((item) => item.time);
+
+  const createBooking = async () => {
+    const total = price * selectedTimes.length;
+    const body = {
+      facilityId: idFacility,
+      userId: null,
+      time: JSON.stringify(selectedTimes),
+      booking_date: selectedDates,
+      total,
+      price,
+    };
+
+    await Axios.post(`/booking`, body)
+      .then((res) => {
+        console.log(res);
+        window.location.reload();
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const allChecked = checked.every((item) => item);
+
   return (
     <div>
       <Navbaruser konten="Fasilitas Merchant" />
@@ -71,11 +98,6 @@ const EditFasilitas = (props) => {
         </div>
         <div className="col-10 mt-5">
           <div class="container">
-            <h4 className="text-dark fw-bold">Daftar Fasilitas</h4>
-            <h5 className="text-muted fw-bold">
-              Pantau aktivitas terkini dari fasilitas yang kamu miliki
-            </h5>
-
             <div
               className="mt-4"
               style={{
@@ -154,7 +176,23 @@ const EditFasilitas = (props) => {
 
                           {item.available ? "Tersedia" : "Terisi"}
                         </td>
-                        <td>{item.available ? <input /> : item.username}</td>
+                        <td>
+                          {item.available ? (
+                            <input
+                              value={"Masih Kosong"}
+                              disabled
+                              style={{ textAlign: "center" }}
+                            />
+                          ) : (
+                            <input
+                              value={
+                                item.username ? item.username : "Main Langsung"
+                              }
+                              style={{ textAlign: "center" }}
+                              disabled
+                            />
+                          )}
+                        </td>
                       </tr>
                     </tbody>
                   ))}
@@ -183,6 +221,8 @@ const EditFasilitas = (props) => {
                     width: "157px",
                     height: "48px",
                   }}
+                  disabled={allChecked}
+                  onClick={createBooking}
                 >
                   Simpan
                 </Button>

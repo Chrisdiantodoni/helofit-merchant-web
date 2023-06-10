@@ -150,7 +150,12 @@ const Fasilitas = () => {
                   <Link
                     to={{
                       pathname: `/welcome/EditFasilitas`,
-                      state: { id: item.id, selected_date: selectedDates },
+                      state: {
+                        id: item.id,
+                        selected_date: selectedDates,
+                        facilityName: item.facility_name,
+                        price: item.price,
+                      },
                     }}
                     className="fw-bold text-dark btn"
                     style={{

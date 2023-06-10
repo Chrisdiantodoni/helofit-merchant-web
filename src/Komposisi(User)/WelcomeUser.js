@@ -11,11 +11,22 @@ import { IoTicketOutline } from "react-icons/io5";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { useLocation } from "react-router-dom";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
+import { Axios } from "../utils";
+import { useEffect } from "react";
 
 const WelcomeUser = () => {
   const location = useLocation();
   const storedData = localStorage.getItem("dataUser");
   console.log(JSON.parse(storedData));
+
+  const getUser = async () => {
+    const response = await Axios.get("/user");
+    console.log(response);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <div>
@@ -205,29 +216,5 @@ const WelcomeUser = () => {
     </div>
   );
 };
-// componentDidMount() {
-//   const { currentUser } = this.state;
-//   var userid = currentUser.id;
-//   fetch("http://localhost:8000/sisa/" + userid)
-//     .then((res) => res.json())
-//     .then((res) => {
-//       this.setState({
-//         sisa: res.sisa,
-//       });
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//     });
-//   fetch("http://localhost:8000/kegiatan/" + userid)
-//     .then((res) => res.json())
-//     .then((res) => {
-//       this.setState({
-//         kegiatan: res.kegiatan,
-//       });
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//     });
-// }
 
 export default withRouter(WelcomeUser);
