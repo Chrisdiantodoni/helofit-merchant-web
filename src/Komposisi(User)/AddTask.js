@@ -70,9 +70,10 @@ const AddTask = (props) => {
         console.log({ res });
       })
       .catch((err) => console.log({ err }));
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + JSON.stringify(pair[1]));
-    // }
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + JSON.stringify(pair[1]));
+    }
+    // console.log({ formData });
     window.alert("Data tasks berhasil ditambah");
     window.location.href = "/welcome/tasks";
   };

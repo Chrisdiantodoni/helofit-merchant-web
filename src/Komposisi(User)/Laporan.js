@@ -1,25 +1,20 @@
-import React, { Component, useState } from "react";
-import AuthService from "../services/auth.service";
+import React, { Component, useState, useContext, useEffect } from "react";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import { Button, Modal, Form, InputGroup } from "react-bootstrap";
-import dasboruser from "../Assets/dasboruser.png";
-import Card from "react-bootstrap/Card";
-import CardGroup from "react-bootstrap/CardGroup";
 import { HiDownload } from "react-icons/hi";
-import { BiWallet } from "react-icons/bi";
-import { TbSoccerField } from "react-icons/tb";
-import { MdOutlineTaskAlt } from "react-icons/md";
-import { IoTicketOutline } from "react-icons/io5";
-import ProgressBar from "@ramonak/react-progress-bar";
 import moment from "moment";
-
+import { Context } from "../context/index";
+import { Axios, currency } from "../utils";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
-
+import * as XLSX from "xlsx";
 const Laporan = () => {
+  const { merchantId } = useContext(Context);
+
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [nama, setNama] = useState("");
+  const [type, setType] = useState("");
   const [fromDate, setFromDate] = useState(
     moment().subtract(1, "month").format("YYYY-MM-DD")
   );
@@ -28,26 +23,93 @@ const Laporan = () => {
   const laporan = [
     {
       nama: "Transaksi Reservasi Fasilitas Anda",
+      type: "transaksi",
     },
     {
       nama: "Daftar Promo yang sedang berjalan",
+      type: "daftarPromo",
     },
     {
       nama: "Customer yang menukarkan promo",
+      type: "CustPromo",
     },
     {
       nama: "Daftar Tasks yang sedang berjalan",
+      type: "Task",
     },
     {
       nama: "Customer yang mengerjakan tasks",
+      type: "custTask",
     },
   ];
 
-  const handleShowModal = (nama) => {
+  const handleShowModal = (nama, type) => {
     setShowModal(true);
     setNama(nama);
+    setType(type);
   };
 
+  const handleDownload = (item) => {
+    switch (item.toLowerCase()) {
+      case "transaksi":
+        getBooking(fromDate, toDate);
+        console.log(item);
+      case "daftarpromo":
+        console.log(item);
+      case "custpromo":
+        console.log(item);
+      case "task":
+        console.log(item);
+        break;
+      case "custtask":
+        console.log(item);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const [reserveData, setReserveData] = useState([]);
+
+  const getBooking = async (fromDate, toDate) => {
+    const response = await Axios.get(`/booking/${merchantId}`);
+    console.log(fromDate, toDate);
+    if (response.data.message === "OK") {
+      const data = response.data?.data;
+      setReserveData(data);
+      console.log(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
+
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `meetup ${fromDate} - ${toDate}.xlsx`;
+      link.click();
+    } else {
+      console.log("Data Merchant tidak ada");
+    }
+  };
   return (
     <div>
       <Navbaruser konten="Laporan Merchant" />
@@ -78,7 +140,7 @@ const Laporan = () => {
                       background: "#C4f601",
                       border: "1px solid #C4f601",
                     }}
-                    onClick={() => handleShowModal(item.nama)}
+                    onClick={() => handleShowModal(item.nama, item.type)}
                   >
                     <HiDownload className="fs-5 me-1 mb-1" />
                     Unduh
@@ -151,6 +213,7 @@ const Laporan = () => {
               background: "#C4f601",
               border: "1px solid #C4f601",
             }}
+            onClick={() => handleDownload(type)}
           >
             <HiDownload className="fs-5 me-1 mb-1" />
             {isLoading ? "Loading…" : "Unduh"}

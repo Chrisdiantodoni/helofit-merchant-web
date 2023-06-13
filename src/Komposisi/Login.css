@@ -13,3 +13,9 @@
   width: 800px;
   border-radius: 10px;
 }
+.eye-button {
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  outline: none;
+}

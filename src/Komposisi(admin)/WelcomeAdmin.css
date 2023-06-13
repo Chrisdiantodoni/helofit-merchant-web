@@ -1,0 +1,36 @@
+@media (max-width: 768px) {
+  /* Adjust sidebar width and main content width for smaller screens */
+  .sidebar-wrapper {
+    width: 100%;
+  }
+
+  .col-md-8 {
+    width: 100%;
+  }
+}
+
+/* Style for data cards */
+.data-card {
+  border: 1px solid #000000;
+  stroke: grey;
+  text-align: center;
+  width: 300px;
+  height: 128px;
+  padding-top: 24px;
+  padding-block: 19px;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-bottom: 15px;
+}
+
+/* Responsive styles for data cards */
+@media (max-width: 768px) {
+  .data-card {
+    width: 100%;
+  }
+}
+
+/* Additional styling for the LineChart */
+.recharts-wrapper {
+  margin-top: 15px;
+}

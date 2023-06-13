@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, useState, useContext } from "react";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
-import dasboruser from "../Assets/dasboruser.png";
-import Card from "react-bootstrap/Card";
-import CardGroup from "react-bootstrap/CardGroup";
+
 import { BiWallet } from "react-icons/bi";
 import { TbSoccerField } from "react-icons/tb";
 import { MdOutlineTaskAlt } from "react-icons/md";
@@ -11,23 +9,91 @@ import { IoTicketOutline } from "react-icons/io5";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { useLocation } from "react-router-dom";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
-import { Axios } from "../utils";
+import { Axios, currency } from "../utils";
 import { useEffect } from "react";
+import { Context } from "../context/index";
+import moment from "moment";
 
 const WelcomeUser = () => {
+  const { merchantId } = useContext(Context);
+
   const location = useLocation();
+  const [profil, setProfil] = useState(0);
   const storedData = localStorage.getItem("dataUser");
+  const [booking, setbooking] = useState([]);
+  const [allBooking, setAllBooking] = useState([]);
   console.log(JSON.parse(storedData));
-
-  const getUser = async () => {
-    const response = await Axios.get("/user");
-    console.log(response);
-  };
-
+  const [merchant, setMerchant] = useState({});
   useEffect(() => {
-    getUser();
+    getMerchant();
+    getTask();
+    getBooking();
   }, []);
 
+  const [dataTask, setDataTask] = useState([]);
+
+  const getMerchant = async () => {
+    const response = await Axios.get(`/merchant/${merchantId}`);
+    if (response.data.message === "OK") {
+      const data = response.data?.data?.merchant_info;
+      console.log(response);
+      const emptyColumns = Object.keys(data).filter((key) => !data[key]);
+      console.log("Kolom yang kosong:", emptyColumns);
+      setProfil(emptyColumns);
+      setMerchant(data);
+    } else {
+      console.log("Data Merchant tidak ada");
+    }
+  };
+
+  const getTask = async (search = "") => {
+    const response = await Axios.get(
+      `/task/${merchantId}?column_name=id&query=${search}`
+    );
+    const data = response.data?.data?.result;
+    if (response.data?.message === "OK") {
+      setDataTask(data || []);
+    }
+
+    console.log("dataTask", data);
+  };
+
+  const profilPercentage = () => {
+    const percentage = 1 - profil.length / 10;
+    const percetagee = percentage * 100;
+    console.log(percetagee);
+    return percetagee;
+  };
+
+  const getBooking = async () => {
+    const response = await Axios.get(`/booking/${merchantId}`);
+    const data = response?.data?.data;
+    if (response.data.message === "OK") {
+      console.log("booking", response);
+      const today = moment().format("YYYY-MM-DD");
+      const filteredDate = data?.filter(
+        (booking) => booking.booking_date >= today
+      );
+      console.log("filtered data", filteredDate);
+      setAllBooking(filteredDate);
+      const filteredKeepBooking = data
+        ?.filter((booking) => booking.show != true)
+        .filter((booking) => booking.booking_date >= today);
+      console.log("filtered booking", filteredKeepBooking);
+      setbooking(filteredKeepBooking);
+    }
+  };
+
+  const bookingPercentage = () => {
+    const allbookingPercentage = allBooking.length;
+    const bookingPercentage = booking.length;
+    const percentage =
+      (parseInt(bookingPercentage) / parseInt(allbookingPercentage)) * 100;
+    console.log(percentage);
+    return percentage;
+  };
+
+  console.log(bookingPercentage());
   return (
     <div>
       <Navbaruser konten="Dashboard Merchant" />
@@ -57,7 +123,7 @@ const WelcomeUser = () => {
                           Dompet Merchant
                         </h6>
                         <p className="card-text text-dark fw-bold">
-                          Rp. 200.000
+                          Rp. {currency(merchant?.balance)}
                         </p>
                       </div>
                       <div>
@@ -108,7 +174,9 @@ const WelcomeUser = () => {
                         <h6 className="card-title fw-bold text-success">
                           Tasks saat ini
                         </h6>
-                        <p className="card-text text-dark fw-bold">2 Tasks</p>
+                        <p className="card-text text-dark fw-bold">
+                          {dataTask?.length} Tasks
+                        </p>
                       </div>
                       <div>
                         <MdOutlineTaskAlt className="fs-3 mb-1" />
@@ -162,14 +230,20 @@ const WelcomeUser = () => {
                     style={{ flexDirection: "row" }}
                   >
                     <h6 className="fw-bold">Kelengkapan Profil Merchant</h6>
-                    <h6 className="fw-bold"> 90/100%</h6>
+                    <h6 className="fw-bold"> {profilPercentage()}/100%</h6>
                   </div>
 
                   <ProgressBar
-                    completed={90}
+                    completed={profilPercentage()}
                     isLabelVisible={false}
                     baseBgColor="#7c7c7c"
-                    bgColor="#28A745"
+                    bgColor={
+                      profilPercentage() > 75
+                        ? "#28A745"
+                        : profilPercentage() >= 50
+                        ? "#FFC107"
+                        : "#DC3545"
+                    }
                   />
                 </div>
                 <div style={{ padding: 8 }}>
@@ -180,14 +254,20 @@ const WelcomeUser = () => {
                     <h6 className="fw-bold">
                       Presentase customer yang melakukan reservasi
                     </h6>
-                    <h6 className="fw-bold"> 80/100%</h6>
+                    <h6 className="fw-bold"> {bookingPercentage()}/100%</h6>
                   </div>
 
                   <ProgressBar
-                    completed={80}
+                    completed={bookingPercentage()}
                     isLabelVisible={false}
                     baseBgColor="#7c7c7c"
-                    bgColor="#28A745"
+                    bgColor={
+                      bookingPercentage() > 75
+                        ? "#28A745"
+                        : bookingPercentage() >= 50
+                        ? "#FFC107"
+                        : "#DC3545"
+                    }
                   />
                 </div>
                 <div style={{ padding: 8 }}>
@@ -205,7 +285,13 @@ const WelcomeUser = () => {
                     completed={60}
                     isLabelVisible={false}
                     baseBgColor="#7c7c7c"
-                    bgColor="#FFC107"
+                    bgColor={
+                      bookingPercentage() > 75
+                        ? "#28A745"
+                        : bookingPercentage() >= 50
+                        ? "#FFC107"
+                        : "#DC3545"
+                    }
                   />
                 </div>
               </div>

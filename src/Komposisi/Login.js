@@ -8,6 +8,8 @@ import Footer from "./Footer";
 import "./Login.css";
 import { Container, Modal, Button } from "react-bootstrap";
 import { isEmail } from "validator";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import {
   Link,
@@ -75,7 +77,7 @@ const Login = () => {
   const [data, setData] = useState({});
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleLogin = async (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -152,40 +154,90 @@ const Login = () => {
                     <h4 className="text-light">Alamat Email</h4>
                   </label>
                   <Input
-                    className="text-dark form-control"
+                    className="form-control"
                     style={{
                       height: "56px",
                       borderRadius: 16,
                       background: "#7C7C7C",
+                      color: "#FFFFFF",
                       border: "1px solid #7c7c7c",
                     }}
                     name="email"
                     type="email"
                     placeholder="Masukkan Email Anda"
                     value={email}
-                    // validations={[required, email, vfield]}
                     onChange={(event) => setEmail(event.target.value)}
+                    onFocus={(event) => {
+                      event.target.style.background = "#7c7c7c";
+                      event.target.style.color = "#ffffff";
+                    }}
                   ></Input>
                 </div>
                 <div class="form-group mb-1">
                   <label>
                     <h4 className="text-light">Password</h4>
                   </label>
-                  <Input
-                    className="text-dark form-control"
+                  <div
                     style={{
-                      height: "56px",
-                      borderRadius: 16,
-                      background: "#7C7C7C",
-                      border: "1px solid #7c7c7c",
+                      position: "relative",
+                      alignContent: "center",
+                      justifyContent: "center",
                     }}
-                    name="password"
-                    type="password"
-                    placeholder="Masukkan Password Anda"
-                    value={password}
-                    // validations={[required, vfield]}
-                    onChange={(event) => setPassword(event.target.value)}
-                  ></Input>
+                  >
+                    <Input
+                      className="form-control"
+                      style={{
+                        height: "56px",
+                        borderRadius: 16,
+                        background: "#7C7C7C",
+                        border: "1px solid #7c7c7c",
+                        color: "#FFFFFF",
+                        paddingRight: "2.5rem",
+                      }}
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Masukkan Password Anda"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                    />
+                    {showPassword ? (
+                      <button
+                        type="button"
+                        className="btn btn-link eye-button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          right: "1rem",
+                          transform: "translateY(-50%)",
+                          background: "none",
+                          border: "none",
+                          padding: 0,
+                          zIndex: 1,
+                        }}
+                      >
+                        <FaRegEye />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-link eye-button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          right: "1rem",
+                          transform: "translateY(-50%)",
+                          background: "none",
+                          border: "none",
+                          padding: 0,
+                          zIndex: 1,
+                        }}
+                      >
+                        <FaRegEyeSlash />
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <p className="text-secondary text-end fw-bold mt-2">
                   <a

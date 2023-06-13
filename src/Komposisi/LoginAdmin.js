@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./Footer";
 import "./Login.css";
 import { Container } from "react-bootstrap";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 import {
   Link,
   Redirect,
@@ -27,6 +29,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [data, setData] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -109,27 +112,45 @@ const Login = () => {
                     onChange={(event) => setEmail(event.target.value)}
                   ></Input>
                 </div>
-                <div class="form-group mb-1">
+                <div className="form-group mb-1">
                   <label>
                     <h4 className="text-light">Password</h4>
                   </label>
-                  <Input
-                    className="text-dark form-control"
-                    style={{
-                      height: "56px",
-                      borderRadius: 16,
-                      background: "#7C7C7C",
-                      border: "1px solid #7c7c7c",
-                    }}
-                    name="password"
-                    type="password"
-                    placeholder="Masukkan Password Anda"
-                    value={password}
-                    // validations={[required, vfield]}
-                    onChange={(event) => setPassword(event.target.value)}
-                  ></Input>
+                  <div style={{ position: "relative" }}>
+                    <Input
+                      className="text-dark form-control"
+                      style={{
+                        height: "56px",
+                        borderRadius: 16,
+                        background: "#7C7C7C",
+                        border: "1px solid #7c7c7c",
+                        paddingRight: "2.5rem",
+                      }}
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Masukkan Password Anda"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-link eye-button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "1rem",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        zIndex: 1,
+                      }}
+                    >
+                      {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                    </button>
+                  </div>
                 </div>
-
                 <div className="text-center pt-5">
                   <button
                     style={{ background: "#C4F601", borderRadius: 16 }}

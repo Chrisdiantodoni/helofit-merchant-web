@@ -13,14 +13,14 @@ import { Axios } from "../utils";
 import { useHistory } from "react-router-dom";
 
 const EditFasilitas = (props) => {
+  const [isSelected, setIsSelected] = useState();
+  const [selectedBooking, setSelectedBooking] = useState([]);
+  const [data, setData] = useState([]);
+  const [dates, setDates] = useState([]);
   const idFacility = props.location?.state.id;
   const facilityName = props.location?.state.facilityName;
   const price = props.location?.state.price;
   const { merchantId } = useContext(Context);
-  const [clocks, setClocks] = useState([]);
-  const [selectedDates, setSelectedDates] = useState({});
-  console.log({ idFacility, merchantId, facilityName, selectedDates });
-  const [dates, setDates] = useState([]);
   const [checked, setChecked] = useState([]);
 
   useEffect(() => {
@@ -34,57 +34,79 @@ const EditFasilitas = (props) => {
     setDates(newDates);
   }, []);
 
-  const getHour = async (selectedDates) => {
-    console.log({
-      date: moment(selectedDates).format("YYYY-MM-DD"),
+  const getHour = async () => {
+    const body = {
       merchantId,
-      idFacility,
-    });
-    const response = await Axios.post(`/facility/time/${idFacility}`, {
-      merchantId,
-      selected_date: moment(selectedDates).format("YYYY-MM-DD"),
-    }).catch((err) => {
-      console.log({ err });
-    });
-    const data = response.data?.data?.list_time;
-    setClocks(data);
-    setChecked(data.map((item) => (item.available ? false : true)));
+      selected_date: moment(isSelected).format("YYYY-MM-DD"),
+    };
+    await Axios.post(`/facility/time/${idFacility}`, body)
+      .then((response) => {
+        console.log(response);
+        const data = response.data?.data;
+        setData(data || []);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
   };
 
   useEffect(() => {
     getHour();
-  }, []);
+    if (!selectedBooking.length != 0) {
+      setSelectedBooking([]);
+    }
+  }, [isSelected]);
 
-  const handleChecked = (index) => {
-    setChecked((prevChecked) => {
-      const newChecked = [...prevChecked];
-      newChecked[index] = !newChecked[index];
-      return newChecked;
-    });
-  };
   const history = useHistory();
 
-  const selectedTimes = clocks
-    .filter((item, index) => checked[index])
-    .map((item) => item.time);
-
-  const createBooking = async () => {
-    const total = price * selectedTimes.length;
+  const createBooking = async (e) => {
+    const total = parseInt(price) * parseInt(selectedBooking).length;
     const body = {
       facilityId: idFacility,
       userId: null,
-      time: JSON.stringify(selectedTimes),
-      booking_date: selectedDates,
+      time: JSON.stringify(selectedBooking.map((item) => item.time)),
+      booking_date: isSelected,
       total,
       price,
+      type: "",
     };
+    console.log({ body });
 
     await Axios.post(`/booking`, body)
       .then((res) => {
         console.log(res);
-        window.location.reload();
       })
       .catch((error) => console.log(error));
+  };
+  const handleSelectedBooking = (item) => {
+    const findDuplicate = selectedBooking.find(
+      (find) => find.time === item.time
+    );
+
+    if (!findDuplicate?.time) {
+      // setData((state) => ({
+      //   ...state,
+      //   list_time: data?.list_time?.map((obj) =>
+      //     obj.time === item.time
+      //       ? {
+      //           ...obj,
+      //           available: false,
+      //         }
+      //       : obj
+      //   ),
+      // }));
+      setSelectedBooking([...selectedBooking, item]);
+    } else {
+      // setData((state) => ({
+      //   ...state,
+      //   list_time: data?.list_time?.filter(
+      //     (filter) => filter?.time != item.time
+      //   ),
+      // }));
+      setSelectedBooking(
+        selectedBooking.filter((filter) => filter.time !== item.time)
+      );
+    }
   };
 
   const allChecked = checked.every((item) => item);
@@ -120,14 +142,14 @@ const EditFasilitas = (props) => {
                       border: "0.5px solid #7c7c7c",
                     }}
                   >
-                    {moment(selectedDates).format("DD-MM-YYYY")}
+                    {moment(isSelected).format("DD-MM-YYYY")}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {dates.map((date, idx) => (
                       <Dropdown.Item
+                        key={idx}
                         onClick={(e) => {
-                          setSelectedDates(moment(date).format("YYYY-MM-DD"));
-                          getHour(date);
+                          setIsSelected(moment(date).format("YYYY-MM-DD"));
                         }}
                       >
                         {moment(date).format("DD-MM-YYYY")}
@@ -152,9 +174,9 @@ const EditFasilitas = (props) => {
                       <th>PEMAIN</th>
                     </tr>
                   </thead>
-                  {clocks?.map((item, index) => (
-                    <tbody className="fw-bold">
-                      <tr>
+                  <tbody>
+                    {data.list_time?.map((item, index) => (
+                      <tr key={index}>
                         <td>{item.time}</td>
                         <td
                           style={{
@@ -163,18 +185,28 @@ const EditFasilitas = (props) => {
                             justifyContent: "space-around",
                           }}
                         >
-                          <Form>
-                            <div className="">
-                              <Form.Check
-                                type="checkbox"
-                                id={`default-checkbox-${index}`}
-                                checked={checked[index]}
-                                onChange={() => handleChecked(index)}
-                              />
-                            </div>
-                          </Form>
-
-                          {item.available ? "Tersedia" : "Terisi"}
+                          {item.available ? (
+                            <Form>
+                              <div className="">
+                                <Form.Check
+                                  label="tersedia"
+                                  // key={item.time}
+                                  // disabled={!item.available}
+                                  type="checkbox"
+                                  // id={`exampleCheckbox${index}`}
+                                  // checked={item.available ? false : true}
+                                  // onChange={() => {
+                                  //   if (item?.available) {
+                                  //     handleSelectedBooking(item);
+                                  //   }
+                                  // }}
+                                  // label={item.available ? "Tersedia" : "Terisi"}
+                                />
+                              </div>
+                            </Form>
+                          ) : (
+                            "Tidak Tersedia"
+                          )}
                         </td>
                         <td>
                           {item.available ? (
@@ -194,8 +226,8 @@ const EditFasilitas = (props) => {
                           )}
                         </td>
                       </tr>
-                    </tbody>
-                  ))}
+                    ))}
+                  </tbody>
                 </Table>
               </div>
               <div className="d-flex justify-content-end">

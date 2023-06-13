@@ -18,38 +18,71 @@ import { useState } from "react";
 
 const DetailTask = (props) => {
   const idUser = props.location.state.id;
+  const taskId = props.location.state.taskId;
   console.log(idUser);
 
   const [dataTask, setDataTask] = useState("");
   const [taskName, setTaskName] = useState("");
   const [expiredIn, setExpiredIn] = useState(new Date());
-  const [task1, setTask1] = useState("");
-  const [task2, setTask2] = useState("");
-  const [task3, setTask3] = useState("");
+  const [listTask, setListTask] = useState([]);
   const [banner, selectedBanner] = useState(null);
+  const [selectedTask, setSelectedTask] = useState([]);
 
-  const getDetailTask = async (id) => {
-    const response = await Axios.get(`/task/list-task-user/detail/${id}`);
-    const data = response?.data?.data;
-    setDataTask(data);
+  const getDetailTask2 = async () => {
+    const response = await Axios.get(
+      `/task/list-task-user/detail/${idUser}/${taskId}`
+    );
+    const data = response.data;
+    setDataTask(data?.data);
+
     console.log({ data });
   };
 
   useEffect(() => {
-    getDetailTask(idUser);
+    // getDetailTask(idUser);
+    getDetailTask2();
   }, []);
 
   const handleOnChangeTask = async (id) => {
-    const body = {
-      taskDetailId: id,
-    };
-    const { data } = await Axios.put(
-      `/task/list-task-user/detail/${idUser}`,
-      body
-    );
-    console.log(data);
-    getDetailTask(idUser);
+    try {
+      const body = {
+        taskDetailId: JSON.stringify([
+          ...selectedTask.map((item) => item.id.toString()),
+          ...(dataTask?.taskDetailId || []),
+        ]),
+      };
+      await Axios.put(`/task/list-task-user/detail/${idUser}`, body).then(
+        (result) => {
+          if (result.data.message == "OK") {
+            getDetailTask2();
+          }
+        }
+      );
+
+      // Update the dataTask state with the updated taskDetailId
+      console.log({ body });
+    } catch (error) {
+      // Handle error
+      console.log(error);
+    }
   };
+
+  const validatingChecked = (item) => {
+    const taskDetailIdArray = dataTask?.taskDetailId?.split(",") || [];
+    return taskDetailIdArray.includes(item.id.toString());
+  };
+
+  const handleSelectedTask = (item) => {
+    console.log(item);
+    const findDuplicate = selectedTask.find((find) => find.id === item.id);
+
+    if (!findDuplicate?.id) {
+      setSelectedTask([...selectedTask, item]);
+    } else {
+      setSelectedTask(selectedTask.filter((filter) => filter.id !== item.id));
+    }
+  };
+
   return (
     <div>
       <Navbaruser konten="Add Fasilitas" />
@@ -92,7 +125,7 @@ const DetailTask = (props) => {
                         fontWeight: "bold",
                         color: "#7C7C7C",
                       }}
-                      value={dataTask?.user?.username}
+                      value={dataTask?.userInfo?.username}
                     />
                   </td>
                 </tr>
@@ -106,7 +139,7 @@ const DetailTask = (props) => {
                         fontWeight: "bold",
                         color: "#7C7C7C",
                       }}
-                      value={dataTask?.user?.phone_number}
+                      value={dataTask?.userInfo?.phone_number || "-"}
                     />
                   </td>
                 </tr>
@@ -128,22 +161,20 @@ const DetailTask = (props) => {
                   <td>List Task</td>
                   <td>
                     <Form>
-                      {dataTask?.list_task?.map((item) => (
-                        <div key={"default-checkbox"} className="mb-3">
-                          <Form.Check
-                            type={"checkbox"}
-                            id={item.id}
-                            label={`${item.task_name}`}
-                            checked={
-                              dataTask?.taskDetailId
-                                ?.split(",")
-                                ?.map((item) => parseInt(item))
-                                ?.includes(item?.id)
-                                ? true
-                                : false
-                            }
-                            onChange={() => handleOnChangeTask(item?.id)}
-                          />
+                      {dataTask?.list_task?.map((item, index) => (
+                        <div key={item.id} className="mb-3">
+                          {dataTask?.taskDetailId?.includes(
+                            JSON.stringify(item?.id)
+                          ) ? (
+                            item.task_name + " Selesai"
+                          ) : (
+                            <Form.Check
+                              type="checkbox"
+                              id={`exampleCheckbox${index}`}
+                              label={item.task_name}
+                              onClick={() => handleSelectedTask(item)}
+                            />
+                          )}
                         </div>
                       ))}
                     </Form>
@@ -174,6 +205,7 @@ const DetailTask = (props) => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={handleOnChangeTask}
             >
               Simpan
             </Button>

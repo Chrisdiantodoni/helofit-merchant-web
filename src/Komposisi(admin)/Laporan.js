@@ -1,10 +1,115 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
 import { HiDownload } from "react-icons/hi";
 import { Button } from "react-bootstrap";
+import * as XLSX from "xlsx";
+import { AxiosAdmin } from "../utils";
+import moment from "moment";
 
 const Laporan = () => {
+  const [data, setData] = useState([]);
+  const [meetupData, setMeetupData] = useState([]);
+  const [taskData, setTaskData] = useState([]);
+  const [promo, setPromo] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
+  const [merchantData, setMerchantData] = useState([]);
+
+  const [desiredStartDate, setDesiredStartDate] = useState();
+  const [desiredEndDate, setDesiredEndDate] = useState();
+  const downloadMeetup = async () => {
+    const response = await AxiosAdmin.get(`/room`);
+    console.log(response);
+    if (response.data.message === "OK") {
+      const { totalPages } = response?.data?.data?.room_info;
+      const data = response?.data?.data?.room_info?.result;
+      setMeetupData(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = new Date(item.createdAt);
+        const desiredStartDate = new Date("2023-01-01");
+        const desiredEndDate = new Date("2023-12-31");
+
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `meetup ${desiredStartDate} - ${desiredEndDate}.xlsx`;
+      link.click();
+    }
+  };
+
+  const downloadUserData = async () => {
+    const result = await AxiosAdmin.get(`/user`);
+    console.log(result?.data?.data?.result);
+    if (result?.data.message === "OK") {
+      const { totalPages } = result?.data?.data;
+      const data = result?.data?.data?.result;
+      setDataUser(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = new Date(item.createdAt);
+        const desiredStartDate = new Date("2023-01-01");
+        const desiredEndDate = new Date("2023-12-31");
+
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = "data.xlsx";
+      link.click();
+    }
+  };
+  const downloadTaskData = async () => {
+    const response = await AxiosAdmin.get(`/task`);
+    console.log(response);
+    if (response.data.message === "OK") {
+      const data = response?.data?.data?.task_info?.result;
+      const { totalPages } = response?.data?.data?.task_info;
+      setTaskData(data);
+    }
+  };
+  const downloadMerchantData = async () => {
+    const response = await AxiosAdmin.get(`/merchant`);
+    if (response.data?.message === "OK") {
+      const data = response?.data?.data?.merchant.result;
+
+      console.log(response?.data);
+      setMerchantData(data);
+    }
+  };
+
+  const downloadGetPromo = () => {};
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -96,6 +201,7 @@ const Laporan = () => {
                     background: "#C4f601",
                     border: "1px solid #C4f601",
                   }}
+                  onClick={downloadMeetup}
                 >
                   <HiDownload className="fs-5 me-1 mb-1" />
                   Unduh

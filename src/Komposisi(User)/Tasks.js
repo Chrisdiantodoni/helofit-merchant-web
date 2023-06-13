@@ -249,7 +249,7 @@ const Tasks = () => {
                       <Link
                         to={{
                           pathname: `/welcome/DetailTask/`,
-                          state: { id: item.id },
+                          state: { id: item.id, taskId: item?.task?.taskId },
                         }}
                         className="fw-bold text-dark btn d-flex"
                         style={{
