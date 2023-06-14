@@ -44,6 +44,7 @@ import Merchant from "./Komposisi(admin)/Merchant";
 import Meetup from "./Komposisi(admin)/Meetup";
 import Syarat from "./Komposisi/Syarat";
 import ContextProvider, { Context } from "./context";
+import EditPromo from "./Komposisi(User)/EditPromo";
 
 class App extends React.Component {
   constructor(props) {
@@ -181,6 +182,10 @@ class App extends React.Component {
       {
         path: "/welcome/AddPromo",
         render: () => <AddPromo />,
+      },
+      {
+        path: "/welcome/EditPromo",
+        render: () => <EditPromo />,
       },
       {
         path: "/admin/dashboard",

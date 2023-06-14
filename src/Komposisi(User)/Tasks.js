@@ -170,7 +170,11 @@ const Tasks = () => {
                       <td>
                         <img
                           src={item.banner_img}
-                          style={{ width: 430, height: 130 }}
+                          style={{
+                            width: 430,
+                            height: 130,
+                            objectFit: "cover",
+                          }}
                         />
                       </td>
                       <td>{moment(item.expiredIn).format("DD/MM/YY")}</td>

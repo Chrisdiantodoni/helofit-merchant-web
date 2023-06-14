@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useRef, useContext, useEffect } from "react";
 import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
@@ -10,31 +10,64 @@ import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import InputGroup from "react-bootstrap/InputGroup";
-
 import Sidebaruser from "../Komponen/Sidebar(login user)";
+import { useState } from "react";
+import { Context } from "./../context/index";
+import { Axios, currency } from "../utils";
 
 const AddPromo = () => {
-  const data = [
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-  ];
+  const { merchantId } = useContext(Context);
+  const [promoName, setPromoName] = useState("");
+  const [previewImage, setPreviewImage] = useState(null);
+  const [selectedBanner, setSelectedBanner] = useState(null);
+  const fileInputRef = useRef(null);
+  const [cost, setCost] = useState(0);
+  const [expiredDate, setExpiredDate] = useState("");
 
+  function handleImageChange(event) {
+    const image = event.target.files[0];
+    setSelectedBanner(image);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPreviewImage(reader.result);
+    };
+    reader.readAsDataURL(image);
+  }
+  function handleRemoveClick() {
+    setSelectedBanner(null);
+    setPreviewImage(null);
+  }
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+  const totalPoin = (cost) => {
+    const poin = cost / 1000;
+    return poin;
+  };
+  useEffect(() => {
+    console.log(selectedBanner);
+  }, [selectedBanner]);
+
+  const handleAddPromo = async () => {
+    const formData = new FormData();
+    formData.append("promo_name", promoName);
+    formData.append("merchantId", merchantId);
+    formData.append("cost", cost);
+    formData.append("ExpiredIn", expiredDate);
+    formData.append("promo_img", selectedBanner);
+    formData.append("point", totalPoin(cost));
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + JSON.stringify(pair[1]));
+    }
+
+    await Axios.post("/promo", formData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log({ err }));
+  };
   return (
     <div>
       <Navbaruser konten="Add Promo" />
@@ -53,14 +86,23 @@ const AddPromo = () => {
             <Table borderless={true}>
               <tbody className="fw-bold">
                 <tr>
-                  <td>Tambah task</td>
+                  <td>Judul Promo</td>
                   <td>
-                    <input style={{ borderRadius: 8 }} />
+                    <input
+                      style={{ borderRadius: 8 }}
+                      onChange={(e) => setPromoName(e.target.value)}
+                    />
                   </td>
                 </tr>
 
                 <tr>
                   <td>Banner</td>
+                  <input
+                    type="file"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                  />
                   <td>
                     <Button
                       className="fw-bold text-dark me-4"
@@ -71,6 +113,7 @@ const AddPromo = () => {
                         width: "157px",
                         height: "48px",
                       }}
+                      onClick={handleButtonClick}
                     >
                       Tambah Foto
                     </Button>
@@ -81,6 +124,7 @@ const AddPromo = () => {
                         border: "1px solid #DC3545",
                         borderRadius: "8px",
                       }}
+                      onClick={handleRemoveClick}
                     >
                       <Logo />
                       <img />
@@ -88,28 +132,47 @@ const AddPromo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>Berlaku Sampai</td>
+                  <td></td>
                   <td>
-                    <input style={{ borderRadius: 8 }} />
+                    {previewImage && (
+                      <div>
+                        <img
+                          src={previewImage}
+                          style={{ width: 430, height: 130 }}
+                          alt="Preview"
+                        />
+                      </div>
+                    )}
                   </td>
                 </tr>
                 <tr>
-                  <td>Task ke-1</td>
+                  <td>Berlaku Sampai</td>
                   <td>
-                    <input style={{ borderRadius: 8 }} />
+                    <input
+                      style={{ borderRadius: 8 }}
+                      type="date"
+                      value={expiredDate}
+                      onChange={(e) => setExpiredDate(e.target.value)}
+                    />
                   </td>
                 </tr>
 
                 <tr>
                   <td>Besarnya Biaya Potongan</td>
                   <td>
-                    <input style={{ borderRadius: 8 }} /> per Promo
+                    <input
+                      style={{ borderRadius: 8 }}
+                      value={cost}
+                      onChange={(e) => setCost(e.target.value)}
+                    />
+                    per Promo
                   </td>
                 </tr>
                 <tr>
                   <td>Poin yang ditukarkan</td>
                   <td>
                     <input
+                      value={parseInt(totalPoin(cost)) || 0}
                       disabled={true}
                       style={{
                         borderRadius: 8,
@@ -144,6 +207,7 @@ const AddPromo = () => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={handleAddPromo}
             >
               Simpan
             </Button>

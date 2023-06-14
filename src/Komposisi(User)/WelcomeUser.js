@@ -22,14 +22,24 @@ const WelcomeUser = () => {
   const storedData = localStorage.getItem("dataUser");
   const [booking, setbooking] = useState([]);
   const [allBooking, setAllBooking] = useState([]);
+  const [dataPromo, setDataPromo] = useState([]);
   console.log(JSON.parse(storedData));
   const [merchant, setMerchant] = useState({});
   useEffect(() => {
     getMerchant();
     getTask();
     getBooking();
+    getPromo();
   }, []);
-
+  const getPromo = async () => {
+    const response = await Axios.get(`/promo/${merchantId}`);
+    console.log(response);
+    if (response.data.message === "OK") {
+      const data = response?.data?.data;
+      console.log(data);
+      setDataPromo(data);
+    }
+  };
   const [dataTask, setDataTask] = useState([]);
 
   const getMerchant = async () => {
@@ -201,7 +211,9 @@ const WelcomeUser = () => {
                         <h6 className="card-title fw-bold text-success">
                           Promo saat ini
                         </h6>
-                        <p className="card-text text-dark fw-bold">2 Promo</p>
+                        <p className="card-text text-dark fw-bold">
+                          {dataPromo.length} Promo
+                        </p>
                       </div>
                       <div>
                         <IoTicketOutline className="fs-3 mb-1" />
@@ -234,7 +246,7 @@ const WelcomeUser = () => {
                   </div>
 
                   <ProgressBar
-                    completed={profilPercentage()}
+                    completed={profilPercentage() ? profilPercentage() : 0}
                     isLabelVisible={false}
                     baseBgColor="#7c7c7c"
                     bgColor={
@@ -254,7 +266,10 @@ const WelcomeUser = () => {
                     <h6 className="fw-bold">
                       Presentase customer yang melakukan reservasi
                     </h6>
-                    <h6 className="fw-bold"> {bookingPercentage()}/100%</h6>
+                    <h6 className="fw-bold">
+                      {" "}
+                      {bookingPercentage() > 0 ? bookingPercentage() : 0}/100%
+                    </h6>
                   </div>
 
                   <ProgressBar

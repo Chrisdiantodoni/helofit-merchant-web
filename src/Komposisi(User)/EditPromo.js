@@ -1,29 +1,30 @@
-import React, { Component, useState, useRef } from "react";
+import React, { Component, useRef, useContext, useEffect } from "react";
+import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import InputGroup from "react-bootstrap/InputGroup";
-
 import Sidebaruser from "../Komponen/Sidebar(login user)";
-import { Axios } from "../utils";
+import { useState } from "react";
+import { Context } from "./../context/index";
+import { Axios, currency } from "../utils";
 
-const AddTask = (props) => {
-  const dataUser = localStorage.getItem("dataUser");
-  console.log(JSON.parse(dataUser)?.id);
-  const merchantId = JSON.parse(dataUser)?.id;
-  const fileInputRef = useRef(null);
-  const [taskName, setTaskName] = useState("");
+const AddPromo = (props) => {
+  const idPromo = props.location.state.id;
+
+  const { merchantId } = useContext(Context);
+  const [promoName, setPromoName] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
+  const fileInputRef = useRef(null);
+  const [cost, setCost] = useState(0);
   const [expiredDate, setExpiredDate] = useState("");
-  const [listTask1, setListTask1] = useState("");
-  const [listTask2, setListTask2] = useState("");
-  const [listTask3, setListTask3] = useState("");
-  const [price, setPrice] = useState(0);
 
   function handleImageChange(event) {
     const image = event.target.files[0];
@@ -42,84 +43,87 @@ const AddTask = (props) => {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
+  const totalPoin = (cost) => {
+    const poin = cost / 1000;
+    return poin;
+  };
+  useEffect(() => {
+    console.log(selectedBanner);
+  }, [selectedBanner]);
 
-  const handleAddTask = async () => {
+  useEffect(() => {
+    getDetailTask();
+  }, []);
+
+  const handleEditPromo = async () => {
     const formData = new FormData();
+    formData.append("promo_name", promoName);
     formData.append("merchantId", merchantId);
-    formData.append("task_name", taskName);
-    formData.append("expiredIn", expiredDate);
-    formData.append("poin", totalPoin(price));
-    formData.append("banner_img", selectedBanner);
-    formData.append(
-      "list_task",
-      JSON.stringify([
-        {
-          task_name: listTask1,
-        },
-        {
-          task_name: listTask2,
-        },
-        {
-          task_name: listTask3,
-        },
-      ])
-    );
+    formData.append("cost", cost);
+    formData.append("ExpiredIn", expiredDate);
+    formData.append("promo_img", selectedBanner);
+    formData.append("point", totalPoin(cost));
 
-    await Axios.post(`/task`, formData)
-      .then((res) => {
-        console.log({ res });
-      })
-      .catch((err) => console.log({ err }));
     for (var pair of formData.entries()) {
       console.log(pair[0] + ", " + JSON.stringify(pair[1]));
     }
-    // console.log({ formData });
-    window.alert("Data tasks berhasil ditambah");
-    window.location.href = "/welcome/tasks";
+
+    await Axios.put(`/promo/${idPromo}`, formData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log({ err }));
   };
 
-  const totalPoin = (price) => {
-    const poin = price / 1000;
-    return poin;
+  const getDetailTask = async () => {
+    const response = await Axios.get(`/promo/detail/${idPromo}`);
+    console.log(response);
+    if (response.data.message === "OK") {
+      const data = response?.data?.data;
+      console.log(data);
+      setPromoName(data?.promo_name);
+      setPreviewImage(data?.promo_img);
+      setExpiredDate(data?.ExpiredIn);
+      setCost(data?.cost);
+    }
   };
-
   return (
     <div>
-      <Navbaruser konten="Add Fasilitas" />
+      <Navbaruser konten="Add Promo" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaruser />
         </div>
         <div className="col-10 mt-5">
           <div class="container">
-            <h5 className="text-dark fw-bold">Tambah Fasilitas</h5>
+            <h5 className="text-dark fw-bold">Tambah Promo</h5>
             <div className="d-flex justify-content-between">
               <h6 className="text-muted fw-bold">
-                Berikan daftar task yang dapat customer kerjakan
+                Berikan promo yang Anda tawarkan ke customer
               </h6>
             </div>
             <Table borderless={true}>
               <tbody className="fw-bold">
                 <tr>
-                  <td>Judul task</td>
+                  <td>Judul Promo</td>
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={taskName}
-                      onChange={(e) => setTaskName(e.target.value)}
+                      value={promoName}
+                      onChange={(e) => setPromoName(e.target.value)}
                     />
                   </td>
                 </tr>
 
                 <tr>
                   <td>Banner</td>
+                  <input
+                    type="file"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                  />
                   <td>
-                    <input
-                      type="file"
-                      onChange={handleImageChange}
-                      style={{ display: "none" }}
-                      ref={fileInputRef}
-                    />
                     <Button
                       className="fw-bold text-dark me-4"
                       style={{
@@ -133,7 +137,6 @@ const AddTask = (props) => {
                     >
                       Tambah Foto
                     </Button>
-
                     <Button
                       className="fw-bold text-dark me-4"
                       style={{
@@ -173,52 +176,23 @@ const AddTask = (props) => {
                     />
                   </td>
                 </tr>
+
                 <tr>
-                  <td>Task ke-1</td>
+                  <td>Besarnya Biaya Potongan</td>
                   <td>
                     <input
                       style={{ borderRadius: 8 }}
-                      value={listTask1}
-                      onChange={(e) => setListTask1(e.target.value)}
+                      value={cost}
+                      onChange={(e) => setCost(e.target.value)}
                     />
+                    per Promo
                   </td>
                 </tr>
                 <tr>
-                  <td>Task ke-2</td>
+                  <td>Poin yang ditukarkan</td>
                   <td>
                     <input
-                      style={{ borderRadius: 8 }}
-                      value={listTask2}
-                      onChange={(e) => setListTask2(e.target.value)}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Task ke-3</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      value={listTask3}
-                      onChange={(e) => setListTask3(e.target.value)}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Biaya yang dikeluarkan customer</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                    />
-                    per keseluruhan task
-                  </td>
-                </tr>
-                <tr>
-                  <td>Poin yang didapatkan</td>
-                  <td>
-                    <input
-                      value={parseInt(totalPoin(price)) || 0}
+                      value={parseInt(totalPoin(cost)) || 0}
                       disabled={true}
                       style={{
                         borderRadius: 8,
@@ -253,7 +227,7 @@ const AddTask = (props) => {
                 width: "157px",
                 height: "48px",
               }}
-              onClick={handleAddTask}
+              onClick={handleEditPromo}
             >
               Simpan
             </Button>
@@ -264,4 +238,4 @@ const AddTask = (props) => {
   );
 };
 
-export default withRouter(AddTask);
+export default withRouter(AddPromo);

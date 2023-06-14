@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useContext, useEffect } from "react";
 
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
@@ -9,19 +9,14 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import { ReactComponent as LogoEdit } from "../Assets/Edit-Icon.svg";
-
+import { Context } from "./../context/index";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
+import { Axios, currency } from "../utils";
+import moment from "moment";
 
 const Promo = () => {
-  const data = [
-    {
-      kode_task: "135780",
-      judul: "Semangat Ma...",
-      berlaku: "18/06/22",
-      banner: "Lapangan 1",
-      Task: ["Main ke 1", "Main ke 2", "Main ke 3"],
-    },
-  ];
+  const { merchantId } = useContext(Context);
+
   const data1 = [
     {
       tanggal: "12/06/22",
@@ -31,6 +26,45 @@ const Promo = () => {
       status: "Selesai",
     },
   ];
+  const [dataPromo, setDataPromo] = useState([]);
+  const [userPromo, setPromoUser] = useState([]);
+  const getPromo = async () => {
+    const response = await Axios.get(`/promo/${merchantId}`);
+    console.log(response);
+    if (response.data.message === "OK") {
+      const data = response?.data?.data;
+      console.log(data);
+      setDataPromo(data);
+    }
+  };
+  const getPromoUser = async () => {
+    const response = await Axios.get(`/promo/user/${merchantId}`);
+    if (response.data.message === "OK") {
+      console.log(response);
+      const data = response?.data?.data;
+      setPromoUser(data);
+    }
+  };
+
+  const handleDeletePromo = async (id, e) => {
+    try {
+      await Axios.delete(`/promo/${id}`)
+        .then((res) => {
+          if (res) {
+            console.log(res);
+            window.location.reload();
+          }
+        })
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getPromo();
+    getPromoUser();
+  }, []);
   return (
     <div>
       <Navbaruser konten="List Promo" />
@@ -110,13 +144,22 @@ const Promo = () => {
                     <th></th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
+                {dataPromo?.map((item, idx) => (
                   <tbody className="fw-bold">
                     <tr>
-                      <td>{item.kode_task}</td>
-                      <td>{item.judul}</td>
-                      <td>{item.banner}</td>
-                      <td>{item.berlaku}</td>
+                      <td>{item.id}</td>
+                      <td>{item.promo_name}</td>
+                      <td>
+                        <img
+                          src={item.promo_img}
+                          style={{
+                            width: 430,
+                            height: 130,
+                            objectFit: "cover",
+                          }}
+                        />
+                      </td>
+                      <td>{moment(item.ExpiredIn).format("DD/MM/YYYY")}</td>
                       <td>
                         <Button
                           className="fw-bold text-dark me-4"
@@ -127,7 +170,14 @@ const Promo = () => {
                             height: "40%",
                           }}
                         >
-                          <LogoEdit />
+                          <Link
+                            to={{
+                              pathname: `/welcome/EditPromo`,
+                              state: { id: item.id },
+                            }}
+                          >
+                            <LogoEdit />
+                          </Link>
                         </Button>
                         <Button
                           className="fw-bold text-dark"
@@ -137,6 +187,7 @@ const Promo = () => {
                             borderRadius: "8px",
                             height: "40%",
                           }}
+                          onClick={() => handleDeletePromo(item.id)}
                         >
                           <Logo />
                         </Button>
@@ -171,17 +222,20 @@ const Promo = () => {
                   <th></th>
                 </tr>
               </thead>
-              {data1.map((item, idx) => (
+              {userPromo?.map((item, idx) => (
                 <tbody className="fw-bold">
                   <tr>
-                    <td>{item.tanggal}</td>
-                    <td>{item.nama}</td>
-                    <td>{item.no_hp}</td>
-                    <td>{item.kode_task}</td>
-                    <td>{item.status}</td>
+                    <td>{moment(item.createdAt).format("DD/MM/YY")}</td>
+                    <td>{item.user?.username}</td>
+                    <td>{item.user?.phone_number}</td>
+                    <td>{item.promo?.id}</td>
+                    <td>{item.status_promo}</td>
                     <td>
                       <Link
-                        to="/welcome/DetailPromo"
+                        to={{
+                          pathname: `/welcome/DetailPromo`,
+                          state: { id: item.id },
+                        }}
                         className="fw-bold text-dark btn d-flex"
                         style={{
                           background: "#C4f601",
