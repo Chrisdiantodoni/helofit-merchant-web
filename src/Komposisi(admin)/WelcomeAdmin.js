@@ -1,7 +1,6 @@
 import React, { Component, useEffect, useState } from "react";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
-import dasboradmin from "../Assets/dasboradmin.png";
 import {
   LineChart,
   Line,
@@ -12,35 +11,18 @@ import {
   Legend,
 } from "recharts";
 import moment from "moment";
-import { Table } from "react-bootstrap";
 import "./WelcomeAdmin.css";
 import { AxiosAdmin } from "../utils";
 
 const WelcomeAdmin = () => {
   const [data, setData] = useState([]);
   const [meetupData, setMeetupData] = useState([]);
+  const [reserveData, setReserveData] = useState([]);
   const [taskData, setTaskData] = useState([]);
   const [promo, setPromo] = useState([]);
   const [dataUser, setDataUser] = useState([]);
   const [merchantData, setMerchantData] = useState([]);
-  const [yAxisData, setYAxisData] = useState([]);
 
-  useEffect(() => {
-    const today = moment().month("June").startOf("month");
-    let newData = [];
-    for (let i = 0; i <= 6; i++) {
-      const date = today.clone().add(i, "months").format("MMM");
-      const newDataPoint = { name: date, uv: Math.floor(Math.random() * 5000) };
-      newData.push(newDataPoint);
-    }
-    setData(newData);
-    getMeetup();
-    getUserData();
-    getTaskData();
-    getmerchantData();
-    getPromo();
-    calculateYAxisData();
-  }, []);
   const getMeetup = async () => {
     const response = await AxiosAdmin.get(`/room`);
     console.log(response);
@@ -49,51 +31,129 @@ const WelcomeAdmin = () => {
       setMeetupData(data);
     }
   };
+  const getReserve = async () => {
+    try {
+      const response = await AxiosAdmin.get(`/booking/all`);
+      console.log(response);
+      if (response?.data.message === "OK") {
+        const data = response?.data?.data?.booking;
+        setReserveData(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getUserData = async () => {
-    const result = await AxiosAdmin.get(`/user`);
-    console.log(result?.data?.data?.result);
-    if (result?.data.message === "OK") {
-      const data = result?.data?.data?.result;
-      setDataUser(data);
+    try {
+      const result = await AxiosAdmin.get(`/user`);
+      console.log(result?.data?.data?.result);
+      if (result?.data.message === "OK") {
+        const data = result?.data?.data?.result;
+        setDataUser(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const getTaskData = async () => {
-    const response = await AxiosAdmin.get(`/task`);
-    console.log(response);
-    if (response.data.message === "OK") {
-      const data = response?.data?.data?.task_info?.result;
-      setTaskData(data);
+    try {
+      const response = await AxiosAdmin.get(`/task`);
+      console.log(response);
+      if (response.data.message === "OK") {
+        const data = response?.data?.data?.task_info?.result;
+        setTaskData(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const getmerchantData = async () => {
-    const response = await AxiosAdmin.get(`/merchant`);
-    if (response.data?.message === "OK") {
-      const data = response?.data?.data?.merchant.result;
-      console.log(response?.data);
-      setMerchantData(data);
+    try {
+      const response = await AxiosAdmin.get(`/merchant`);
+      if (response.data?.message === "OK") {
+        const data = response?.data?.data?.merchant.result;
+        console.log(response?.data);
+        setMerchantData(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const calculateYAxisData = () => {
-    const meetupDataAll = meetupData.length;
-    const userDataAll = dataUser.length;
-    const dataTaskAll = taskData.length;
-    const merchantDataAll = merchantData.length;
-    const promoDataAll = promo.length;
-    const yAxisData = [
-      { name: "Total Reservasi/Transaksi", value: meetupDataAll },
-      { name: "Total User", value: userDataAll },
-      { name: "Total Merchant", value: merchantDataAll },
-      { name: "Total Meetup", value: meetupDataAll },
-      { name: "Total Tasks", value: dataTaskAll },
-      { name: "Total Promo", value: promoDataAll },
-    ];
-
-    setYAxisData(yAxisData);
+  const getPromo = async () => {
+    try {
+      const response = await AxiosAdmin.get(`/promo`);
+      console.log(response);
+      if (response.data?.message === "OK") {
+        const data = response?.data?.data?.result;
+        setPromo(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getPromo = () => {};
+  useEffect(() => {
+    getMeetup();
+    getUserData();
+    getTaskData();
+    getPromo();
+    getmerchantData();
+    getReserve();
+  }, []);
+
+  const calculateData = async () => {
+    if (
+      meetupData.length === 0 ||
+      dataUser.length === 0 ||
+      taskData.length === 0 ||
+      merchantData.length === 0
+    ) {
+      return;
+    }
+    const today = moment().startOf("month");
+    const newData = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const date = today.clone().subtract(i, "months").format("MMM");
+      const filteredMeetupData = meetupData.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+      const filteredReserveData = reserveData.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+      const filteredUserData = dataUser.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+      const filteredTaskData = taskData.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+      const filteredMerchantData = merchantData.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+      const filteredPromoData = promo.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+
+      const uvValue =
+        filteredMeetupData.length +
+        filteredUserData.length +
+        filteredReserveData.length +
+        filteredTaskData.length +
+        filteredMerchantData.length +
+        filteredPromoData.length;
+      console.log({ uvValue });
+      const newDataPoint = { name: date, uv: uvValue };
+      newData.push(newDataPoint);
+    }
+
+    setData(newData);
+  };
+
+  useEffect(() => {
+    calculateData();
+  }, [meetupData, dataUser, taskData, merchantData, reserveData]);
   return (
     <div>
       <Navbaradmin konten="Dashboard Admin" />
@@ -137,7 +197,7 @@ const WelcomeAdmin = () => {
             <div className="d-flex flex-wrap pt-2">
               <div className="data-card">
                 <p style={{ fontWeight: "700" }}>Total Reservasi/Transaksi</p>
-                <p style={{ fontWeight: "700" }}>{meetupData.length}</p>
+                <p style={{ fontWeight: "700" }}>{reserveData.length}</p>
                 <a style={{ color: "#28A745", fontWeight: "700" }}>
                   lihat detail
                 </a>

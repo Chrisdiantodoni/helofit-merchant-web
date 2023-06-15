@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
 import Sidebaradmin from "../Komponen/Sidebar(login admin)";
 import { HiDownload } from "react-icons/hi";
-import { Button } from "react-bootstrap";
+import { Button, Modal, Form, InputGroup } from "react-bootstrap";
 import * as XLSX from "xlsx";
 import { AxiosAdmin } from "../utils";
 import moment from "moment";
@@ -14,21 +14,86 @@ const Laporan = () => {
   const [promo, setPromo] = useState([]);
   const [dataUser, setDataUser] = useState([]);
   const [merchantData, setMerchantData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [fromDate, setFromDate] = useState(
+    moment().subtract(1, "month").format("YYYY-MM-DD")
+  );
+  const [isLoading, setLoading] = useState(false);
+  const [toDate, setTodate] = useState(moment().format("YYYY-MM-DD"));
+  const [nama, setNama] = useState("");
+  const [type, setType] = useState("");
+  const laporan = [
+    {
+      nama: "Rekap keseluruhan transaksi/reservasi",
+      type: "transaksi",
+    },
+    {
+      nama: "Data user pengguna Aplikasi",
+      type: "user",
+    },
+    {
+      nama: "Data Merchant yang telah bergabung",
+      type: "merchant",
+    },
+    {
+      nama: "Data meetup yang sudah dibuat",
+      type: "meetup",
+    },
+    {
+      nama: "Data Tasks yang telah berjalan",
+      type: "task",
+    },
+  ];
 
-  const [desiredStartDate, setDesiredStartDate] = useState();
-  const [desiredEndDate, setDesiredEndDate] = useState();
-  const downloadMeetup = async () => {
-    const response = await AxiosAdmin.get(`/room`);
+  const handleDownload = (item) => {
+    switch (item) {
+      case "transaksi":
+        downloadReserve(fromDate, toDate);
+        console.log(item);
+        break;
+      case "user":
+        downloadUserData(fromDate, toDate);
+        console.log(item);
+        break;
+      case "merchant":
+        downloadMerchantData(fromDate, toDate);
+        console.log(item);
+        break;
+      case "meetup":
+        console.log(item);
+        break;
+      case "task":
+        downloadTaskData(fromDate, toDate);
+        console.log(item);
+        break;
+      default:
+        break;
+    }
+  };
+  const handleShowModal = (nama, type) => {
+    setShowModal(true);
+    setNama(nama);
+    setType(type);
+  };
+  const getBooking = async () => {
+    const response = await AxiosAdmin.get(`/booking`);
     console.log(response);
-    if (response.data.message === "OK") {
-      const { totalPages } = response?.data?.data?.room_info;
-      const data = response?.data?.data?.room_info?.result;
+  };
+  useEffect(() => {
+    getBooking();
+  }, []);
+  //booking bermasalah
+  const downloadReserve = async (fromDate, toDate) => {
+    const response = await AxiosAdmin.get(`/booking/all`);
+    console.log(response);
+    if (response?.data.message === "OK") {
+      const data = response?.data?.data?.booking;
+      console.log(data);
       setMeetupData(data);
       const filteredData = data.filter((item) => {
-        const createdAt = new Date(item.createdAt);
-        const desiredStartDate = new Date("2023-01-01");
-        const desiredEndDate = new Date("2023-12-31");
-
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
         return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
       });
       const workbook = XLSX.utils.book_new();
@@ -49,63 +114,96 @@ const Laporan = () => {
       const downloadLink = URL.createObjectURL(excelBlob);
       const link = document.createElement("a");
       link.href = downloadLink;
-      link.download = `meetup ${desiredStartDate} - ${desiredEndDate}.xlsx`;
+      link.download = `Reserve Data ${fromDate} - ${toDate}.xlsx`;
       link.click();
     }
   };
 
-  const downloadUserData = async () => {
+  const downloadUserData = async (fromDate, toDate) => {
     const result = await AxiosAdmin.get(`/user`);
     console.log(result?.data?.data?.result);
     if (result?.data.message === "OK") {
-      const { totalPages } = result?.data?.data;
       const data = result?.data?.data?.result;
       setDataUser(data);
       const filteredData = data.filter((item) => {
-        const createdAt = new Date(item.createdAt);
-        const desiredStartDate = new Date("2023-01-01");
-        const desiredEndDate = new Date("2023-12-31");
-
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
         return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
       });
       const workbook = XLSX.utils.book_new();
-
       const worksheet = XLSX.utils.json_to_sheet(filteredData);
-
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
       const excelBuffer = XLSX.write(workbook, {
         bookType: "xlsx",
         type: "array",
       });
-
       const excelBlob = new Blob([excelBuffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-
       const downloadLink = URL.createObjectURL(excelBlob);
       const link = document.createElement("a");
       link.href = downloadLink;
-      link.download = "data.xlsx";
+      link.download = `Data User ${fromDate} - ${toDate}.xlsx`;
       link.click();
     }
   };
-  const downloadTaskData = async () => {
+  const downloadTaskData = async (fromDate, toDate) => {
     const response = await AxiosAdmin.get(`/task`);
     console.log(response);
     if (response.data.message === "OK") {
       const data = response?.data?.data?.task_info?.result;
-      const { totalPages } = response?.data?.data?.task_info;
       setTaskData(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `Data Task ${fromDate} - ${toDate}.xlsx`;
+      link.click();
     }
   };
-  const downloadMerchantData = async () => {
+  const downloadMerchantData = async (fromDate, toDate) => {
     const response = await AxiosAdmin.get(`/merchant`);
     if (response.data?.message === "OK") {
       const data = response?.data?.data?.merchant.result;
-
       console.log(response?.data);
       setMerchantData(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `Data Merchant ${fromDate} - ${toDate}.xlsx`;
+      link.click();
     }
   };
 
@@ -127,130 +225,99 @@ const Laporan = () => {
               className="mt-4"
               style={{ background: "#000000", width: "100%", height: "4px" }}
             ></div>
-            <div className="mt-4 d-flex justify-content-between">
-              <div>
-                <h5 className="text-dark fw-bold">
-                  Rekap keseluruhan transaksi/reservasi
-                </h5>
+            {laporan.map((item) => (
+              <div className="mt-4 d-flex justify-content-between">
+                <div>
+                  <h5 className="text-dark fw-bold">{item.nama}</h5>
+                </div>
+                <div className="fs-5 me-1 flex-row fw-bold">
+                  <Button
+                    type="button"
+                    className="me-4 text-dark fw-bold"
+                    style={{
+                      background: "#C4f601",
+                      border: "1px solid #C4f601",
+                    }}
+                    onClick={() => handleShowModal(item.nama, item.type)}
+                  >
+                    <HiDownload className="fs-5 me-1 mb-1" />
+                    Unduh
+                  </Button>
+                </div>
               </div>
-              <div className="fs-5 me-1 flex-row fw-bold">
-                <Button
-                  type="button"
-                  className="me-4 text-dark fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    border: "1px solid #C4f601",
-                  }}
-                >
-                  <HiDownload className="fs-5 me-1 mb-1" />
-                  Unduh
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 d-flex justify-content-between">
-              <div>
-                <h5 className="text-dark fw-bold">
-                  Data user pengguna Aplikasi
-                </h5>
-              </div>
-              <div className="fs-5 me-1 flex-row fw-bold">
-                <Button
-                  type="button"
-                  className="me-4 text-dark fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    border: "1px solid #C4f601",
-                  }}
-                >
-                  <HiDownload className="fs-5 me-1 mb-1" />
-                  Unduh
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 d-flex justify-content-between">
-              <div>
-                <h5 className="text-dark fw-bold">
-                  Data Merchant yang telah bergabung
-                </h5>
-              </div>
-              <div className="fs-5 me-1 flex-row fw-bold">
-                <Button
-                  type="button"
-                  className="me-4 text-dark fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    border: "1px solid #C4f601",
-                  }}
-                >
-                  <HiDownload className="fs-5 me-1 mb-1" />
-                  Unduh
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 d-flex justify-content-between">
-              <div>
-                <h5 className="text-dark fw-bold">
-                  Data meetup yang sudah dibuat
-                </h5>
-              </div>
-              <div className="fs-5 me-1 flex-row fw-bold">
-                <Button
-                  type="button"
-                  className="me-4 text-dark fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    border: "1px solid #C4f601",
-                  }}
-                  onClick={downloadMeetup}
-                >
-                  <HiDownload className="fs-5 me-1 mb-1" />
-                  Unduh
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 d-flex justify-content-between">
-              <div>
-                <h5 className="text-dark fw-bold">
-                  Data Tasks yang telah berjalan
-                </h5>
-              </div>
-              <div className="fs-5 me-1 flex-row fw-bold">
-                <Button
-                  type="button"
-                  className="me-4 text-dark fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    border: "1px solid #C4f601",
-                  }}
-                >
-                  <HiDownload className="fs-5 me-1 mb-1" />
-                  Unduh
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 d-flex justify-content-between">
-              <div>
-                <h5 className="text-dark fw-bold">
-                  Data Promo yang sedang aktif
-                </h5>
-              </div>
-              <div className="fs-5 me-1 flex-row fw-bold">
-                <Button
-                  type="button"
-                  className="me-4 text-dark fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    border: "1px solid #C4f601",
-                  }}
-                >
-                  <HiDownload className="fs-5 me-1 mb-1" />
-                  Unduh
-                </Button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <p style={{ fontSize: 24, fontWeight: "700" }}>
+            Rekap Laporan {nama}
+          </p>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <InputGroup className="mb-3 mt-5">
+              <InputGroup.Text>From Date</InputGroup.Text>
+              <Form.Control
+                type="date"
+                placeholder="Select From Date"
+                value={fromDate}
+                onChange={(e) => {
+                  const selectedDate = moment(e.target.value).format(
+                    "YYYY-MM-DD"
+                  );
+                  setFromDate(selectedDate);
+                }}
+              />
+              <InputGroup.Text>To Date</InputGroup.Text>
+              <Form.Control
+                type="date"
+                placeholder="Select To Date"
+                value={toDate}
+                onChange={(e) => {
+                  const selectedDate = moment(e.target.value).format(
+                    "YYYY-MM-DD"
+                  );
+                  setTodate(selectedDate);
+                }}
+              />
+            </InputGroup>
+          </Form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            className="fw-bold text-dark"
+            style={{
+              background: "#F8F9FA",
+              border: "1px solid #C4f601",
+              borderRadius: "8px",
+              width: "117px",
+              height: "48px",
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => setShowModal(false)}
+          >
+            Batal
+          </Button>
+          <Button
+            type="button"
+            className="me-4 text-dark fw-bold"
+            style={{
+              background: "#C4f601",
+              border: "1px solid #C4f601",
+            }}
+            onClick={() => handleDownload(type)}
+          >
+            <HiDownload className="fs-5 me-1 mb-1" />
+            {isLoading ? "Loading…" : "Unduh"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <span className="d-none">{"Username"}</span>
     </div>
   );

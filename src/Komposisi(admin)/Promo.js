@@ -1,27 +1,55 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table } from "react-bootstrap";
-
-const data = [
-  {
-    Judul: "Hartono Lubis",
-    Expired: "12/05/2023",
-    Poin_name: "Futsal",
-    Banner: "../Assets/FotoMerchant.png",
-    Merchant: "XYZ Futsal",
-  },
-  {
-    Judul: "Hartono Lubis",
-    Expired: "12/05/2023",
-    Poin_name: "Futsal",
-    Banner: "../Assets/FotoMerchant.png",
-    Merchant: "XYZ Futsal",
-  },
-];
+import { Table, InputGroup, Form, Button } from "react-bootstrap";
+import { AxiosAdmin, currency } from "../utils";
+import moment from "moment";
 
 const Promo = () => {
+  const [promo, setPromoData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
+  const getPromo = async (search = "", page = 1) => {
+    const response = await AxiosAdmin.get(
+      `/promo/?page=${page}&size=${pageSize}&column_name=promo_name&query=${search}`
+    );
+    console.log(response);
+    if (response.data.message === "OK") {
+      const { totalPages } = response?.data?.data;
+      const data = response?.data?.data?.result;
+      setPromoData(data);
+      setTotalPages(totalPages);
+    }
+  };
+
+  useEffect(() => {
+    getPromo();
+  }, []);
+
+  const changePage = (page) => {
+    setCurrentPage(page);
+    getPromo(search, page);
+  };
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
+
   return (
     <div>
       <Navbaradmin konten="Laporan" />
@@ -37,7 +65,32 @@ const Promo = () => {
                 Berikut adalah data promo yang ditawarkan mitra
               </h6>
             </div>
-
+            <div className="d-flex mt-5">
+              <InputGroup className="mb-3 ">
+                <Form.Control
+                  placeholder="Ketikkan Nama Promo.."
+                  aria-label="Ketikkan Nama Promo.."
+                  aria-describedby="basic-addon2"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <Button
+                  className="fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    color: "#000000",
+                    border: "1px solid #C4f601",
+                  }}
+                  id="button-addon2"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    getPromo(search, 1);
+                  }}
+                >
+                  Cari
+                </Button>
+              </InputGroup>
+            </div>
             <div className="justify-content-center d-flex mt-5">
               <Table borderless={true}>
                 <thead>
@@ -56,24 +109,53 @@ const Promo = () => {
                     <th>Merchant</th>
                   </tr>
                 </thead>
-                {data.map((item, idx) => (
-                  <tbody className="fw-bold">
+                {promo?.map((item, idx) => (
+                  <tbody key={idx} className="fw-bold">
                     <tr>
-                      <td>{item.Judul}</td>
+                      <td>{item.promo_name}</td>
                       <td>
                         <img
-                          src="../Assets/FotoMerchant.png"
+                          src={item.promo_img}
                           style={{ width: 84, height: 39 }}
                         />
                       </td>
-                      <td>{item.Expired}</td>
-                      <td>{item.Poin_name}</td>
-                      <td>{item.Merchant}</td>
+                      <td>{moment(item.expiredIn).format("DD/MM/YYYY")}</td>
+                      <td>{currency(item.point)}</td>
+                      <td>{item.merchant?.merchant_name}</td>
                     </tr>
                   </tbody>
                 ))}
               </Table>
             </div>
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
+                </li>
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

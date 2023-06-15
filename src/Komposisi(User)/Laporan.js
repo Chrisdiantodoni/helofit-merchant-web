@@ -50,21 +50,27 @@ const Laporan = () => {
   };
 
   const handleDownload = (item) => {
-    switch (item.toLowerCase()) {
+    switch (item) {
       case "transaksi":
         getBooking(fromDate, toDate);
         console.log(item);
-      case "daftarpromo":
-        console.log(item);
-      case "custpromo":
-        console.log(item);
-      case "task":
+        break;
+      case "daftarPromo":
+        getPromo(fromDate, toDate);
         console.log(item);
         break;
-      case "custtask":
+      case "CustPromo":
+        getPromoUser(fromDate, toDate);
         console.log(item);
         break;
-
+      case "Task":
+        getTask(fromDate, toDate);
+        console.log(item);
+        break;
+      case "custTask":
+        getTaskStatus(fromDate, toDate);
+        console.log(item);
+        break;
       default:
         break;
     }
@@ -83,24 +89,18 @@ const Laporan = () => {
         const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
         const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
         const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
-
         return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
       });
       const workbook = XLSX.utils.book_new();
-
       const worksheet = XLSX.utils.json_to_sheet(filteredData);
-
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
       const excelBuffer = XLSX.write(workbook, {
         bookType: "xlsx",
         type: "array",
       });
-
       const excelBlob = new Blob([excelBuffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-
       const downloadLink = URL.createObjectURL(excelBlob);
       const link = document.createElement("a");
       link.href = downloadLink;
@@ -110,6 +110,143 @@ const Laporan = () => {
       console.log("Data Merchant tidak ada");
     }
   };
+  const getPromo = async (fromDate, toDate) => {
+    const response = await Axios.get(`/promo/${merchantId}`);
+    console.log(fromDate, toDate);
+    if (response.data.message === "OK") {
+      const data = response.data?.data;
+      setReserveData(data);
+      console.log(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `Daftar Promo ${fromDate} - ${toDate}.xlsx`;
+      link.click();
+    } else {
+      console.log("Data Merchant tidak ada");
+    }
+  };
+  const getPromoUser = async (fromDate, toDate) => {
+    const response = await Axios.get(`/promo/user/${merchantId}`);
+    console.log(fromDate, toDate);
+    if (response.data.message === "OK") {
+      const data = response.data?.data;
+      setReserveData(data);
+      console.log(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `Daftar Promo ${fromDate} - ${toDate}.xlsx`;
+      link.click();
+    } else {
+      console.log("Data Merchant tidak ada");
+    }
+  };
+  const getTask = async (fromDate, toDate) => {
+    const response = await Axios.get(`/task/${merchantId}`);
+    console.log(fromDate, toDate);
+    if (response.data.message === "OK") {
+      const data = response.data?.data?.result;
+      setReserveData(data);
+      console.log(data);
+      const filteredData = data.filter((item) => {
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
+        return createdAt >= desiredStartDate && createdAt <= desiredEndDate;
+      });
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `Daftar Task ${fromDate} - ${toDate}.xlsx`;
+      link.click();
+    } else {
+      console.log("Data Merchant tidak ada");
+    }
+  };
+  const getTaskStatus = async (fromDate, toDate) => {
+    const response = await Axios.get(`/task/list-task-user/${merchantId}`);
+    console.log(fromDate, toDate);
+    if (response.data.message === "OK") {
+      const data = response.data?.data?.result;
+      setReserveData(data);
+      console.log(data);
+      const filteredData = data.filter((item) => {
+        if (!item) {
+          return false;
+        }
+        const createdAt = moment(item.createdAt).format("YYYY-MM-DD");
+        const desiredStartDate = moment(fromDate).format("YYYY-MM-DD");
+        const desiredEndDate = moment(toDate).format("YYYY-MM-DD");
+        const task = item.task;
+        return (
+          createdAt >= desiredStartDate &&
+          createdAt <= desiredEndDate &&
+          task !== null
+        );
+      });
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelBlob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const downloadLink = URL.createObjectURL(excelBlob);
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.download = `Daftar Task User ${fromDate} - ${toDate}.xlsx`;
+      link.click();
+    } else {
+      console.log("Data Merchant tidak ada");
+    }
+  };
+
   return (
     <div>
       <Navbaruser konten="Laporan Merchant" />
