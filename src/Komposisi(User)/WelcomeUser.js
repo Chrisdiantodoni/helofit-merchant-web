@@ -16,8 +16,10 @@ import moment from "moment";
 
 const WelcomeUser = () => {
   const { merchantId } = useContext(Context);
-
+  const [statusTask, setStatusTask] = useState([]);
+  const [complete, setComplete] = useState([]);
   const location = useLocation();
+  const [getHour, setGetHour] = useState([]);
   const [profil, setProfil] = useState(0);
   const storedData = localStorage.getItem("dataUser");
   const [booking, setbooking] = useState([]);
@@ -27,10 +29,12 @@ const WelcomeUser = () => {
   const [merchant, setMerchant] = useState({});
   useEffect(() => {
     getMerchant();
+    getTaskStatus();
     getTask();
     getBooking();
     getPromo();
   }, []);
+
   const getPromo = async () => {
     const response = await Axios.get(`/promo/${merchantId}`);
     console.log(response);
@@ -57,9 +61,7 @@ const WelcomeUser = () => {
   };
 
   const getTask = async (search = "") => {
-    const response = await Axios.get(
-      `/task/${merchantId}?column_name=id&query=${search}`
-    );
+    const response = await Axios.get(`/task/${merchantId}`);
     const data = response.data?.data?.result;
     if (response.data?.message === "OK") {
       setDataTask(data || []);
@@ -68,11 +70,29 @@ const WelcomeUser = () => {
     console.log("dataTask", data);
   };
 
+  const getTaskStatus = async () => {
+    const response = await Axios.get(
+      `/task/list-task-user/${merchantId}?page=1&size=10`
+    );
+    const data = response?.data?.data?.result;
+    setStatusTask(data);
+    const filteredComplete = data.filter(
+      (filter) => filter.status === "selesai"
+    );
+    setComplete(filteredComplete);
+    console.log({ getTaskStatus: filteredComplete });
+  };
+
   const profilPercentage = () => {
     const percentage = 1 - profil.length / 10;
     const percetagee = percentage * 100;
-    console.log(percetagee);
-    return percetagee;
+    return percetagee.toFixed(0);
+  };
+
+  const taskPercentage = () => {
+    const percentage =
+      (parseInt(complete.length) / parseInt(statusTask.length)) * 100;
+    return percentage.toFixed(0);
   };
 
   const getBooking = async () => {
@@ -84,8 +104,9 @@ const WelcomeUser = () => {
       const filteredDate = data?.filter(
         (booking) => booking.booking_date >= today
       );
-      console.log("filtered data", filteredDate);
       setAllBooking(filteredDate);
+      console.log("All Booking", filteredDate);
+      setGetHour(filteredDate);
       const filteredKeepBooking = data
         ?.filter((booking) => booking.show != true)
         .filter((booking) => booking.booking_date >= today);
@@ -99,11 +120,15 @@ const WelcomeUser = () => {
     const bookingPercentage = booking.length;
     const percentage =
       (parseInt(bookingPercentage) / parseInt(allbookingPercentage)) * 100;
-    console.log(percentage);
-    return percentage;
+    return percentage.toFixed(0);
   };
+  const timeLengths = getHour.map((booking) => {
+    const timeArray = JSON.parse(booking.time);
+    return timeArray.length;
+  });
 
-  console.log(bookingPercentage());
+  const sum = timeLengths.reduce((total, length) => total + length, 0);
+
   return (
     <div>
       <Navbaruser konten="Dashboard Merchant" />
@@ -159,7 +184,7 @@ const WelcomeUser = () => {
                         <h6 className="card-title fw-bold text-success">
                           Reservasi Hari ini
                         </h6>
-                        <p className="card-text text-dark fw-bold">6 Jam</p>
+                        <p className="card-text text-dark fw-bold">{sum} Jam</p>
                       </div>
                       <div>
                         <TbSoccerField className="fs-3 mb-1" />
@@ -254,7 +279,9 @@ const WelcomeUser = () => {
                         ? "#28A745"
                         : profilPercentage() >= 50
                         ? "#FFC107"
-                        : "#DC3545"
+                        : profilPercentage() < 50
+                        ? "#DC3545"
+                        : "#7c7c7c"
                     }
                   />
                 </div>
@@ -281,7 +308,9 @@ const WelcomeUser = () => {
                         ? "#28A745"
                         : bookingPercentage() >= 50
                         ? "#FFC107"
-                        : "#DC3545"
+                        : bookingPercentage() < 50
+                        ? "#DC3545"
+                        : "#7c7c7c"
                     }
                   />
                 </div>
@@ -293,19 +322,24 @@ const WelcomeUser = () => {
                     <h6 className="fw-bold">
                       Capaian target customer menyelesaikan task
                     </h6>
-                    <h6 className="fw-bold"> 60/100%</h6>
+                    <h6 className="fw-bold">
+                      {" "}
+                      {taskPercentage() > 0 ? taskPercentage() : 0}/100%
+                    </h6>
                   </div>
 
                   <ProgressBar
-                    completed={60}
+                    completed={taskPercentage()}
                     isLabelVisible={false}
                     baseBgColor="#7c7c7c"
                     bgColor={
-                      bookingPercentage() > 75
+                      taskPercentage() > 75
                         ? "#28A745"
-                        : bookingPercentage() >= 50
+                        : taskPercentage() >= 50
                         ? "#FFC107"
-                        : "#DC3545"
+                        : taskPercentage() < 50
+                        ? "#DC3545"
+                        : "#7c7c7c"
                     }
                   />
                 </div>

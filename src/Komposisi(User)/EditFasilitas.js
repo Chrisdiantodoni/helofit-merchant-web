@@ -25,6 +25,7 @@ const EditFasilitas = (props) => {
 
   useEffect(() => {
     const today = new Date();
+    setIsSelected(moment(today).format("YYYY-MM-DD"));
     let newDates = [];
     for (let i = 0; i < 7; i++) {
       let date = new Date(today);
@@ -52,7 +53,7 @@ const EditFasilitas = (props) => {
 
   useEffect(() => {
     getHour();
-    if (!selectedBooking.length != 0) {
+    if (selectedBooking.length != 0) {
       setSelectedBooking([]);
     }
   }, [isSelected]);
@@ -60,7 +61,8 @@ const EditFasilitas = (props) => {
   const history = useHistory();
 
   const createBooking = async (e) => {
-    const total = parseInt(price) * parseInt(selectedBooking).length;
+    const total = parseInt(price) * parseInt(selectedBooking.length);
+    console.log(total);
     const body = {
       facilityId: idFacility,
       userId: null,
@@ -74,10 +76,14 @@ const EditFasilitas = (props) => {
 
     await Axios.post(`/booking`, body)
       .then((res) => {
-        console.log(res);
+        if (res) {
+          console.log(res);
+          window.location.reload();
+        }
       })
       .catch((error) => console.log(error));
   };
+
   const handleSelectedBooking = (item) => {
     const findDuplicate = selectedBooking.find(
       (find) => find.time === item.time
@@ -109,7 +115,17 @@ const EditFasilitas = (props) => {
     }
   };
 
-  const allChecked = checked.every((item) => item);
+  const validateSelectedBooking = (item) => {
+    const findDuplicate = selectedBooking.find(
+      (find) => find.time === item.time
+    );
+
+    if (findDuplicate?.time) {
+      return findDuplicate?.time;
+    } else {
+      return;
+    }
+  };
 
   return (
     <div>
@@ -190,16 +206,20 @@ const EditFasilitas = (props) => {
                               <div className="">
                                 <Form.Check
                                   label="tersedia"
-                                  // key={item.time}
+                                  key={item.time}
                                   // disabled={!item.available}
                                   type="checkbox"
                                   // id={`exampleCheckbox${index}`}
-                                  // checked={item.available ? false : true}
-                                  // onChange={() => {
-                                  //   if (item?.available) {
-                                  //     handleSelectedBooking(item);
-                                  //   }
-                                  // }}
+                                  checked={
+                                    validateSelectedBooking(item) === item.time
+                                      ? true
+                                      : false
+                                  }
+                                  onChange={() => {
+                                    if (item?.available) {
+                                      handleSelectedBooking(item);
+                                    }
+                                  }}
                                   // label={item.available ? "Tersedia" : "Terisi"}
                                 />
                               </div>
@@ -253,7 +273,6 @@ const EditFasilitas = (props) => {
                     width: "157px",
                     height: "48px",
                   }}
-                  disabled={allChecked}
                   onClick={createBooking}
                 >
                   Simpan

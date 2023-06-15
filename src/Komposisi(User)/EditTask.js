@@ -12,6 +12,7 @@ import { Axios } from "../utils";
 import { useEffect } from "react";
 import moment from "moment";
 import { each } from "lodash";
+import { useHistory } from "react-router-dom";
 
 const EditTask = (props) => {
   const [taskName, setTaskName] = useState("");
@@ -26,6 +27,7 @@ const EditTask = (props) => {
   const [point, setPoint] = useState(0);
   const idTask = props.location.state.id;
   console.log(idTask);
+  const history = useHistory();
 
   function handleImageChange(event) {
     const image = event.target.files[0];
@@ -243,6 +245,7 @@ const EditTask = (props) => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={() => history.goBack()}
             >
               Batal
             </Button>

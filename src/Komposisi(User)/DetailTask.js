@@ -15,22 +15,21 @@ import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const DetailTask = (props) => {
-  const idUser = props.location.state.id;
+  const idUser = props.location.state.idUser;
+  const taskUserId = props.location.state.taskUserId;
   const taskId = props.location.state.taskId;
   console.log(idUser);
+  const history = useHistory();
 
   const [dataTask, setDataTask] = useState("");
-  const [taskName, setTaskName] = useState("");
-  const [expiredIn, setExpiredIn] = useState(new Date());
-  const [listTask, setListTask] = useState([]);
-  const [banner, selectedBanner] = useState(null);
   const [selectedTask, setSelectedTask] = useState([]);
 
   const getDetailTask2 = async () => {
     const response = await Axios.get(
-      `/task/list-task-user/detail/${idUser}/${taskId}`
+      `/task/list-task-user/detail/${idUser}/${taskId}/${taskUserId}`
     );
     const data = response.data;
     setDataTask(data?.data);
@@ -46,19 +45,21 @@ const DetailTask = (props) => {
   const handleOnChangeTask = async (id) => {
     try {
       const body = {
-        taskDetailId: JSON.stringify([
-          ...selectedTask.map((item) => item.id.toString()),
-          ...(dataTask?.taskDetailId || []),
-        ]),
+        taskDetailId: JSON.stringify(
+          [
+            ...selectedTask.map((item) => item.id.toString()),
+            ...(dataTask?.taskDetailId || []),
+          ].filter(Boolean)
+        ),
       };
-      await Axios.put(`/task/list-task-user/detail/${idUser}`, body).then(
+      await Axios.put(`/task/list-task-user/detail/${taskUserId}`, body).then(
         (result) => {
           if (result.data.message == "OK") {
             getDetailTask2();
           }
         }
       );
-
+      window.location.reload();
       // Update the dataTask state with the updated taskDetailId
       console.log({ body });
     } catch (error) {
@@ -193,6 +194,7 @@ const DetailTask = (props) => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={() => history.goBack()}
             >
               Batal
             </Button>

@@ -7,9 +7,9 @@ import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import InputGroup from "react-bootstrap/InputGroup";
-
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
+import { useHistory } from "react-router-dom";
 
 const AddTask = (props) => {
   const dataUser = localStorage.getItem("dataUser");
@@ -24,6 +24,7 @@ const AddTask = (props) => {
   const [listTask2, setListTask2] = useState("");
   const [listTask3, setListTask3] = useState("");
   const [price, setPrice] = useState(0);
+  const history = useHistory();
 
   function handleImageChange(event) {
     const image = event.target.files[0];
@@ -241,6 +242,7 @@ const AddTask = (props) => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={() => history.goBack()}
             >
               Batal
             </Button>

@@ -57,6 +57,7 @@ const Tasks = () => {
     const response = await Axios.get(
       `/task/list-task-user/${merchantId}?page=1&size=10`
     );
+    console.log(response);
     const data = response?.data?.data?.result;
     setStatusTask(data);
     console.log({ getTaskStatus: data });
@@ -246,14 +247,18 @@ const Tasks = () => {
               {statusTask.map((item, idx) => (
                 <tbody className="fw-bold">
                   <tr>
-                    <td>{item.username}</td>
-                    <td>{item.phone_number || "-"}</td>
-                    <td>{item.task?.status || "-"}</td>
+                    <td>{item.user?.username}</td>
+                    <td>{item.user?.phone_number || "-"}</td>
+                    <td>{item?.status}</td>
                     <td>
                       <Link
                         to={{
                           pathname: `/welcome/DetailTask/`,
-                          state: { id: item.id, taskId: item?.task?.taskId },
+                          state: {
+                            idUser: item?.userId,
+                            taskId: item?.taskId,
+                            taskUserId: item?.id,
+                          },
                         }}
                         className="fw-bold text-dark btn d-flex"
                         style={{

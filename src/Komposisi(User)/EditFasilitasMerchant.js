@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import { Table } from "react-bootstrap";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import FacilityService from "../services/facility.service";
-
+import { useHistory } from "react-router-dom";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import categoryService from "../services/category.service";
 
@@ -113,6 +113,7 @@ class EditMerchant extends Component {
   }
 
   render() {
+    const { history } = this.props;
     const { options } = this.state;
     return (
       <div>
@@ -232,6 +233,7 @@ class EditMerchant extends Component {
                   width: "157px",
                   height: "48px",
                 }}
+                onClick={() => history.goBack()}
               >
                 Batal
               </Button>

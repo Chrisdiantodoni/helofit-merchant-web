@@ -14,6 +14,7 @@ import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { useState } from "react";
 import { Context } from "./../context/index";
 import { Axios, currency } from "../utils";
+import { useHistory } from "react-router-dom";
 
 const AddPromo = () => {
   const { merchantId } = useContext(Context);
@@ -23,6 +24,7 @@ const AddPromo = () => {
   const fileInputRef = useRef(null);
   const [cost, setCost] = useState(0);
   const [expiredDate, setExpiredDate] = useState("");
+  const history = useHistory();
 
   function handleImageChange(event) {
     const image = event.target.files[0];
@@ -195,6 +197,7 @@ const AddPromo = () => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={() => history.goBack()}
             >
               Batal
             </Button>

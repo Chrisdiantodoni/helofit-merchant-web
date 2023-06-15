@@ -8,11 +8,13 @@ import Form from "react-bootstrap/Form";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios, currency } from "../utils";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 const DetailPromo = (props) => {
   const idUserPromo = props.location.state.id;
   console.log(idUserPromo);
   const [dataPromo, setDataPromo] = useState([]);
+  const history = useHistory();
   const [statusPromo, setStatusPromo] = useState("");
   const getPromo = async () => {
     const response = await Axios.get(`/promo/detail-user/${idUserPromo}`);
@@ -153,6 +155,7 @@ const DetailPromo = (props) => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={() => history.goBack()}
             >
               Batal
             </Button>

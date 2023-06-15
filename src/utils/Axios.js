@@ -2,7 +2,8 @@ import axios from "axios";
 import Cookie from "js-cookie";
 
 // const baseURL = "http://localhost:3002/api/v1/admin";
-const baseURL = "http://192.168.0.118:3002/api/v1/admin";
+// const baseURL = "http://192.168.100.59:3002/api/v1/admin";
+const baseURL = "http://192.168.146.118:3002/api/v1/admin";
 
 // const timeout = 16000;
 

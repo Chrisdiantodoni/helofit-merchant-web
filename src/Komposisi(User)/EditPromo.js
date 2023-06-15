@@ -14,10 +14,11 @@ import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { useState } from "react";
 import { Context } from "./../context/index";
 import { Axios, currency } from "../utils";
+import { useHistory } from "react-router-dom";
 
 const AddPromo = (props) => {
   const idPromo = props.location.state.id;
-
+  const history = useHistory();
   const { merchantId } = useContext(Context);
   const [promoName, setPromoName] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
@@ -215,6 +216,7 @@ const AddPromo = (props) => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={() => history.goBack()}
             >
               Batal
             </Button>
