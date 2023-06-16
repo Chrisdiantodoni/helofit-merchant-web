@@ -6,8 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Table } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import { Table, Modal, Col, Form, Row } from "react-bootstrap";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import InputGroup from "react-bootstrap/InputGroup";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
@@ -15,6 +14,7 @@ import { useState } from "react";
 import { Context } from "./../context/index";
 import { Axios, currency } from "../utils";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
 
 const AddPromo = (props) => {
   const idPromo = props.location.state.id;
@@ -55,8 +55,23 @@ const AddPromo = (props) => {
   useEffect(() => {
     getDetailTask();
   }, []);
-
+  const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleCloseErrorModal = () => {
+    setShowErrorModal(false);
+  };
   const handleEditPromo = async () => {
+    if (
+      promoName === "" ||
+      cost === "" ||
+      expiredDate === "" ||
+      selectedBanner === null
+    ) {
+      setErrorMessage("Promo masih kosong");
+      setShowErrorModal(true);
+      return;
+    }
     const formData = new FormData();
     formData.append("promo_name", promoName);
     formData.append("merchantId", merchantId);
@@ -72,6 +87,8 @@ const AddPromo = (props) => {
     await Axios.put(`/promo/${idPromo}`, formData)
       .then((res) => {
         console.log(res);
+        setShowModal(true);
+        window.location.href = "/welcome/promo";
       })
       .catch((err) => console.log({ err }));
   };
@@ -84,6 +101,7 @@ const AddPromo = (props) => {
       console.log(data);
       setPromoName(data?.promo_name);
       setPreviewImage(data?.promo_img);
+      setSelectedBanner(data?.promo_img);
       setExpiredDate(data?.ExpiredIn);
       setCost(data?.cost);
     }
@@ -103,108 +121,139 @@ const AddPromo = (props) => {
                 Berikan promo yang Anda tawarkan ke customer
               </h6>
             </div>
-            <Table borderless={true}>
-              <tbody className="fw-bold">
-                <tr>
-                  <td>Judul Promo</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      value={promoName}
-                      onChange={(e) => setPromoName(e.target.value)}
-                    />
-                  </td>
-                </tr>
+            <Form>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column sm="4" className="fw-bold">
+                  Judul Promo
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    type="text"
+                    style={{ borderRadius: 8 }}
+                    value={promoName}
+                    onChange={(e) => setPromoName(e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
 
-                <tr>
-                  <td>Banner</td>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextPassword"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Banner
+                </Form.Label>
+                <Col sm="8">
                   <input
                     type="file"
                     onChange={handleImageChange}
                     style={{ display: "none" }}
                     ref={fileInputRef}
                   />
-                  <td>
-                    <Button
-                      className="fw-bold text-dark me-4"
-                      style={{
-                        background: "#c4f601",
-                        border: "1px solid #C4f601",
-                        borderRadius: "8px",
-                        width: "157px",
-                        height: "48px",
-                      }}
-                      onClick={handleButtonClick}
-                    >
-                      Tambah Foto
-                    </Button>
-                    <Button
-                      className="fw-bold text-dark me-4"
-                      style={{
-                        background: "#DC3545",
-                        border: "1px solid #DC3545",
-                        borderRadius: "8px",
-                      }}
-                      onClick={handleRemoveClick}
-                    >
-                      <Logo />
-                      <img />
-                    </Button>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>
-                    {previewImage && (
-                      <div>
-                        <img
-                          src={previewImage}
-                          style={{ width: 430, height: 130 }}
-                          alt="Preview"
-                        />
-                      </div>
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Berlaku Sampai</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      type="date"
-                      value={expiredDate}
-                      onChange={(e) => setExpiredDate(e.target.value)}
-                    />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Besarnya Biaya Potongan</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      value={cost}
-                      onChange={(e) => setCost(e.target.value)}
-                    />
-                    per Promo
-                  </td>
-                </tr>
-                <tr>
-                  <td>Poin yang ditukarkan</td>
-                  <td>
-                    <input
-                      value={parseInt(totalPoin(cost)) || 0}
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        border: "none",
-                        backgroundColor: "#D9D9D9",
-                      }}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
+                  <Button
+                    className="fw-bold text-dark me-4"
+                    style={{
+                      background: "#c4f601",
+                      border: "1px solid #C4f601",
+                      borderRadius: "8px",
+                      width: "157px",
+                      height: "48px",
+                    }}
+                    onClick={handleButtonClick}
+                  >
+                    Tambah Foto
+                  </Button>
+                  <Button
+                    className="fw-bold text-dark me-4"
+                    style={{
+                      background: "#DC3545",
+                      border: "1px solid #DC3545",
+                      borderRadius: "8px",
+                    }}
+                    onClick={handleRemoveClick}
+                  >
+                    <Logo />
+                    <img />
+                  </Button>
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4"></Form.Label>
+                <Col sm="8">
+                  {previewImage && (
+                    <div>
+                      <img
+                        src={previewImage}
+                        style={{ width: 430, height: 130 }}
+                        alt="Preview"
+                      />
+                    </div>
+                  )}
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Berlaku Sampai
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    type="date"
+                    style={{ borderRadius: 8 }}
+                    value={expiredDate}
+                    onChange={(e) => setExpiredDate(e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label
+                  column
+                  sm="4"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  Besarnya Biaya Potongan
+                </Form.Label>
+                <Col sm="6">
+                  <Form.Control
+                    style={{ borderRadius: 8 }}
+                    value={cost}
+                    onChange={(e) => setCost(e.target.value)}
+                  />
+                </Col>
+                <Form.Label column sm="2">
+                  per Promo
+                </Form.Label>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Poin yang ditukarkan
+                </Form.Label>
+                <Col sm="1">
+                  <Form.Control
+                    style={{ borderRadius: 8 }}
+                    value={currency(parseInt(totalPoin(cost))) || 0}
+                    disabled={true}
+                  />
+                </Col>
+              </Form.Group>
+            </Form>
           </div>
           <div className="d-flex justify-content-end">
             <Button
@@ -236,6 +285,27 @@ const AddPromo = (props) => {
           </div>
         </div>
       </div>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Promo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Promo Berhasil diedit</p>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{errorMessage}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseErrorModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

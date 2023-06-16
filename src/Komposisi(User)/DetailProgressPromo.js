@@ -3,7 +3,7 @@ import AuthService from "../services/auth.service";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { Table } from "react-bootstrap";
+import { Table, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios, currency } from "../utils";
@@ -58,92 +58,124 @@ const DetailPromo = (props) => {
             <div className="d-flex justify-content-between">
               <h6 className="text-muted fw-bold">Detail Progress Promo</h6>
             </div>
-            <Table borderless={true}>
-              <tbody className="fw-bold">
-                <tr>
-                  <td>Tanggal Memulai</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={moment(dataPromo?.createdAt).format("DD/MM/YYYY")}
-                    />
-                  </td>
-                </tr>
+            <Form>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column sm="4" className="fw-bold">
+                  Tanggal Memulai
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={moment(dataPromo?.createdAt).format("DD/MM/YYYY")}
+                  />
+                </Col>
+              </Form.Group>
 
-                <tr>
-                  <td>Nama Customer</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={dataPromo?.user?.username}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>No Handphone</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={"082134567890"}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Kode Promo</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={dataPromo?.promo?.id}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>List Promo</td>
-                  <td className="mb-3 d-flex" style={{ flexDirection: "row" }}>
-                    <Form>
-                      <div key="radio" className="mb-3 d-flex">
-                        <Form.Check
-                          type="radio"
-                          id="belum-digunakan"
-                          label="Belum Digunakan"
-                          value="Belum Digunakan"
-                          checked={statusPromo === "Belum Digunakan"}
-                          onChange={handleRadioChange}
-                        />
-                        <Form.Check
-                          type="radio"
-                          id="sudah-digunakan"
-                          label="Sudah Digunakan"
-                          value="Sudah Digunakan"
-                          checked={statusPromo === "Sudah Digunakan"}
-                          onChange={handleRadioChange}
-                        />
-                      </div>
-                    </Form>
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Nama Customer
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={dataPromo?.user?.username}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label
+                  column
+                  sm="4"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  No Handphone
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={"082134567890"}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Kode Promo
+                </Form.Label>
+                <Col sm="1">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={dataPromo?.promo?.id}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  List Promo
+                </Form.Label>
+                <Col sm="8">
+                  <Form>
+                    <div key="radio" className="mr-5 d-flex">
+                      <Form.Check
+                        type="radio"
+                        id="belum-digunakan"
+                        label="Belum Digunakan"
+                        value="Belum Digunakan"
+                        checked={statusPromo === "Belum Digunakan"}
+                        onChange={handleRadioChange}
+                      />
+                      <div className="ml-3" />
+                      <p>{`     `}</p>
+                      <Form.Check
+                        type="radio"
+                        id="sudah-digunakan"
+                        label="Sudah Digunakan"
+                        value="Sudah Digunakan"
+                        checked={statusPromo === "Sudah Digunakan"}
+                        className="mr-5"
+                        onChange={handleRadioChange}
+                      />
+                    </div>
+                  </Form>
+                </Col>
+              </Form.Group>
+            </Form>
           </div>
           <div className="d-flex justify-content-end">
             <Button

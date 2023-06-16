@@ -6,7 +6,7 @@ import "../css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./Footer";
 import "./Login.css";
-import { Container, Modal, Button } from "react-bootstrap";
+import { Container, Button, Modal } from "react-bootstrap";
 import { isEmail } from "validator";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
@@ -107,8 +107,9 @@ const Login = () => {
           name: "dataUser",
           value: JSON.stringify(dataUser),
         });
+        setShowSuccessModal(true);
+        history.push("/welcome/user");
       }
-      setShowSuccessModal(true);
     } catch (error) {
       console.log(error);
     }

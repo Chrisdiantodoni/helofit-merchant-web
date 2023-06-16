@@ -6,7 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Table } from "react-bootstrap";
+import { Table, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -86,7 +86,7 @@ const DetailTask = (props) => {
 
   return (
     <div>
-      <Navbaruser konten="Add Fasilitas" />
+      <Navbaruser konten="Detail Progress Task" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaruser />
@@ -99,87 +99,134 @@ const DetailTask = (props) => {
                 Detail proses customer mengerjakan task
               </h6>
             </div>
+            <Form>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column sm="4" className="fw-bold">
+                  Tanggal Memulai
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={moment(dataTask?.createdAt).format("DD/MM/YYYY")}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Nama Customer
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={dataTask?.userInfo?.username}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label
+                  column
+                  sm="4"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  No Handphone
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={dataTask?.userInfo?.phone_number || "-"}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label
+                  column
+                  sm="4"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  Kode Task
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      fontWeight: "bold",
+                      color: "#7C7C7C",
+                    }}
+                    value={dataTask?.taskId}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label
+                  column
+                  sm="4"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  List Task
+                </Form.Label>
+                <Col sm="8">
+                  <Form className="fw-bold">
+                    {dataTask?.list_task?.map((item, index) => (
+                      <div key={item.id} className="mb-3">
+                        {dataTask?.taskDetailId?.includes(
+                          JSON.stringify(item?.id)
+                        ) ? (
+                          item.task_name + " Selesai"
+                        ) : (
+                          <Form.Check
+                            type="checkbox"
+                            id={`exampleCheckbox${index}`}
+                            label={item.task_name}
+                            onClick={() => handleSelectedTask(item)}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </Form>
+                </Col>
+              </Form.Group>
+            </Form>
             <Table borderless={true}>
               <tbody className="fw-bold">
                 <tr>
-                  <td>Tanggal Memulai</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={moment(dataTask?.createdAt).format("DD/MM/YYYY")}
-                    />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Nama Customer</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={dataTask?.userInfo?.username}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>No Handphone</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={dataTask?.userInfo?.phone_number || "-"}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Kode Task</td>
-                  <td>
-                    <input
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        fontWeight: "bold",
-                        color: "#7C7C7C",
-                      }}
-                      value={dataTask?.taskId}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>List Task</td>
-                  <td>
-                    <Form>
-                      {dataTask?.list_task?.map((item, index) => (
-                        <div key={item.id} className="mb-3">
-                          {dataTask?.taskDetailId?.includes(
-                            JSON.stringify(item?.id)
-                          ) ? (
-                            item.task_name + " Selesai"
-                          ) : (
-                            <Form.Check
-                              type="checkbox"
-                              id={`exampleCheckbox${index}`}
-                              label={item.task_name}
-                              onClick={() => handleSelectedTask(item)}
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </Form>
-                  </td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </tbody>
             </Table>

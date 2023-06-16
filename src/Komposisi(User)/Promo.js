@@ -17,15 +17,6 @@ import moment from "moment";
 const Promo = () => {
   const { merchantId } = useContext(Context);
 
-  const data1 = [
-    {
-      tanggal: "12/06/22",
-      nama: "hartono Lubis",
-      no_hp: "082164896939",
-      kode_task: "12345",
-      status: "Selesai",
-    },
-  ];
   const [dataPromo, setDataPromo] = useState([]);
   const [userPromo, setPromoUser] = useState([]);
   const getPromo = async () => {

@@ -22,11 +22,14 @@ const WelcomeUser = () => {
   const [getHour, setGetHour] = useState([]);
   const [profil, setProfil] = useState(0);
   const storedData = localStorage.getItem("dataUser");
+  const token = localStorage.getItem("token");
   const [booking, setbooking] = useState([]);
   const [allBooking, setAllBooking] = useState([]);
   const [dataPromo, setDataPromo] = useState([]);
   console.log(JSON.parse(storedData));
+  console.log(token);
   const [merchant, setMerchant] = useState({});
+
   useEffect(() => {
     getMerchant();
     getTaskStatus();
@@ -60,7 +63,7 @@ const WelcomeUser = () => {
     }
   };
 
-  const getTask = async (search = "") => {
+  const getTask = async () => {
     const response = await Axios.get(`/task/${merchantId}`);
     const data = response.data?.data?.result;
     if (response.data?.message === "OK") {
@@ -71,9 +74,7 @@ const WelcomeUser = () => {
   };
 
   const getTaskStatus = async () => {
-    const response = await Axios.get(
-      `/task/list-task-user/${merchantId}?page=1&size=10`
-    );
+    const response = await Axios.get(`/task/list-task-user/${merchantId}`);
     const data = response?.data?.data?.result;
     setStatusTask(data);
     const filteredComplete = data.filter(

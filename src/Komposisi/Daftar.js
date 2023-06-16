@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 const Daftar = () => {
   const history = useHistory();
   const [nama, setNama] = useState("");
-  const [selectedOlahraga, setSelectedOlahraga] = useState("Basket");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pin, setPin] = useState("");
@@ -51,7 +51,7 @@ const Daftar = () => {
           Ayo Menjadi Bagian dari Kami
         </p>
         <div
-          className="container w-md-50 rounded-3 mx-auto mb-3"
+          className="container w-md-100 rounded-3 mx-auto mb-3"
           style={{ background: "#161616" }}
         >
           <Form
@@ -81,7 +81,6 @@ const Daftar = () => {
                   // validations={[required, vfield]}
                   className="text-light form-control"
                   style={{
-                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     backgroundColor: "#7c7c7c",
@@ -92,38 +91,6 @@ const Daftar = () => {
                   }}
                 ></Input>
               </div>
-              <div class="form-group mb-3">
-                <label
-                  className="text-light "
-                  style={{ fontSize: 24, fontweight: "700" }}
-                >
-                  Jenis Olahraga
-                </label>
-              </div>
-              <select
-                value={selectedOlahraga}
-                onChange={(e) => setSelectedOlahraga(e.target.value)}
-                style={{
-                  maxWidth: "515px",
-                  height: "56px",
-                  borderRadius: 16,
-                  backgroundColor: "#7c7c7c",
-                  border: "1px solid #7c7c7c",
-                  fontWeight: "700",
-                  fontSize: 20,
-                  color: "#ffffff",
-                  paddingLeft: 5,
-                  fontSize: 20,
-                  color: "#ffffff",
-                  paddingLeft: 5,
-                }}
-              >
-                <option value="Basket">Basket</option>
-                <option value="Futsal">Futsal</option>
-                <option value="Badminton">Badminton</option>
-                <option value="Yoga">Yoga</option>
-                <option value="Fitness">Fitness</option>
-              </select>
               <div class="form-group mb-3">
                 <label
                   className="text-light "
@@ -140,7 +107,6 @@ const Daftar = () => {
                   placeholder="Masukkan Email"
                   // validations={[required, email, vfield]}
                   style={{
-                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     backgroundColor: "#7c7c7c",
@@ -167,7 +133,6 @@ const Daftar = () => {
                   // validations={[required, vfield]}
                   placeholder="Masukkan Password"
                   style={{
-                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     backgroundColor: "#7c7c7c",
@@ -194,7 +159,6 @@ const Daftar = () => {
                   // validations={[required, vfield]}
                   placeholder="Masukkan Password"
                   style={{
-                    maxWidth: "515px",
                     height: "56px",
                     borderRadius: 16,
                     backgroundColor: "#7c7c7c",

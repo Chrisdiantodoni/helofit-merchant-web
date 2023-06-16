@@ -3,12 +3,12 @@ import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Table } from "react-bootstrap";
+import { Table, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
 import InputGroup from "react-bootstrap/InputGroup";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
-import { Axios } from "../utils";
+import { Axios, currency } from "../utils";
 import { useEffect } from "react";
 import moment from "moment";
 import { each } from "lodash";
@@ -20,14 +20,13 @@ const EditTask = (props) => {
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [expiredDate, setExpiredDate] = useState("");
   const [listTask, setListTask] = useState([]);
-  const [listTask2, setListTask2] = useState("");
-  const [listTask3, setListTask3] = useState("");
   const [dataTask, setDataTask] = useState({});
   const [price, setPrice] = useState(0);
   const [point, setPoint] = useState(0);
   const idTask = props.location.state.id;
   console.log(idTask);
   const history = useHistory();
+  const fileInputRef = useRef(null);
 
   function handleImageChange(event) {
     const image = event.target.files[0];
@@ -48,6 +47,7 @@ const EditTask = (props) => {
     setExpiredDate(moment(data?.expiredIn).format("YYYY-MM-DD"));
     setListTask(data.list_task);
     setPoint(data.poin);
+    setPreviewImage(data.banner_img);
     setPrice(parseInt(data.poin) * 1000);
     console.log({ data });
   };
@@ -60,7 +60,9 @@ const EditTask = (props) => {
     const poin = price / 1000;
     return poin;
   };
-
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
   const handleEditTask = async () => {
     console.log({ listTask });
     const formData = new FormData();
@@ -100,140 +102,190 @@ const EditTask = (props) => {
 
   return (
     <div>
-      <Navbaruser konten="Add Fasilitas" />
+      <Navbaruser konten="Edit Task" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaruser />
         </div>
         <div className="col-10 mt-5">
           <div class="container">
-            <h5 className="text-dark fw-bold">Tambah Fasilitas</h5>
+            <h5 className="text-dark fw-bold">Edit Task</h5>
             <div className="d-flex justify-content-between">
               <h6 className="text-muted fw-bold">
                 Berikan daftar task yang dapat customer kerjakan
               </h6>
             </div>
-            <Table borderless={true}>
-              <tbody className="fw-bold">
-                <tr>
-                  <td>Judul task</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      value={taskName}
-                      onChange={(e) => setTaskName(e.target.value)}
-                    />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Banner</td>
-                  <td>
-                    <input
-                      type="file"
-                      onChange={handleImageChange}
-                      style={{}}
-                    />
-
-                    {/* <Button
-                      className="fw-bold text-dark me-4"
-                      style={{
-                        background: "#c4f601",
-                        border: "1px solid #C4f601",
-                        borderRadius: "8px",
-                        width: "157px",
-                        height: "48px",
-                      }}
-                      onChange={handleClick}
-                    >
-                      Tambah Foto
-                    </Button> */}
-
-                    <Button
-                      className="fw-bold text-dark me-4"
-                      style={{
-                        background: "#DC3545",
-                        border: "1px solid #DC3545",
-                        borderRadius: "8px",
-                      }}
-                      onClick={handleRemoveClick}
-                    >
-                      <Logo />
-                    </Button>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>
-                    {previewImage && (
-                      <div>
-                        <img
-                          src={
-                            selectedBanner
-                              ? URL.createObjectURL(selectedBanner)
-                              : null
-                          }
-                          style={{ width: 430, height: 130 }}
-                          alt="Preview"
-                        />
-                      </div>
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Berlaku Sampai</td>
-                  <td>
-                    <input
-                      style={{ borderRadius: 8 }}
-                      type="date"
-                      value={expiredDate}
-                      onChange={(e) => setExpiredDate(e.target.value)}
-                    />
-                  </td>
-                </tr>
-                {listTask?.map((item, idx) => (
-                  <tr>
-                    <td>Task ke-{idx + 1}</td>
-                    <td>
-                      <input
-                        style={{ borderRadius: 8 }}
-                        value={listTask[idx].task_name}
-                        onChange={(e) => handleOnChangeTask(e, idx)}
+            <Form>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column sm="4" className="fw-bold">
+                  Judul task
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    type="text"
+                    style={{ borderRadius: 8 }}
+                    value={taskName}
+                    onChange={(e) => setTaskName(e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextPassword"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Banner
+                </Form.Label>
+                <Col sm="8">
+                  <input
+                    type="file"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                  />
+                  <Button
+                    className="fw-bold text-dark me-4"
+                    style={{
+                      background: "#c4f601",
+                      border: "1px solid #C4f601",
+                      borderRadius: "8px",
+                      width: "157px",
+                      height: "48px",
+                    }}
+                    onClick={handleButtonClick}
+                  >
+                    Tambah Foto
+                  </Button>
+                  <Button
+                    className="fw-bold text-dark me-4"
+                    style={{
+                      background: "#DC3545",
+                      border: "1px solid #DC3545",
+                      borderRadius: "8px",
+                    }}
+                    onClick={handleRemoveClick}
+                  >
+                    <Logo />
+                    <img />
+                  </Button>
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4"></Form.Label>
+                <Col sm="8">
+                  {previewImage && (
+                    <div>
+                      <img
+                        src={previewImage}
+                        style={{ width: 430, height: 130 }}
+                        alt="Preview"
                       />
-                    </td>
-                  </tr>
-                ))}
+                    </div>
+                  )}
+                </Col>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label column sm="4" className="fw-bold">
+                  Berlaku Sampai
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    style={{ borderRadius: 8 }}
+                    type="date"
+                    value={expiredDate}
+                    onChange={(e) => setExpiredDate(e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
 
-                <tr>
-                  <td>Biaya yang dikeluarkan customer</td>
-                  <td>
-                    <input
+              {listTask?.map((item, idx) => (
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextEmail"
+                >
+                  <Form.Label
+                    column
+                    sm="4"
+                    className="fw-bold"
+                    style={{ borderRadius: 8 }}
+                  >
+                    Task ke - {idx + 1}
+                  </Form.Label>
+                  <Col sm="8">
+                    <Form.Control
                       style={{ borderRadius: 8 }}
-                      value={price}
-                      onChange={(e) => {
-                        setPrice(e.target.value);
-                        setPoint(parseInt(e.target.value / 1000));
-                      }}
+                      value={listTask[idx].task_name}
+                      onChange={(e) => handleOnChangeTask(e, idx)}
                     />
-                    per keseluruhan task
-                  </td>
-                </tr>
-                <tr>
-                  <td>Poin yang didapatkan</td>
-                  <td>
-                    <input
-                      value={point}
-                      disabled={true}
-                      style={{
-                        borderRadius: 8,
-                        border: "none",
-                        backgroundColor: "#D9D9D9",
-                      }}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
+                  </Col>
+                </Form.Group>
+              ))}
+
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label
+                  column
+                  sm="4"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  Biaya yang dikeluarkan customer
+                </Form.Label>
+                <Col sm="6">
+                  <Form.Control
+                    style={{ borderRadius: 8 }}
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                </Col>
+                <Form.Label
+                  column
+                  sm="2"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  per keseluruhan task
+                </Form.Label>
+              </Form.Group>
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextEmail"
+              >
+                <Form.Label
+                  column
+                  sm="4"
+                  className="fw-bold"
+                  style={{ borderRadius: 8 }}
+                >
+                  Poin yang didapatkan
+                </Form.Label>
+                <Col sm="8">
+                  <Form.Control
+                    value={currency(parseInt(totalPoin(price))) || 0}
+                    disabled={true}
+                    style={{
+                      borderRadius: 8,
+                      border: "none",
+                      backgroundColor: "#D9D9D9",
+                    }}
+                  />
+                </Col>
+              </Form.Group>
+            </Form>
           </div>
           <div className="d-flex justify-content-end">
             <Button

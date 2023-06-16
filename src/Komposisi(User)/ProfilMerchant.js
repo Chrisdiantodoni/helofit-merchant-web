@@ -6,7 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Table } from "react-bootstrap";
+import { Table, Modal, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
@@ -16,6 +16,7 @@ import { moneyFormat } from "../utils/format";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { useQuery } from "react-query";
 import merchantService from "../services/merchant.service";
+import { Axios } from "../utils";
 
 const ProfilMerchant = () => {
   const getDataUser = () => {
@@ -123,7 +124,139 @@ const ProfilMerchant = () => {
                   Ubah
                 </Link>
               </div>
-              <Table borderless={true}>
+              <Form>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column sm="4" className="fw-bold">
+                    Nama Merchant
+                  </Form.Label>
+                  <Col sm="6">
+                    <Form.Control
+                      type="text"
+                      style={{ borderRadius: 8 }}
+                      value={data?.data?.merchant_info?.merchant_name || "-"}
+                      disabled={true}
+                    />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextEmail"
+                >
+                  <Form.Label column sm="4" className="fw-bold">
+                    Lokasi
+                  </Form.Label>
+                  <Col sm="6">
+                    <Form.Control
+                      style={{ borderRadius: 8 }}
+                      value={data?.data?.merchant_info?.address || "-"}
+                      disabled={true}
+                    />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextEmail"
+                >
+                  <Form.Label
+                    column
+                    sm="4"
+                    className="fw-bold"
+                    style={{ borderRadius: 8 }}
+                  >
+                    Deskripsi
+                  </Form.Label>
+                  <Col sm="6">
+                    <Form.Control
+                      style={{ borderRadius: 8 }}
+                      value={data?.data?.merchant_info?.desc || "-"}
+                      disabled={true}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextEmail"
+                >
+                  <Form.Label
+                    column
+                    sm="4"
+                    className="fw-bold"
+                    style={{ borderRadius: 8 }}
+                  >
+                    Foto Merchant
+                  </Form.Label>
+                  <Col sm="6">
+                    {data?.data?.merchant_info?.img_merchant
+                      ? parsingImgMerchant(data)?.map((item, key) => {
+                          return (
+                            <img
+                              src={item}
+                              key={key}
+                              width="50%"
+                              height={100}
+                              style={{ objectFit: "cover" }}
+                            />
+                          );
+                        })
+                      : null}
+                  </Col>
+                </Form.Group>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextEmail"
+                >
+                  <Form.Label
+                    column
+                    sm="4"
+                    className="fw-bold"
+                    style={{ borderRadius: 8 }}
+                  >
+                    Prasarana yang tersedia
+                  </Form.Label>
+                  <Col sm="8">
+                    {data?.data?.feature_merchant?.map((item, idx) => {
+                      return <h6>{item?.feature?.feature_name || "-"}</h6>;
+                    }) || "-"}
+                  </Col>
+                </Form.Group>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextEmail"
+                >
+                  <Form.Label
+                    column
+                    sm="4"
+                    className="fw-bold"
+                    style={{ borderRadius: 8 }}
+                  >
+                    Jadwal buka
+                  </Form.Label>
+                  <Col sm="6">
+                    <h6 className="fw-bold">
+                      {displayDayOpenMerchant(data?.data?.merchant_time)}
+                    </h6>
+                    <h6 className="fw-bold">
+                      {(filteredData &&
+                        filteredData[days] &&
+                        filteredData[days][0]) ||
+                        "-"}{" "}
+                      -{" "}
+                      {(filteredData &&
+                        filteredData[days] &&
+                        filteredData[days][1]) ||
+                        "-"}
+                    </h6>
+                  </Col>
+                </Form.Group>
+              </Form>
+              {/* <Table borderless={true}>
                 <tbody className="fw-bold">
                   <tr>
                     <td>Nama Merchant</td>
@@ -189,7 +322,7 @@ const ProfilMerchant = () => {
                     </td>
                   </tr>
                 </tbody>
-              </Table>
+              </Table> */}
             </div>
             <div class="container">
               <h5 className="text-dark fw-bold">Detail Fasilitas</h5>
@@ -237,6 +370,22 @@ const ProfilMerchant = () => {
 export default withRouter(ProfilMerchant);
 
 const DisplayListFailitas = ({ category_name, facility }) => {
+  const handleDeleteFacility = async (id) => {
+    console.log(id);
+    try {
+      await Axios.delete(`/facility/${id}`)
+        .then((res) => {
+          if (res) {
+            console.log(res);
+            window.location.reload();
+          }
+        })
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <Table borderless={true}>
@@ -312,7 +461,14 @@ const DisplayListFailitas = ({ category_name, facility }) => {
                       height: "40%",
                     }}
                   >
-                    <LogoEdit />
+                    <Link
+                      to={{
+                        pathname: `/welcome/EditEachFacility`,
+                        state: { id: item.id },
+                      }}
+                    >
+                      <LogoEdit />
+                    </Link>
                     <img />
                   </Button>
                   <Button
@@ -323,6 +479,7 @@ const DisplayListFailitas = ({ category_name, facility }) => {
                       borderRadius: "8px",
                       height: "40%",
                     }}
+                    onClick={() => handleDeleteFacility(item.id)}
                   >
                     <Logo />
                     <img />
