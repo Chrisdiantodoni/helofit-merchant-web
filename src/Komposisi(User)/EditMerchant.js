@@ -1,39 +1,186 @@
-import React, { Component } from "react";
-import AuthService from "../services/auth.service";
+import React, { useEffect, useState, useRef } from "react";
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
-import InputGroup from "react-bootstrap/InputGroup";
+import Axios from "../services/axios";
 
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 
 const EditMerchant = () => {
-  const data = [
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-    {
-      kode_reservasi: "135780",
-      tanggal: "12/06/22",
-      jam: "17:00",
-      fasilitas: "Lapangan 1",
-      nama_cust: "Rudi Suprapto",
-      no_hp: "085297614911",
-      Total_Biaya: "Rp.100.000",
-    },
-  ];
+  const dataUser = localStorage.getItem("dataUser")
+    ? JSON.parse(localStorage.getItem("dataUser"))
+    : {};
+
+  const [merchantInfo, setMerchantInfo] = useState({});
+  const [feature, setFeature] = useState([]);
+  const [merchantTime, setMerchantTime] = useState({});
+  const [listFeature, setListFeature] = useState([]);
+  const [imgBanner, setImgBanner] = useState("");
+
+  const change_photo = useRef(null);
+
+  console.log({ dataUser });
+
+  const getDetailMerchant = async () => {
+    const response = await Axios.get(`/merchant/${dataUser?.id || null}`);
+
+    if (response.data?.message === "OK") {
+      setMerchantInfo(response.data?.data?.merchant_info);
+      setFeature(
+        response.data?.data?.feature_merchant?.map((item) => item.feature)
+      );
+      setMerchantTime(response.data?.data?.merchant_time);
+    }
+  };
+  const getListFeature = async () => {
+    const response = await Axios.get(`/feature`);
+
+    console.log({ response: response.data.data?.result });
+    setListFeature(response.data.data?.result);
+  };
+
+  useEffect(() => {
+    getDetailMerchant();
+    getListFeature();
+  }, []);
+
+  const handleOnChangeInput = (e) => {
+    const { name, value } = e.target;
+    setMerchantInfo((state) => ({
+      ...state,
+      [name]: value,
+    }));
+  };
+
+  const isCheckedFeature = (item) => {
+    const findDuplicate = feature.find((find) => find?.feature_name == item);
+
+    if (findDuplicate) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getDAsyinWeek = () => {
+    const hari = Object.keys(merchantTime).filter((key) =>
+      [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+      ].includes(key)
+    );
+
+    const hariDanNilai = hari.map((key) => {
+      return {
+        hari: key,
+        time: merchantTime[key],
+      };
+    });
+    return hariDanNilai;
+  };
+
+  const getTimeOpenAndClose = () => {
+    const nilaiDenganNilai = getDAsyinWeek().filter(
+      (item) => item.time !== "" && item.time.length > 0
+    );
+
+    return {
+      open: nilaiDenganNilai[0]?.time[0],
+      close: nilaiDenganNilai[0]?.time[1],
+    };
+  };
+
+  const handleCheckBoxFeature = (event) => {
+    const findDuplicate = feature.find(
+      (find) => find?.feature_name == event.target.value
+    );
+
+    if (findDuplicate) {
+      setFeature(
+        feature.filter(
+          (filter) => filter.feature_name !== findDuplicate?.feature_name
+        )
+      );
+    } else {
+      setFeature([
+        ...feature,
+        listFeature.find((find) => find.feature_name == event.target.value),
+      ]);
+    }
+  };
+
+  const handleCheckboxSchedule = (type) => {
+    const findDayEmpty = merchantTime[type.hari];
+
+    console.log(findDayEmpty);
+
+    if (findDayEmpty?.length == 2) {
+      setMerchantTime((state) => ({
+        ...state,
+        [type.hari]: "",
+      }));
+    } else {
+      setMerchantTime((state) => ({
+        ...state,
+        [type.hari]: [getTimeOpenAndClose().open, getTimeOpenAndClose().close],
+      }));
+    }
+  };
+
+  const displayImg = () => {
+    if (imgBanner) {
+      return URL.createObjectURL(imgBanner);
+    }
+    return;
+  };
+
+  const handleChangePhoto = (e) => {
+    setImgBanner(e.target.files[0]);
+    e.target.value = null;
+  };
+
+  const deleteImg = () => {
+    setImgBanner("");
+  };
+
+  const saveEditMerchant = async () => {
+    const payload = {
+      merchant_name: merchantInfo?.merchant_name,
+      address: merchantInfo?.address,
+      desc: merchantInfo?.desc,
+      merchant_feature: JSON.stringify(feature),
+      merchant_time: JSON.stringify(merchantTime),
+      banner_img: imgBanner,
+    };
+
+    const formData = new FormData();
+
+    for (const item in payload) {
+      formData.append(item, payload[item]);
+    }
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+
+    const response = await Axios.put(
+      `/merchant/${dataUser?.id || null}`,
+      formData
+    );
+
+    console.log({ response });
+
+    await getDetailMerchant();
+  };
   return (
     <div>
       <Navbaruser konten="Edit Merchant" />
@@ -49,7 +196,7 @@ const EditMerchant = () => {
                 Tampilkan informasi tempat olahraga Anda secara akurat
               </h6>
 
-              <Link
+              {/* <Link
                 to="/welcome/EditMerchant"
                 className="fw-bold text-dark btn d-flex"
                 style={{
@@ -65,26 +212,41 @@ const EditMerchant = () => {
                 }}
               >
                 Ubah
-              </Link>
+              </Link> */}
             </div>
             <Table borderless={true}>
               <tbody className="fw-bold">
                 <tr>
                   <td>Nama Merchant</td>
                   <td>
-                    <input style={{ borderRadius: 8 }} />
+                    <input
+                      style={{ borderRadius: 8 }}
+                      value={merchantInfo?.merchant_name}
+                      name="merchant_name"
+                      onChange={handleOnChangeInput}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td>Lokasi</td>
                   <td>
-                    <input style={{ borderRadius: 8 }} />
+                    <input
+                      style={{ borderRadius: 8 }}
+                      value={merchantInfo?.address}
+                      name="address"
+                      onChange={handleOnChangeInput}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td>Deskripsi</td>
                   <td>
-                    <input style={{ borderRadius: 8 }} />
+                    <input
+                      style={{ borderRadius: 8 }}
+                      value={merchantInfo?.desc}
+                      name="desc"
+                      onChange={handleOnChangeInput}
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -99,9 +261,19 @@ const EditMerchant = () => {
                         width: "157px",
                         height: "48px",
                       }}
+                      onClick={() => change_photo.current.click()}
                     >
-                      Tambah Foto
+                      Ganti Foto
                     </Button>
+                    <input
+                      type="file"
+                      name=""
+                      id="change_photo"
+                      ref={change_photo}
+                      hidden
+                      // accept=".PNG,.JPG,.JPEG.AVIF"
+                      onChange={handleChangePhoto}
+                    />
                     <Button
                       className="fw-bold text-dark me-4"
                       style={{
@@ -109,26 +281,30 @@ const EditMerchant = () => {
                         border: "1px solid #DC3545",
                         borderRadius: "8px",
                       }}
+                      onClick={deleteImg}
                     >
                       <Logo />
-                      <img />
                     </Button>
+                    <img
+                      src={displayImg() || merchantInfo?.img_merchant}
+                      width={500}
+                      height={250}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td>Prasarana yang tersedia</td>
                   <td>
                     <Form>
-                      {[
-                        "Sewa Peralatan Olahraga",
-                        "Makanan dan Minuman",
-                        "Tempat Beribadah",
-                      ].map((type) => (
+                      {listFeature.map((type) => (
                         <div key={"default-checkbox"} className="mb-3">
                           <Form.Check
                             type={"checkbox"}
-                            id={`{type}`}
-                            label={`${type}`}
+                            id={`${type.feature_name}`}
+                            label={`${type.feature_name}`}
+                            checked={isCheckedFeature(type.feature_name)}
+                            value={type.feature_name}
+                            onChange={handleCheckBoxFeature}
                           />
                         </div>
                       ))}
@@ -138,21 +314,19 @@ const EditMerchant = () => {
                 <tr>
                   <td>Jadwal buka</td>
                   <td>
+                    {console.log({
+                      getDAsyinWeek: getDAsyinWeek(),
+                      merchantTime,
+                    })}
                     <Form>
-                      {[
-                        "Senin",
-                        "Selasa",
-                        "Rabu",
-                        "Kamis",
-                        "Jumat",
-                        "Sabtu",
-                        "Minggu",
-                      ].map((type) => (
+                      {getDAsyinWeek().map((type) => (
                         <div key={"default-checkbox"} className="mb-3">
                           <Form.Check
                             type={"checkbox"}
-                            id={`{type}`}
-                            label={`${type}`}
+                            id={`${type.hari}`}
+                            label={`${type.hari}`}
+                            checked={type.time?.length == 2 ? true : false}
+                            onChange={() => handleCheckboxSchedule(type)}
                           />
                         </div>
                       ))}
@@ -161,11 +335,11 @@ const EditMerchant = () => {
                 </tr>
                 <tr>
                   <td>Jam buka</td>
-                  <td></td>
+                  <td>{getTimeOpenAndClose().open}</td>
                 </tr>
                 <tr>
                   <td>Jam Tutup</td>
-                  <td></td>
+                  <td>{getTimeOpenAndClose().close}</td>
                 </tr>
               </tbody>
             </Table>
@@ -192,6 +366,7 @@ const EditMerchant = () => {
                 width: "157px",
                 height: "48px",
               }}
+              onClick={saveEditMerchant}
             >
               Simpan
             </Button>
