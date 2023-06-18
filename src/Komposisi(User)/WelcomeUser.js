@@ -9,10 +9,12 @@ import { IoTicketOutline } from "react-icons/io5";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { useLocation } from "react-router-dom";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
-import { Axios, currency } from "../utils";
+import axios from "../services/axios";
+import { currency } from "../utils";
 import { useEffect } from "react";
 import { Context } from "../context/index";
 import moment from "moment";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const WelcomeUser = () => {
   const { merchantId } = useContext(Context);
@@ -39,7 +41,7 @@ const WelcomeUser = () => {
   }, []);
 
   const getPromo = async () => {
-    const response = await Axios.get(`/promo/${merchantId}`);
+    const response = await axios.get(`/promo/${merchantId}`);
     console.log(response);
     if (response.data.message === "OK") {
       const data = response?.data?.data;
@@ -50,7 +52,7 @@ const WelcomeUser = () => {
   const [dataTask, setDataTask] = useState([]);
 
   const getMerchant = async () => {
-    const response = await Axios.get(`/merchant/${merchantId}`);
+    const response = await axios.get(`/merchant/${merchantId}`);
     if (response.data.message === "OK") {
       const data = response.data?.data?.merchant_info;
       console.log(response);
@@ -64,7 +66,7 @@ const WelcomeUser = () => {
   };
 
   const getTask = async () => {
-    const response = await Axios.get(`/task/${merchantId}`);
+    const response = await axios.get(`/task/${merchantId}`);
     const data = response.data?.data?.result;
     if (response.data?.message === "OK") {
       setDataTask(data || []);
@@ -74,7 +76,7 @@ const WelcomeUser = () => {
   };
 
   const getTaskStatus = async () => {
-    const response = await Axios.get(`/task/list-task-user/${merchantId}`);
+    const response = await axios.get(`/task/list-task-user/${merchantId}`);
     const data = response?.data?.data?.result;
     setStatusTask(data);
     const filteredComplete = data.filter(
@@ -97,7 +99,7 @@ const WelcomeUser = () => {
   };
 
   const getBooking = async () => {
-    const response = await Axios.get(`/booking/${merchantId}`);
+    const response = await axios.get(`/booking/${merchantId}`);
     const data = response?.data?.data;
     if (response.data.message === "OK") {
       console.log("booking", response);
@@ -123,10 +125,12 @@ const WelcomeUser = () => {
       (parseInt(bookingPercentage) / parseInt(allbookingPercentage)) * 100;
     return percentage.toFixed(0);
   };
-  const timeLengths = getHour.map((booking) => {
-    const timeArray = JSON.parse(booking.time);
-    return timeArray.length;
-  });
+  const timeLengths = getHour
+    .filter((filter) => filter.show === false)
+    .map((booking) => {
+      const timeArray = JSON.parse(booking.time);
+      return timeArray.length;
+    });
 
   const sum = timeLengths.reduce((total, length) => total + length, 0);
 
@@ -150,22 +154,27 @@ const WelcomeUser = () => {
                       boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <div
-                      className="card-body text-start"
-                      style={{ flexDirection: "row", display: "flex" }}
+                    <Link
+                      style={{ color: "#000000", textDecoration: "none" }}
+                      to={{ pathname: "/welcome/Dompet" }}
                     >
-                      <div className="me-5">
-                        <h6 className="card-title fw-bold text-success">
-                          Dompet Merchant
-                        </h6>
-                        <p className="card-text text-dark fw-bold">
-                          Rp. {currency(merchant?.balance)}
-                        </p>
+                      <div
+                        className="card-body text-start"
+                        style={{ flexDirection: "row", display: "flex" }}
+                      >
+                        <div className="me-5">
+                          <h6 className="card-title fw-bold text-success">
+                            Dompet Merchant
+                          </h6>
+                          <p className="card-text text-dark fw-bold">
+                            Rp. {currency(merchant?.balance)}
+                          </p>
+                        </div>
+                        <div>
+                          <BiWallet className="fs-3 mb-1" />
+                        </div>
                       </div>
-                      <div>
-                        <BiWallet className="fs-3 mb-1" />
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
                 <div className="col">
@@ -177,20 +186,27 @@ const WelcomeUser = () => {
                       boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <div
-                      className="card-body text-start"
-                      style={{ flexDirection: "row", display: "flex" }}
+                    <Link
+                      style={{ color: "#000000", textDecoration: "none" }}
+                      to={{ pathname: "/welcome/fasilitas" }}
                     >
-                      <div className="me-5">
-                        <h6 className="card-title fw-bold text-success">
-                          Reservasi Hari ini
-                        </h6>
-                        <p className="card-text text-dark fw-bold">{sum} Jam</p>
+                      <div
+                        className="card-body text-start"
+                        style={{ flexDirection: "row", display: "flex" }}
+                      >
+                        <div className="me-5">
+                          <h6 className="card-title fw-bold text-success">
+                            Reservasi yang Akan Berlangsung
+                          </h6>
+                          <p className="card-text text-dark fw-bold">
+                            {sum} Jam
+                          </p>
+                        </div>
+                        <div>
+                          <TbSoccerField className="fs-3 mb-1" />
+                        </div>
                       </div>
-                      <div>
-                        <TbSoccerField className="fs-3 mb-1" />
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
                 <div className="col">
@@ -202,22 +218,27 @@ const WelcomeUser = () => {
                       boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <div
-                      className="card-body text-start"
-                      style={{ flexDirection: "row", display: "flex" }}
+                    <Link
+                      style={{ color: "#000000", textDecoration: "none" }}
+                      to={{ pathname: "/welcome/tasks" }}
                     >
-                      <div className="me-5">
-                        <h6 className="card-title fw-bold text-success">
-                          Tasks saat ini
-                        </h6>
-                        <p className="card-text text-dark fw-bold">
-                          {dataTask?.length} Tasks
-                        </p>
+                      <div
+                        className="card-body text-start"
+                        style={{ flexDirection: "row", display: "flex" }}
+                      >
+                        <div className="me-5">
+                          <h6 className="card-title fw-bold text-success">
+                            Tasks saat ini
+                          </h6>
+                          <p className="card-text text-dark fw-bold">
+                            {dataTask?.length} Tasks
+                          </p>
+                        </div>
+                        <div>
+                          <MdOutlineTaskAlt className="fs-3 mb-1" />
+                        </div>
                       </div>
-                      <div>
-                        <MdOutlineTaskAlt className="fs-3 mb-1" />
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
                 <div className="col">
@@ -229,22 +250,27 @@ const WelcomeUser = () => {
                       boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <div
-                      className="card-body text-start"
-                      style={{ flexDirection: "row", display: "flex" }}
+                    <Link
+                      style={{ color: "#000000", textDecoration: "none" }}
+                      to={{ pathname: "/welcome/tasks" }}
                     >
-                      <div className="me-5">
-                        <h6 className="card-title fw-bold text-success">
-                          Promo saat ini
-                        </h6>
-                        <p className="card-text text-dark fw-bold">
-                          {dataPromo.length} Promo
-                        </p>
+                      <div
+                        className="card-body text-start"
+                        style={{ flexDirection: "row", display: "flex" }}
+                      >
+                        <div className="me-5">
+                          <h6 className="card-title fw-bold text-success">
+                            Promo saat ini
+                          </h6>
+                          <p className="card-text text-dark fw-bold">
+                            {dataPromo.length} Promo
+                          </p>
+                        </div>
+                        <div>
+                          <IoTicketOutline className="fs-3 mb-1" />
+                        </div>
                       </div>
-                      <div>
-                        <IoTicketOutline className="fs-3 mb-1" />
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               </div>

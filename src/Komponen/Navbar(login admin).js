@@ -9,13 +9,14 @@ const Navbaradmin = (props) => {
 
   const dataAdmin = () => {
     const storedUserData = localStorage.getItem("dataAdmin");
-    console.log(storedUserData);
+    console.log({ storedUserData });
     setData(JSON.parse(storedUserData));
   };
 
   const handleLogout = () => {
     localStorage.removeItem("dataAdmin");
   };
+  console.log(data);
   useEffect(() => {
     dataAdmin();
   }, []);

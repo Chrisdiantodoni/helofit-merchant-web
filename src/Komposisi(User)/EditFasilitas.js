@@ -205,7 +205,7 @@ const EditFasilitas = (props) => {
                             <Form>
                               <div className="">
                                 <Form.Check
-                                  label="tersedia"
+                                  label="Terisi"
                                   key={item.time}
                                   // disabled={!item.available}
                                   type="checkbox"
@@ -225,7 +225,7 @@ const EditFasilitas = (props) => {
                               </div>
                             </Form>
                           ) : (
-                            "Tidak Tersedia"
+                            "Terisi"
                           )}
                         </td>
                         <td>

@@ -37,10 +37,17 @@ const ProfilMerchant = () => {
     },
     onError: (onError) => onError,
   });
-
   const parsingImgMerchant = (dataProps) => {
     if (dataProps) {
-      return JSON.parse(dataProps?.data?.merchant_info?.img_merchant);
+      try {
+        console.log(dataProps?.data?.merchant_info?.img_merchant);
+        const imgMerchant = dataProps?.data?.merchant_info?.img_merchant;
+
+        return imgMerchant;
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return [];
+      }
     } else {
       return [];
     }
@@ -54,7 +61,6 @@ const ProfilMerchant = () => {
     const thursday = merchantTime?.thursday;
     const tuesday = merchantTime?.tuesday;
     const wednesday = merchantTime?.wednesday;
-
     return (
       <ul>
         <li>{monday?.length > 0 ? "monday" : "libur"}</li>
@@ -177,35 +183,21 @@ const ProfilMerchant = () => {
                     />
                   </Col>
                 </Form.Group>
-                <Form.Group
-                  as={Row}
-                  className="mb-3"
-                  controlId="formPlaintextEmail"
-                >
-                  <Form.Label
-                    column
-                    sm="4"
-                    className="fw-bold"
-                    style={{ borderRadius: 8 }}
-                  >
-                    Foto Merchant
+
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column sm="4" className="fw-bold">
+                    Foto
                   </Form.Label>
                   <Col sm="6">
-                    {data?.data?.merchant_info?.img_merchant
-                      ? parsingImgMerchant(data)?.map((item, key) => {
-                          return (
-                            <img
-                              src={item}
-                              key={key}
-                              width="50%"
-                              height={100}
-                              style={{ objectFit: "cover" }}
-                            />
-                          );
-                        })
-                      : null}
+                    <img
+                      src={parsingImgMerchant(data)}
+                      className="img-fluid img-thumbnail me-2"
+                      style={{ width: "184px", height: "128px" }}
+                      alt={`img-merchant`}
+                    />
                   </Col>
                 </Form.Group>
+
                 <Form.Group
                   as={Row}
                   className="mb-3"
@@ -332,7 +324,12 @@ const ProfilMerchant = () => {
                 </h6>
 
                 <Link
-                  to="/welcome/EditFasilitasMerchant"
+                  to={{
+                    pathname: `/welcome/EditFasilitasMerchant`,
+                    state: {
+                      time: filteredData && filteredData[days],
+                    },
+                  }}
                   className="fw-bold text-dark btn d-flex"
                   style={{
                     background: "#C4f601",
@@ -369,7 +366,8 @@ const ProfilMerchant = () => {
 
 export default withRouter(ProfilMerchant);
 
-const DisplayListFailitas = ({ category_name, facility }) => {
+const DisplayListFailitas = ({ category_name, facility, time }) => {
+  console.log({ time });
   const handleDeleteFacility = async (id) => {
     console.log(id);
     try {
@@ -434,7 +432,11 @@ const DisplayListFailitas = ({ category_name, facility }) => {
                           alt="banner_img"
                           width="50%"
                           height={100}
-                          style={{ objectFit: "cover" }}
+                          style={{
+                            objectFit: "cover",
+                            width: "410px",
+                            height: "136px",
+                          }}
                         />
                       </td>
                     </tr>
@@ -464,7 +466,7 @@ const DisplayListFailitas = ({ category_name, facility }) => {
                     <Link
                       to={{
                         pathname: `/welcome/EditEachFacility`,
-                        state: { id: item.id },
+                        state: { id: item.id, time: item.time },
                       }}
                     >
                       <LogoEdit />

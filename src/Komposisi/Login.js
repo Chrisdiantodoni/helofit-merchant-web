@@ -108,10 +108,12 @@ const Login = () => {
           value: JSON.stringify(dataUser),
         });
         setShowSuccessModal(true);
-        history.push("/welcome/user");
+        // history.push("/welcome/user");
+        window.location.href = "/welcome/user";
       }
     } catch (error) {
       console.log(error);
+      setShowErrorModal(true);
     }
   };
 

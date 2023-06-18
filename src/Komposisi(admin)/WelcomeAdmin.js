@@ -12,7 +12,8 @@ import {
 } from "recharts";
 import moment from "moment";
 import "./WelcomeAdmin.css";
-import { AxiosAdmin } from "../utils";
+import { AxiosAdmin, currency } from "../utils";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const WelcomeAdmin = () => {
   const [data, setData] = useState([]);
@@ -22,6 +23,21 @@ const WelcomeAdmin = () => {
   const [promo, setPromo] = useState([]);
   const [dataUser, setDataUser] = useState([]);
   const [merchantData, setMerchantData] = useState([]);
+  const [adminData, setAdminData] = useState({});
+
+  const dataAdmin = async () => {
+    const storedUserData = await localStorage.getItem("dataAdmin");
+    console.log({ storedUserData });
+    const adminId = JSON.parse(storedUserData)?.id;
+    getAdmin(adminId);
+  };
+
+  const getAdmin = async (adminId) => {
+    const response = await AxiosAdmin.get(`/admin/${adminId}`);
+    const data = response?.data?.data;
+    console.log({ data });
+    setAdminData(data);
+  };
 
   const getMeetup = async () => {
     const response = await AxiosAdmin.get(`/room`);
@@ -101,6 +117,7 @@ const WelcomeAdmin = () => {
     getPromo();
     getmerchantData();
     getReserve();
+    dataAdmin();
   }, []);
 
   const calculateData = async () => {
@@ -144,7 +161,7 @@ const WelcomeAdmin = () => {
         filteredMerchantData.length +
         filteredPromoData.length;
       console.log({ uvValue });
-      const newDataPoint = { name: date, uv: uvValue };
+      const newDataPoint = { name: date, Perkembangan: uvValue };
       newData.push(newDataPoint);
     }
 
@@ -185,8 +202,17 @@ const WelcomeAdmin = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+                <Line type="monotone" dataKey="Perkembangan" stroke="#8884d8" />
               </LineChart>
+            </div>
+
+            <h5 className="text-dark fw-bold mt-5">
+              Saldo Dompet Admin Saat ini
+            </h5>
+            <div className="d-flex justify-content-between">
+              <h2 className=" fw-bold" style={{ color: "#28A745" }}>
+                Rp. {currency(adminData?.balance)}
+              </h2>
             </div>
             <h5 className="text-dark fw-bold pt-5">Aktivitas Sistem</h5>
             <div className="d-flex justify-content-between">
@@ -198,44 +224,75 @@ const WelcomeAdmin = () => {
               <div className="data-card">
                 <p style={{ fontWeight: "700" }}>Total Reservasi/Transaksi</p>
                 <p style={{ fontWeight: "700" }}>{reserveData.length}</p>
-                <a style={{ color: "#28A745", fontWeight: "700" }}>
-                  lihat detail
-                </a>
+                <Link
+                  style={{ color: "#000000", textDecoration: "none" }}
+                  to={{ pathname: "/admin/Reserve" }}
+                >
+                  <a style={{ color: "#28A745", fontWeight: "700" }}>
+                    lihat detail
+                  </a>
+                </Link>
               </div>
               <div className="data-card">
                 <p style={{ fontWeight: "700" }}>Total User</p>
                 <p style={{ fontWeight: "700" }}>{dataUser.length}</p>
-                <a style={{ color: "#28A745", fontWeight: "700" }}>
-                  lihat detail
-                </a>
+
+                <Link
+                  style={{ color: "#000000", textDecoration: "none" }}
+                  to={{ pathname: "/admin/UserData" }}
+                >
+                  <a style={{ color: "#28A745", fontWeight: "700" }}>
+                    lihat detail
+                  </a>
+                </Link>
               </div>
               <div className="data-card">
                 <p style={{ fontWeight: "700" }}>Total Merchant</p>
                 <p style={{ fontWeight: "700" }}>{merchantData.length}</p>
-                <a style={{ color: "#28A745", fontWeight: "700" }}>
-                  lihat detail
-                </a>
+                <Link
+                  style={{ color: "#000000", textDecoration: "none" }}
+                  to={{ pathname: "/admin/Merchant" }}
+                >
+                  <a style={{ color: "#28A745", fontWeight: "700" }}>
+                    lihat detail
+                  </a>
+                </Link>
               </div>
               <div className="data-card">
                 <p style={{ fontWeight: "700" }}>Total Meetup</p>
                 <p style={{ fontWeight: "700" }}>{meetupData.length}</p>
-                <a style={{ color: "#28A745", fontWeight: "700" }}>
-                  lihat detail
-                </a>
+                <Link
+                  style={{ color: "#000000", textDecoration: "none" }}
+                  to={{ pathname: "/admin/meetup" }}
+                >
+                  <a style={{ color: "#28A745", fontWeight: "700" }}>
+                    lihat detail
+                  </a>
+                </Link>
               </div>
               <div className="data-card">
                 <p style={{ fontWeight: "700" }}>Total Tasks</p>
                 <p style={{ fontWeight: "700" }}>{taskData.length}</p>
-                <a style={{ color: "#28A745", fontWeight: "700" }}>
-                  lihat detail
-                </a>
+                <Link
+                  style={{ color: "#000000", textDecoration: "none" }}
+                  to={{ pathname: "/admin/tasks" }}
+                >
+                  <a style={{ color: "#28A745", fontWeight: "700" }}>
+                    lihat detail
+                  </a>
+                </Link>
               </div>
               <div className="data-card">
                 <p style={{ fontWeight: "700" }}>Total Promo</p>
                 <p style={{ fontWeight: "700" }}>{promo.length}</p>
-                <a style={{ color: "#28A745", fontWeight: "700" }}>
-                  lihat detail
-                </a>
+                <Link
+                  style={{ color: "#000000", textDecoration: "none" }}
+                  to={{ pathname: "/admin/Promo" }}
+                >
+                  <a style={{ color: "#28A745", fontWeight: "700" }}>
+                    lihat detail
+                  </a>
+                </Link>
               </div>
             </div>
           </div>

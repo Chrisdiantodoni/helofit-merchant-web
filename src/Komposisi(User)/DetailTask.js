@@ -45,21 +45,21 @@ const DetailTask = (props) => {
   const handleOnChangeTask = async (id) => {
     try {
       const body = {
-        taskDetailId: JSON.stringify(
-          [
-            ...selectedTask.map((item) => item.id.toString()),
-            ...(dataTask?.taskDetailId || []),
-          ].filter(Boolean)
-        ),
+        taskDetailId: JSON.stringify([
+          ...selectedTask.map((item) => item.id.toString()),
+          ...(dataTask?.taskDetailId || []),
+        ]),
       };
       await Axios.put(`/task/list-task-user/detail/${taskUserId}`, body).then(
         (result) => {
           if (result.data.message == "OK") {
             getDetailTask2();
           }
+          window.alert("Task Berhasil Diedit");
+          window.location.href = "/welcome/tasks";
         }
       );
-      window.location.reload();
+      // window.location.reload();
       // Update the dataTask state with the updated taskDetailId
       console.log({ body });
     } catch (error) {

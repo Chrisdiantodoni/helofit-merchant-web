@@ -18,6 +18,8 @@ import { useHistory } from "react-router-dom";
 
 const EditEachFacility = (props) => {
   const facilityId = props.location.state.id;
+  const time = props.location.state.time;
+  console.log(time);
   const history = useHistory();
   const { merchantId } = useContext(Context);
   const [category, setCategory] = useState("");
@@ -51,7 +53,7 @@ const EditEachFacility = (props) => {
   }, [selectedBanner]);
 
   useEffect(() => {
-    getDetailPromo();
+    getDetailFasilitas();
   }, []);
 
   const handleEditFasilitas = async () => {
@@ -59,25 +61,28 @@ const EditEachFacility = (props) => {
     formData.append("facility_name", facilityName);
     formData.append("price", price);
     formData.append("banner_img", selectedBanner);
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + JSON.stringify(pair[1]));
-    }
-
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + JSON.stringify(pair[1]));
+    // }
     await Axios.put(`/facility/detail/${facilityId}`, formData)
       .then((res) => {
-        console.log(res);
+        alert("Fasilitas Berhasil diedit");
+        window.location.href = "/welcome/ProfilMerchant";
       })
-      .catch((err) => console.log({ err }));
+      .catch((err) => {
+        console.log(err);
+        alert("Error editing facility");
+      });
   };
 
-  const getDetailPromo = async () => {
+  const getDetailFasilitas = async () => {
     const response = await Axios.get(`/facility/Detail/${facilityId}`);
     console.log(response);
     if (response.data.message === "OK") {
-      const data = response?.data?.data;
+      const data = response?.data?.data?.facility_info;
       console.log(data);
       setCategory(data?.category?.category_name);
+      setSelectedBanner(data?.banner_img);
       setFacilityName(data?.facility_name);
       setPreviewImage(data?.banner_img);
       setPrice(data?.price);
@@ -85,7 +90,7 @@ const EditEachFacility = (props) => {
   };
   return (
     <div>
-      <Navbaruser konten="Edit Promo" />
+      <Navbaruser konten="Edit Fasilitas" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaruser />
@@ -212,7 +217,7 @@ const EditEachFacility = (props) => {
                 width: "157px",
                 height: "48px",
               }}
-              onClick={handleEditFasilitas}
+              onClick={() => handleEditFasilitas()}
             >
               Simpan
             </Button>

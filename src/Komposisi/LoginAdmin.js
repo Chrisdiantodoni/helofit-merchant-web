@@ -61,7 +61,7 @@ const Login = () => {
           name: "dataAdmin",
           value: JSON.stringify(dataAdmin),
         });
-        history.push("/admin/dashboard");
+        window.location.href = "/admin/dashboard";
       }
     } catch (error) {
       console.log(error);

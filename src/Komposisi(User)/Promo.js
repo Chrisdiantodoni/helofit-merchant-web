@@ -2,7 +2,7 @@ import React, { Component, useState, useContext, useEffect } from "react";
 
 import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
@@ -16,6 +16,9 @@ import moment from "moment";
 
 const Promo = () => {
   const { merchantId } = useContext(Context);
+  const [name, setName] = useState("");
+  const [idPromo, setIdPromo] = useState("");
+  const [show, setShow] = useState(false);
 
   const [dataPromo, setDataPromo] = useState([]);
   const [userPromo, setPromoUser] = useState([]);
@@ -28,6 +31,8 @@ const Promo = () => {
       setDataPromo(data);
     }
   };
+  const handleClose = () => setShow(false);
+
   const getPromoUser = async () => {
     const response = await Axios.get(`/promo/user/${merchantId}`);
     if (response.data.message === "OK") {
@@ -37,9 +42,10 @@ const Promo = () => {
     }
   };
 
-  const handleDeletePromo = async (id, e) => {
+  const handleDeletePromo = async (idPromo) => {
+    console.log(idPromo);
     try {
-      await Axios.delete(`/promo/${id}`)
+      await Axios.delete(`/promo/${idPromo}`)
         .then((res) => {
           if (res) {
             console.log(res);
@@ -56,6 +62,12 @@ const Promo = () => {
     getPromo();
     getPromoUser();
   }, []);
+
+  const handleShowModal = (item) => {
+    setShow(true);
+    setName(item?.promo_name);
+    setIdPromo(item?.id);
+  };
   return (
     <div>
       <Navbaruser konten="List Promo" />
@@ -178,7 +190,7 @@ const Promo = () => {
                             borderRadius: "8px",
                             height: "40%",
                           }}
-                          onClick={() => handleDeletePromo(item.id)}
+                          onClick={() => handleShowModal(item)}
                         >
                           <Logo />
                         </Button>
@@ -250,6 +262,58 @@ const Promo = () => {
           </div>
         </div>
       </div>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        centered
+        style={{
+          borderRadius: 16,
+        }}
+      >
+        <Modal.Footer
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            backgroundColor: "#F8F9FA",
+            textAlign: "center",
+          }}
+        >
+          <h5>Anda yakin ingin menghapus Promo {name}</h5>
+          <Button
+            className="fw-bold"
+            style={{
+              background: "#7C7C7C",
+              borderColor: "1px solid #7c7c7c",
+              borderRadius: 8,
+              width: 117,
+              height: 48,
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={handleClose}
+          >
+            Batal
+          </Button>
+          <Button
+            className="fw-bold text-light"
+            style={{
+              borderRadius: 8,
+              background: "#F3594F",
+              borderColor: "1px solid #F3594F",
+              width: 117,
+              height: 48,
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+            }}
+            onClick={() => handleDeletePromo(idPromo)}
+          >
+            Hapus
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

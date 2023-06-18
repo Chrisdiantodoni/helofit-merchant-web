@@ -171,15 +171,19 @@ const EditMerchant = () => {
     for (var pair of formData.entries()) {
       console.log(pair[0] + ", " + pair[1]);
     }
-
-    const response = await Axios.put(
-      `/merchant/${dataUser?.id || null}`,
-      formData
-    );
-
-    console.log({ response });
-
-    await getDetailMerchant();
+    try {
+      const response = await Axios.put(
+        `/merchant/${dataUser?.id || null}`,
+        formData
+      );
+      console.log({ response });
+      window.alert("Edit Profil Mitra Berhasil");
+      window.location.href = "/welcome/ProfilMerchant";
+      await getDetailMerchant();
+    } catch (error) {
+      console.log(error);
+      window.alert("Gagal Edit Profil Mitra");
+    }
   };
   return (
     <div>

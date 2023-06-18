@@ -3,7 +3,7 @@ import Navbaruser from "../Komponen/Navbar(login user)";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Table from "react-bootstrap/Table";
+import { Table, Modal } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { ReactComponent as Logo } from "../Assets/Trash-bin.svg";
@@ -12,6 +12,7 @@ import moment from "moment";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import { Axios } from "../utils";
 import { Context } from "./../context/index";
+import currency from "./../utils/currency";
 
 const Tasks = () => {
   const { merchantId } = useContext(Context);
@@ -24,7 +25,11 @@ const Tasks = () => {
   const [search, setSearch] = useState("");
   const [dataTask, setDataTask] = useState([]);
   const [statusTask, setStatusTask] = useState([]);
-
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const [name, setName] = useState("");
+  const [idTask, setIdTask] = useState("");
+  const [idMerchant, setIdMerchant] = useState("");
   // const getTask = async () => {
   //   const response = await Axios.get(
   //     `/task/${merchantId}?column_name=id&query=${search}`
@@ -63,15 +68,16 @@ const Tasks = () => {
     console.log({ getTaskStatus: data });
   };
 
-  const handleDeleteTask = async (id) => {
+  const handleDeleteTask = async (item) => {
     const body = {
-      merchantId: id.merchantId,
-      taskId: id.taskId,
+      merchantId: item?.merchantId,
+      taskId: item?.idTask,
     };
     console.log(body);
     try {
       const response = await Axios.delete(`/task`, { data: body });
       console.log(response);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -80,6 +86,13 @@ const Tasks = () => {
   useEffect(() => {
     dataMerchant();
   }, []);
+
+  const handleShowModal = (item) => {
+    setShow(true);
+    setName(item?.task_name);
+    setIdTask(item?.id);
+    setIdMerchant(item?.merchantId);
+  };
 
   return (
     <div>
@@ -160,6 +173,7 @@ const Tasks = () => {
                     <th>Judul</th>
                     <th>Banner</th>
                     <th>Berlaku s.d</th>
+                    <th>Poin</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -179,6 +193,7 @@ const Tasks = () => {
                         />
                       </td>
                       <td>{moment(item.expiredIn).format("DD/MM/YY")}</td>
+                      <td>{currency(item.poin)}</td>
                       <td>
                         <Button
                           className="fw-bold text-dark me-4"
@@ -206,12 +221,7 @@ const Tasks = () => {
                             borderRadius: "8px",
                             height: "40%",
                           }}
-                          onClick={() =>
-                            handleDeleteTask({
-                              taskId: item.id,
-                              merchantId: item.merchantId,
-                            })
-                          }
+                          onClick={() => handleShowModal(item)}
                         >
                           <Logo />
                         </Button>
@@ -283,6 +293,63 @@ const Tasks = () => {
           </div>
         </div>
       </div>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        centered
+        style={{
+          borderRadius: 16,
+        }}
+      >
+        <Modal.Footer
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            backgroundColor: "#F8F9FA",
+            textAlign: "center",
+          }}
+        >
+          <h5>Anda yakin ingin menghapus Task {name}</h5>
+          <Button
+            className="fw-bold"
+            style={{
+              background: "#7C7C7C",
+              borderColor: "1px solid #7c7c7c",
+              borderRadius: 8,
+              width: 117,
+              height: 48,
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={handleClose}
+          >
+            Batal
+          </Button>
+          <Button
+            className="fw-bold text-light"
+            style={{
+              borderRadius: 8,
+              background: "#F3594F",
+              borderColor: "1px solid #F3594F",
+              width: 117,
+              height: 48,
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+            }}
+            onClick={() =>
+              handleDeleteTask({
+                idTask,
+                merchantId,
+              })
+            }
+          >
+            Hapus
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -207,7 +207,11 @@ const Fasilitas = () => {
                           className="mt-2 fw-bold"
                           style={{ textAlign: "center" }}
                         >
-                          {timeItem.available ? "Tersedia" : timeItem?.username}
+                          {timeItem.available
+                            ? "Tersedia"
+                            : timeItem?.username
+                            ? timeItem?.username
+                            : "Sudah Diisi"}
                         </h6>
                       </div>
                       <div

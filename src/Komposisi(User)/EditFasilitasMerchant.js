@@ -9,15 +9,16 @@ import { useHistory } from "react-router-dom";
 import Sidebaruser from "../Komponen/Sidebar(login user)";
 import categoryService from "../services/category.service";
 
-const EditMerchant = () => {
+const EditMerchant = (props) => {
   const [params, setParams] = useState({
     merchantId: "",
     facility_name: "",
     banner_img: "",
     price: "",
     categoryId: "",
-    time: ["00:00", "00:00"],
+    time: "",
   });
+
   const [options, setOptions] = useState({
     category: [],
   });
@@ -30,6 +31,7 @@ const EditMerchant = () => {
     setParams((prevState) => ({
       ...prevState,
       merchantId: getDataUser()?.id || null,
+      time: JSON.stringify(props?.location?.state?.time),
     }));
   }, []);
 

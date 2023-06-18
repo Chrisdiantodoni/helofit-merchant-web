@@ -33,14 +33,20 @@ const DetailPromo = (props) => {
     const body = {
       status_promo: statusPromo,
     };
-    await Axios.put(`/promo/detail/${id}`, body)
-      .then((res) => {
-        if (res) {
-          console.log(res);
-        }
-      })
-      .catch((error) => console.log(error));
-    console.log({ body });
+    try {
+      await Axios.put(`/promo/detail/${id}`, body)
+        .then((res) => {
+          if (res) {
+            console.log(res);
+          }
+          window.alert("Edit Promo Berhasil");
+          history.push("/welcome/promo");
+        })
+        .catch((error) => console.log(error));
+      console.log({ body });
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     getPromo();

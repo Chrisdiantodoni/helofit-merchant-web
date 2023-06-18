@@ -35,6 +35,7 @@ const EditTask = (props) => {
   function handleRemoveClick() {
     setSelectedBanner(null);
     setPreviewImage(null);
+    console.log(selectedBanner);
   }
   const hiddenFileInput = useRef(null);
 
@@ -83,13 +84,18 @@ const EditTask = (props) => {
     // for (var pair of formData.entries()) {
     //   console.log(pair[0] + ", " + JSON.stringify(pair[1]));
     // }
-    await Axios.put(`/task/detail/${dataTask?.merchantId}`, formData)
-      .then((res) => {
-        console.log({ res });
-      })
-      .catch((err) => console.log({ err }));
-    window.alert(`Data ${taskName} berhasil di edit`);
-    window.location.href = "/welcome/tasks";
+    try {
+      await Axios.put(`/task/detail/${dataTask?.merchantId}`, formData)
+        .then((res) => {
+          console.log({ res });
+        })
+        .catch((err) => console.log({ err }));
+      window.alert(`Data ${taskName} berhasil di edit`);
+      window.location.href = "/welcome/tasks";
+    } catch (error) {
+      console.log(error);
+      window.alert("Data gagal diedit");
+    }
   };
 
   const handleOnChangeTask = (e, index) => {
