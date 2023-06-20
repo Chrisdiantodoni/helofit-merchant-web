@@ -27,7 +27,6 @@ const EditMerchant = () => {
 
   const getDetailMerchant = async () => {
     const response = await Axios.get(`/merchant/${dataUser?.id || null}`);
-
     if (response.data?.message === "OK") {
       setMerchantInfo(response.data?.data?.merchant_info);
       setFeature(

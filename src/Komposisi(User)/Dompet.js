@@ -22,6 +22,7 @@ const Dompet = () => {
 
   const [merchant, setMerchant] = useState({});
   const [reserveData, setReserveData] = useState([]);
+  const [historyData, setHistoryData] = useState([]);
 
   const getMerchant = async () => {
     const response = await Axios.get(`/merchant/${merchantId}`);
@@ -40,13 +41,24 @@ const Dompet = () => {
       setReserveData(data);
       console.log(data);
     } else {
-      console.log("Data Merchant tidak ada");
+      console.log("Data booking tidak ada");
+    }
+  };
+  const getHistory = async () => {
+    const response = await Axios.get(`/history/${merchantId}`);
+    if (response.data.message === "OK") {
+      const data = response.data?.data;
+      setHistoryData(data);
+      console.log(data);
+    } else {
+      console.log("Data history tidak ada");
     }
   };
 
   useEffect(() => {
     getMerchant();
     getBooking();
+    getHistory();
   }, []);
   return (
     <div>
@@ -82,6 +94,55 @@ const Dompet = () => {
                 Tarik Saldo
               </Link>
             </div>
+            <div className="mt-5">
+              <h4 className="text-dark fw-bold">Histori Penarikan</h4>
+              <h5 className="text-muted fw-bold">
+                Berikut adalah list penarikan anda
+              </h5>
+            </div>
+            <div>
+              <InputGroup className="mb-3 mt-5">
+                <Form.Control
+                  placeholder="Ketikkan Kode Reservasi.."
+                  aria-label="Ketikkan Kode Reservasi.."
+                  aria-describedby="basic-addon2"
+                />
+                <Button
+                  className="fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    color: "#000000",
+                    border: "1px solid #C4f601",
+                  }}
+                  id="button-addon2"
+                >
+                  Cari
+                </Button>
+              </InputGroup>
+            </div>
+            <Table className="mt-5" borderless={true}>
+              <thead>
+                <tr
+                  className="fw-bold"
+                  style={{
+                    background: "#28A745",
+                    color: "#FFFFFF",
+                    borderRadius: 8,
+                  }}
+                >
+                  <th>Tanggal</th>
+                  <th>Nominal</th>
+                </tr>
+              </thead>
+              {historyData?.map((item, idx) => (
+                <tbody className="fw-bold">
+                  <tr>
+                    <td>{moment(item.booking_date).format("DD/MM/YYYY")}</td>
+                    <td>Rp. {currency(item.nominal)}</td>
+                  </tr>
+                </tbody>
+              ))}
+            </Table>
 
             <div className="mt-5">
               <h4 className="text-dark fw-bold">Daftar Transaksi</h4>

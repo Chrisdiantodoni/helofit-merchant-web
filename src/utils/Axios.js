@@ -3,7 +3,7 @@ import Cookie from "js-cookie";
 
 // const baseURL = "http://localhost:3002/api/v1/admin";
 // const baseURL = "http://192.168.100.59:3002/api/v1/admin";
-const baseURL = "http://192.168.43.118:3002/api/v1/admin";
+const baseURL = "http://localhost:3002/api/v1/admin";
 
 // const timeout = 16000;
 

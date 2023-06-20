@@ -127,6 +127,10 @@ const EditFasilitas = (props) => {
     }
   };
 
+  const handleConfirmPayment = (item) => {
+    console.log(item);
+  };
+
   return (
     <div>
       <Navbaruser konten="Fasilitas Merchant" />
@@ -177,8 +181,12 @@ const EditFasilitas = (props) => {
               <div>
                 <Table
                   className="mt-3"
-                  borderless={true}
-                  style={{ textAlign: "center" }}
+                  borderless
+                  style={{
+                    textAlign: "center",
+                    alignItems: "center",
+                    alignContent: "center",
+                  }}
                 >
                   <thead>
                     <tr
@@ -188,50 +196,56 @@ const EditFasilitas = (props) => {
                       <th>JAM BERMAIN</th>
                       <th>STATUS</th>
                       <th>PEMAIN</th>
+                      <th></th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{ alignItems: "center" }}>
                     {data.list_time?.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.time}</td>
+                      <tr style={{ height: "60px" }} key={index}>
                         <td
                           style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-around",
+                            alignItems: "center",
+                            verticalAlign: "middle",
+                          }}
+                        >
+                          {item.time}
+                        </td>
+                        <td
+                          style={{
+                            alignItems: "center",
+                            verticalAlign: "middle",
                           }}
                         >
                           {item.available ? (
-                            <Form>
-                              <div className="">
-                                <Form.Check
-                                  label="Terisi"
-                                  key={item.time}
-                                  // disabled={!item.available}
-                                  type="checkbox"
-                                  // id={`exampleCheckbox${index}`}
-                                  checked={
-                                    validateSelectedBooking(item) === item.time
-                                      ? true
-                                      : false
+                            <Form
+                              style={{
+                                alignItems: "center",
+                                justifyContent: "space-evenly",
+                                display: "flex",
+                              }}
+                            >
+                              <Form.Check
+                                label="Terisi"
+                                key={item.time}
+                                type="checkbox"
+                                checked={
+                                  validateSelectedBooking(item) === item.time
+                                }
+                                onChange={() => {
+                                  if (item?.available) {
+                                    handleSelectedBooking(item);
                                   }
-                                  onChange={() => {
-                                    if (item?.available) {
-                                      handleSelectedBooking(item);
-                                    }
-                                  }}
-                                  // label={item.available ? "Tersedia" : "Terisi"}
-                                />
-                              </div>
+                                }}
+                              />
                             </Form>
                           ) : (
                             "Terisi"
                           )}
                         </td>
-                        <td>
+                        <td style={{ verticalAlign: "middle" }}>
                           {item.available ? (
                             <input
-                              value={"Masih Kosong"}
+                              value="Masih Kosong"
                               disabled
                               style={{ textAlign: "center" }}
                             />
@@ -240,10 +254,25 @@ const EditFasilitas = (props) => {
                               value={
                                 item.username ? item.username : "Main Langsung"
                               }
-                              style={{ textAlign: "center" }}
                               disabled
+                              style={{ textAlign: "center" }}
                             />
                           )}
+                        </td>
+                        <td style={{ verticalAlign: "middle" }}>
+                          {!item.available && item.type === "reserve" ? (
+                            <Button
+                              className="fw-bold text-dark me-4"
+                              style={{
+                                background: "#c4f601",
+                                border: "1px solid #c4f601",
+                                borderRadius: "8px",
+                              }}
+                              onClick={() => handleConfirmPayment(item)}
+                            >
+                              Konfirmasi
+                            </Button>
+                          ) : null}
                         </td>
                       </tr>
                     ))}
