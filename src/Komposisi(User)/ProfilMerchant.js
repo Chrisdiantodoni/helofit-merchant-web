@@ -352,6 +352,7 @@ const ProfilMerchant = () => {
                     <DisplayListFailitas
                       category_name={item?.category_name}
                       facility={item?.facility}
+                      time={filteredData && filteredData[days]}
                     />
                   );
                 }
@@ -466,7 +467,7 @@ const DisplayListFailitas = ({ category_name, facility, time }) => {
                     <Link
                       to={{
                         pathname: `/welcome/EditEachFacility`,
-                        state: { id: item.id, time: item.time },
+                        state: { id: item.id, time: time },
                       }}
                     >
                       <LogoEdit />

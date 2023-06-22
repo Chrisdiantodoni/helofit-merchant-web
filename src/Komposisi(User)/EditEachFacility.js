@@ -61,6 +61,7 @@ const EditEachFacility = (props) => {
     formData.append("facility_name", facilityName);
     formData.append("price", price);
     formData.append("banner_img", selectedBanner);
+    formData.append("time", JSON.stringify(time));
     // for (var pair of formData.entries()) {
     //   console.log(pair[0] + ", " + JSON.stringify(pair[1]));
     // }

@@ -88,13 +88,20 @@ const EditMerchant = () => {
   };
 
   const getTimeOpenAndClose = () => {
-    const nilaiDenganNilai = getDAsyinWeek().filter(
-      (item) => item.time !== "" && item.time.length > 0
-    );
+    const openTimes = [];
+    const closeTimes = [];
+
+    Object.keys(merchantTime).forEach((key) => {
+      const time = merchantTime[key];
+      if (time && time.length === 2) {
+        openTimes.push(time[0]);
+        closeTimes.push(time[1]);
+      }
+    });
 
     return {
-      open: nilaiDenganNilai[0]?.time[0],
-      close: nilaiDenganNilai[0]?.time[1],
+      open: openTimes.length > 0 ? openTimes[0] : "",
+      close: closeTimes.length > 0 ? closeTimes[0] : "",
     };
   };
 
@@ -102,8 +109,9 @@ const EditMerchant = () => {
   const [closeTime, setCloseTime] = useState("");
 
   useEffect(() => {
-    setOpenTime(getTimeOpenAndClose().open);
-    setCloseTime(getTimeOpenAndClose().close);
+    const { open, close } = getTimeOpenAndClose();
+    setOpenTime(open);
+    setCloseTime(close);
   }, [merchantTime]);
 
   const handleCheckBoxFeature = (event) => {
@@ -127,20 +135,15 @@ const EditMerchant = () => {
 
   const handleCheckboxSchedule = (type) => {
     const findDayEmpty = merchantTime[type.hari];
+    const updatedMerchantTime = { ...merchantTime };
 
-    console.log(findDayEmpty);
-
-    if (findDayEmpty?.length == 2) {
-      setMerchantTime((state) => ({
-        ...state,
-        [type.hari]: "",
-      }));
+    if (findDayEmpty?.length === 2) {
+      updatedMerchantTime[type.hari] = "";
     } else {
-      setMerchantTime((state) => ({
-        ...state,
-        [type.hari]: [openTime, closeTime],
-      }));
+      updatedMerchantTime[type.hari] = [openTime, closeTime];
     }
+
+    setMerchantTime(updatedMerchantTime);
   };
 
   const displayImg = () => {
@@ -160,12 +163,21 @@ const EditMerchant = () => {
   };
 
   const saveEditMerchant = async () => {
+    const updatedMerchantTime = { ...merchantTime };
+
+    Object.keys(updatedMerchantTime).forEach((key) => {
+      if (updatedMerchantTime[key]?.length === 2) {
+        updatedMerchantTime[key][0] = openTime;
+        updatedMerchantTime[key][1] = closeTime;
+      }
+    });
+
     const payload = {
       merchant_name: merchantInfo?.merchant_name,
       address: merchantInfo?.address,
       desc: merchantInfo?.desc,
       merchant_feature: JSON.stringify(feature),
-      merchant_time: JSON.stringify(merchantTime),
+      merchant_time: JSON.stringify(updatedMerchantTime),
       banner_img: imgBanner,
     };
 
@@ -337,7 +349,7 @@ const EditMerchant = () => {
                             type={"checkbox"}
                             id={`${type.hari}`}
                             label={`${type.hari}`}
-                            checked={type.time?.length == 2 ? true : false}
+                            checked={type.time?.length === 2 ? true : false}
                             onChange={() => handleCheckboxSchedule(type)}
                           />
                         </div>
