@@ -196,7 +196,6 @@ const EditFasilitas = (props) => {
                       <th>JAM BERMAIN</th>
                       <th>STATUS</th>
                       <th>PEMAIN</th>
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody style={{ alignItems: "center" }}>
@@ -258,21 +257,6 @@ const EditFasilitas = (props) => {
                               style={{ textAlign: "center" }}
                             />
                           )}
-                        </td>
-                        <td style={{ verticalAlign: "middle" }}>
-                          {!item.available && item.type === "reserve" ? (
-                            <Button
-                              className="fw-bold text-dark me-4"
-                              style={{
-                                background: "#c4f601",
-                                border: "1px solid #c4f601",
-                                borderRadius: "8px",
-                              }}
-                              onClick={() => handleConfirmPayment(item)}
-                            >
-                              Konfirmasi
-                            </Button>
-                          ) : null}
                         </td>
                       </tr>
                     ))}

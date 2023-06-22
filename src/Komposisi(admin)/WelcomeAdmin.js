@@ -17,6 +17,8 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const WelcomeAdmin = () => {
   const [data, setData] = useState([]);
+  const [dataMerchantLine, setDataMerchantLine] = useState([]);
+  const [dataUserLine, setDataUserLine] = useState([]);
   const [meetupData, setMeetupData] = useState([]);
   const [reserveData, setReserveData] = useState([]);
   const [taskData, setTaskData] = useState([]);
@@ -120,6 +122,70 @@ const WelcomeAdmin = () => {
     dataAdmin();
   }, []);
 
+  const calculateDataUser = async () => {
+    if (dataUser.length === 0) {
+      return;
+    }
+    const today = moment().startOf("month");
+    const newData = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const date = today.clone().subtract(i, "months").format("MMM");
+      const filteredUserData = dataUser.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+      const uvValue = filteredUserData.length;
+      console.log("Data User", { uvValue });
+      const newDataPoint = { name: date, "Perkembangan User": uvValue };
+      newData.push(newDataPoint);
+      setDataUserLine(newData);
+    }
+  };
+  const calculateTransaction = async () => {
+    if (meetupData.length === 0 || merchantData.length === 0) {
+      return;
+    }
+    const today = moment().startOf("month");
+    const newData = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const date = today.clone().subtract(i, "months").format("MMM");
+      const filteredMeetupData = meetupData.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+      const filteredReserveData = reserveData.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+
+      const uvValue = filteredMeetupData.length + filteredReserveData.length;
+      console.log({ uvValue });
+      const newDataPoint = { name: date, "Perkembangan Transaksi": uvValue };
+      newData.push(newDataPoint);
+      setData(newData);
+    }
+  };
+  const calculateDataMerchant = async () => {
+    if (merchantData.length === 0) {
+      return;
+    }
+    const today = moment().startOf("month");
+    const newData = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const date = today.clone().subtract(i, "months").format("MMM");
+
+      const filteredMerchantData = merchantData.filter(
+        (item) => moment(item.createdAt).format("MMM") === date
+      );
+
+      const uvValue = filteredMerchantData.length;
+      console.log({ uvValue });
+      const newDataPoint = { name: date, "Perkembangan Merchant": uvValue };
+      newData.push(newDataPoint);
+      setDataMerchantLine(newData);
+    }
+  };
+
   const calculateData = async () => {
     if (
       meetupData.length === 0 ||
@@ -164,13 +230,13 @@ const WelcomeAdmin = () => {
       const newDataPoint = { name: date, Perkembangan: uvValue };
       newData.push(newDataPoint);
     }
-
-    setData(newData);
   };
 
   useEffect(() => {
-    calculateData();
-  }, [meetupData, dataUser, taskData, merchantData, reserveData]);
+    calculateDataMerchant();
+    calculateTransaction();
+    calculateDataUser();
+  }, []);
   return (
     <div>
       <Navbaradmin konten="Dashboard Admin" />
@@ -180,41 +246,7 @@ const WelcomeAdmin = () => {
         </div>
         <div className="col-md-8 mt-5">
           <div className="container">
-            <h5 className="text-dark fw-bold">Traffic Progress</h5>
-            <div className="d-flex justify-content-between">
-              <h6 className="text-muted fw-bold">
-                Perkembangan aplikasi dalam satu bulan
-              </h6>
-            </div>
-            <div
-              style={{
-                marginTop: 15,
-              }}
-            >
-              <LineChart
-                width={600}
-                height={300}
-                data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <XAxis dataKey="name" />
-                <YAxis />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="Perkembangan" stroke="#8884d8" />
-              </LineChart>
-            </div>
-
-            <h5 className="text-dark fw-bold mt-5">
-              Saldo Dompet Admin Saat ini
-            </h5>
-            <div className="d-flex justify-content-between">
-              <h2 className=" fw-bold" style={{ color: "#28A745" }}>
-                Rp. {currency(adminData?.balance)}
-              </h2>
-            </div>
-            <h5 className="text-dark fw-bold pt-5">Aktivitas Sistem</h5>
+            <h5 className="text-dark fw-bold">Aktivitas Sistem</h5>
             <div className="d-flex justify-content-between">
               <h6 className="text-muted fw-bold">
                 Ringkasan keseluruhan yang terjadi dalam sistem
@@ -294,6 +326,78 @@ const WelcomeAdmin = () => {
                   </a>
                 </Link>
               </div>
+            </div>
+
+            <h5 className="text-dark fw-bold mt-5">
+              Saldo Dompet Admin Saat ini
+            </h5>
+            <div className="d-flex justify-content-between">
+              <h2 className=" fw-bold" style={{ color: "#28A745" }}>
+                Rp. {currency(adminData?.balance)}
+              </h2>
+            </div>
+            <h5 className="text-dark fw-bold pt-5">Traffic Progress</h5>
+            <div className="d-flex justify-content-between">
+              <h6 className="text-muted fw-bold">
+                Perkembangan aplikasi dalam satu bulan
+              </h6>
+            </div>
+            <div
+              style={{
+                marginTop: 15,
+              }}
+            >
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="Perkembangan Transaksi"
+                  stroke="#8884d8"
+                />
+              </LineChart>
+              <LineChart
+                width={600}
+                height={300}
+                data={dataUserLine}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="Perkembangan User"
+                  stroke="#8884d8"
+                />
+              </LineChart>
+              <LineChart
+                width={600}
+                height={300}
+                data={dataMerchantLine}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="Perkembangan Merchant"
+                  stroke="#8884d8"
+                />
+              </LineChart>
             </div>
           </div>
         </div>

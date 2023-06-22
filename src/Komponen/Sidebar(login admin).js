@@ -85,7 +85,7 @@ export class Sidebaradmin extends Component {
               </div>
             </Nav.Link>
           </Nav.Item>
-          <Nav.Item>
+          {/* <Nav.Item>
             <Nav.Link
               href="/admin/tasks"
               className="text-dark fw-bold ps-3  border-bottom border-dark"
@@ -138,7 +138,7 @@ export class Sidebaradmin extends Component {
                 </span>
               </div>
             </Nav.Link>
-          </Nav.Item>
+          </Nav.Item> */}
         </Nav>
       </div>
     );

@@ -98,6 +98,14 @@ const EditMerchant = () => {
     };
   };
 
+  const [openTime, setOpenTime] = useState("");
+  const [closeTime, setCloseTime] = useState("");
+
+  useEffect(() => {
+    setOpenTime(getTimeOpenAndClose().open);
+    setCloseTime(getTimeOpenAndClose().close);
+  }, [merchantTime]);
+
   const handleCheckBoxFeature = (event) => {
     const findDuplicate = feature.find(
       (find) => find?.feature_name == event.target.value
@@ -130,7 +138,7 @@ const EditMerchant = () => {
     } else {
       setMerchantTime((state) => ({
         ...state,
-        [type.hari]: [getTimeOpenAndClose().open, getTimeOpenAndClose().close],
+        [type.hari]: [openTime, closeTime],
       }));
     }
   };
@@ -184,6 +192,7 @@ const EditMerchant = () => {
       window.alert("Gagal Edit Profil Mitra");
     }
   };
+
   return (
     <div>
       <Navbaruser konten="Edit Merchant" />
@@ -338,11 +347,25 @@ const EditMerchant = () => {
                 </tr>
                 <tr>
                   <td>Jam buka</td>
-                  <td>{getTimeOpenAndClose().open}</td>
+                  <td>
+                    <input
+                      type="time"
+                      style={{ borderRadius: 8 }}
+                      value={openTime}
+                      onChange={(e) => setOpenTime(e.target.value)}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>Jam Tutup</td>
-                  <td>{getTimeOpenAndClose().close}</td>
+                  <td>
+                    <input
+                      type="time"
+                      style={{ borderRadius: 8 }}
+                      value={closeTime}
+                      onChange={(e) => setCloseTime(e.target.value)}
+                    />
+                  </td>
                 </tr>
               </tbody>
             </Table>
