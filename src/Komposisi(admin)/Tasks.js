@@ -52,7 +52,7 @@ const Tasks = () => {
   };
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="List Task" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaradmin />

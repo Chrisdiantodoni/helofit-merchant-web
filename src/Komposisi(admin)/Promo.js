@@ -52,7 +52,7 @@ const Promo = () => {
 
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="List Promo" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaradmin />

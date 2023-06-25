@@ -75,8 +75,10 @@ const WelcomeUser = () => {
     console.log("dataTask", data);
   };
 
-  const getTaskStatus = async () => {
-    const response = await axios.get(`/task/list-task-user/${merchantId}`);
+  const getTaskStatus = async (search = "") => {
+    const response = await axios.get(
+      `/task/list-task-user/${merchantId}?column_name=username&query=${search}`
+    );
     const data = response?.data?.data?.result;
     setStatusTask(data);
     const filteredComplete = data.filter(

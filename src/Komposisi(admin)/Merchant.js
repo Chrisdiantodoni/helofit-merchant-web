@@ -82,7 +82,7 @@ const Merchant = () => {
 
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="List Merchant" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaradmin />

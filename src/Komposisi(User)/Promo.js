@@ -19,25 +19,41 @@ const Promo = () => {
   const [name, setName] = useState("");
   const [idPromo, setIdPromo] = useState("");
   const [show, setShow] = useState(false);
-
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
   const [dataPromo, setDataPromo] = useState([]);
   const [userPromo, setPromoUser] = useState([]);
-  const getPromo = async () => {
-    const response = await Axios.get(`/promo/${merchantId}`);
+  const [searchUser, setSearchUser] = useState("");
+  const [currentPageUser, setCurrentPageUser] = useState(1);
+  const [totalPagesUser, setTotalPagesUser] = useState(0);
+  const pageSizeUser = 10;
+  const getPromo = async (search = "", page = 1) => {
+    const response = await Axios.get(
+      `/promo/${merchantId}/?page=${page}&size=${pageSize}&column_name=promo_name&query=${search}`
+    );
     console.log(response);
     if (response.data.message === "OK") {
-      const data = response?.data?.data;
+      const data = response?.data?.data?.result;
+      const { totalPages } = response?.data?.data;
+      setTotalPages(totalPages);
       console.log(data);
       setDataPromo(data);
     }
   };
   const handleClose = () => setShow(false);
 
-  const getPromoUser = async () => {
-    const response = await Axios.get(`/promo/user/${merchantId}`);
+  const getPromoUser = async (searchUser = "", page = 1) => {
+    const response = await Axios.get(
+      `/promo/user/${merchantId}/?page=${page}&size=${pageSizeUser}&column_name=username&query=${searchUser}`
+    );
+    console.log(response);
+
     if (response.data.message === "OK") {
-      console.log(response);
-      const data = response?.data?.data;
+      const data = response?.data?.data.result;
+      const { totalPages } = response?.data?.data;
+      setTotalPagesUser(totalPages);
       setPromoUser(data);
     }
   };
@@ -67,6 +83,49 @@ const Promo = () => {
     setShow(true);
     setName(item?.promo_name);
     setIdPromo(item?.id);
+  };
+
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
+  const getPaginationUser = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPagesUser; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPageUser === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePageUser(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
+
+  const changePage = (page) => {
+    setCurrentPage(page);
+    getPromo(search, page);
+  };
+
+  const changePageUser = (page) => {
+    setCurrentPageUser(page);
+    getPromoUser(searchUser, page);
   };
   return (
     <div>
@@ -113,9 +172,11 @@ const Promo = () => {
               <div className="d-flex ">
                 <InputGroup className="mb-3 ">
                   <Form.Control
-                    placeholder="Ketikkan Kode Promo.."
-                    aria-label="Ketikkan Kode Promo.."
+                    placeholder="Ketikkan Nama Promo.."
+                    aria-label="Ketikkan Nama Promo.."
                     aria-describedby="basic-addon2"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                   <Button
                     className="fw-bold"
@@ -125,6 +186,10 @@ const Promo = () => {
                       border: "1px solid #C4f601",
                     }}
                     id="button-addon2"
+                    onClick={() => {
+                      getPromo(search, 1);
+                      setCurrentPage(1);
+                    }}
                   >
                     Cari
                   </Button>
@@ -200,14 +265,68 @@ const Promo = () => {
                 ))}
               </Table>
             </div>
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
+                </li>
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
             <div className="mt-5">
               <h4 className="text-dark fw-bold">Penukaran Task</h4>
               <h5 className="text-muted fw-bold">
                 Berikut adalah list customer yang telah menukarkan promonya
               </h5>
             </div>
-
-            <Table className="mt-5" borderless={true}>
+            <div className="d-flex ">
+              <InputGroup className="mb-3 ">
+                <Form.Control
+                  placeholder="Ketikkan Nama Customer"
+                  aria-label="Ketikkan Nama Customer"
+                  aria-describedby="basic-addon2"
+                  value={searchUser}
+                  onChange={(e) => setSearchUser(e.target.value)}
+                />
+                <Button
+                  className="fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    color: "#000000",
+                    border: "1px solid #C4f601",
+                  }}
+                  id="button-addon2"
+                  onClick={() => {
+                    getPromoUser(searchUser, 1);
+                    setCurrentPageUser(1);
+                  }}
+                >
+                  Cari
+                </Button>
+              </InputGroup>
+            </div>
+            <Table borderless={true}>
               <thead>
                 <tr
                   className="fw-bold"
@@ -259,6 +378,37 @@ const Promo = () => {
                 </tbody>
               ))}
             </Table>
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${
+                    currentPageUser === 1 ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePageUser(currentPageUser - 1)}
+                    disabled={currentPageUser === 1}
+                  >
+                    Prev
+                  </button>
+                </li>
+                {getPaginationUser()}
+                <li
+                  className={`page-item ${
+                    currentPageUser === totalPagesUser ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePageUser(currentPageUser + 1)}
+                    disabled={currentPageUser === totalPagesUser}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

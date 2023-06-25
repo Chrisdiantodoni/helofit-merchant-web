@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Sidebaradmin } from "../Komponen/Sidebar(login admin)";
 import Navbaradmin from "../Komponen/Navbar(login admin)";
-import { Table, Button, Form, Modal } from "react-bootstrap";
+import { Table, Button, Form, Modal, InputGroup } from "react-bootstrap";
 import { AxiosAdmin } from "../utils";
 
 const Messages = () => {
@@ -14,7 +14,10 @@ const Messages = () => {
   const [emailUser, setEmailUser] = useState("");
   const [id, setId] = useState("");
   const [isLoading, setLoading] = useState(false);
-
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
   const sendEmail = (id) => {
     try {
       AxiosAdmin.post("/email", { to: emailUser, subject, text })
@@ -35,9 +38,13 @@ const Messages = () => {
 
   const handleClose = () => setShow(false);
 
-  const getMessages = async () => {
-    const result = await AxiosAdmin.get("/message");
-    setDataMessage(result?.data?.data?.message);
+  const getMessages = async (search = "", page = 1) => {
+    const result = await AxiosAdmin.get(
+      `/message/?page=${page}&size=${pageSize}&column_name=name&query=${search}`
+    );
+    const { totalPages } = result?.data?.data;
+    setDataMessage(result?.data?.data?.result);
+    setTotalPages(totalPages);
     console.log(result);
   };
 
@@ -73,10 +80,29 @@ const Messages = () => {
       console.log(error);
     }
   };
-
+  const changePage = (page) => {
+    setCurrentPage(page);
+    getMessages(search, page);
+  };
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="Inbox Admin" />
       <div className="row">
         <div className="col-12 col-md-2 sidebar-wrapper">
           <Sidebaradmin />
@@ -88,6 +114,32 @@ const Messages = () => {
               <h6 className="text-muted fw-bold">
                 Pesan yang dikirimkan melalui halaman kontak
               </h6>
+            </div>
+            <div className="d-flex mt-5">
+              <InputGroup className="mb-3 ">
+                <Form.Control
+                  placeholder="Ketikkan Nama Pengirim.."
+                  aria-label="Ketikkan Nama Pengirim.."
+                  aria-describedby="basic-addon2"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <Button
+                  className="fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    color: "#000000",
+                    border: "1px solid #C4f601",
+                  }}
+                  id="button-addon2"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    getMessages(search, 1);
+                  }}
+                >
+                  Cari
+                </Button>
+              </InputGroup>
             </div>
             <div className="justify-content-center d-flex mt-5">
               <Table responsive borderless>
@@ -145,6 +197,35 @@ const Messages = () => {
                 </tbody>
               </Table>
             </div>
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
+                </li>
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

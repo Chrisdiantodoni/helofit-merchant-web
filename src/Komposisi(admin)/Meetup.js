@@ -54,7 +54,7 @@ const Meetup = () => {
   };
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="List Meetup" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaradmin />

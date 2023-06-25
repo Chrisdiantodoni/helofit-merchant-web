@@ -17,12 +17,11 @@ import currency from "./../utils/currency";
 const Tasks = () => {
   const { merchantId } = useContext(Context);
 
-  const dataMerchant = () => {
-    getTask(merchantId, search);
-    getTaskStatus(merchantId);
-  };
   const dataUser = localStorage.getItem("dataUser");
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
   const [dataTask, setDataTask] = useState([]);
   const [statusTask, setStatusTask] = useState([]);
   const [show, setShow] = useState(false);
@@ -30,6 +29,10 @@ const Tasks = () => {
   const [name, setName] = useState("");
   const [idTask, setIdTask] = useState("");
   const [idMerchant, setIdMerchant] = useState("");
+  const [currentPageUser, setCurrentPageUser] = useState(1);
+  const [searchTaskUser, setSearchTaskUser] = useState("");
+  const [totalPagesUser, setTotalPagesUSer] = useState(0);
+  const pageSizeUser = 10;
   // const getTask = async () => {
   //   const response = await Axios.get(
   //     `/task/${merchantId}?column_name=id&query=${search}`
@@ -47,24 +50,27 @@ const Tasks = () => {
   //   console.log(data);
   // };
 
-  const getTask = async (merchantId, search) => {
+  const getTask = async (search = "", page = 1) => {
     const response = await Axios.get(
-      `/task/${merchantId}?column_name=id&query=${search}`
+      `/task/${merchantId}/?page=${page}&size=${pageSize}&column_name=task_name&query=${search}`
     );
     const data = response.data?.data?.result;
+    const { totalPages } = response?.data?.data;
+    setTotalPages(totalPages);
     if (response.data?.message === "OK") {
       setDataTask(data || []);
     }
-
     console.log(data);
   };
-  const getTaskStatus = async (merchantId) => {
+  const getTaskStatus = async (searchTaskUser = "", page = 1) => {
     const response = await Axios.get(
-      `/task/list-task-user/${merchantId}?page=1&size=10`
+      `/task/list-task-user/${merchantId}/?page=${page}&size=${pageSizeUser}&column_name=username&query=${searchTaskUser}`
     );
     console.log(response);
     const data = response?.data?.data?.result;
     setStatusTask(data);
+    const { totalPages } = response?.data?.data;
+    setTotalPagesUSer(totalPages);
     console.log({ getTaskStatus: data });
   };
 
@@ -84,7 +90,8 @@ const Tasks = () => {
   };
 
   useEffect(() => {
-    dataMerchant();
+    getTaskStatus();
+    getTask();
   }, []);
 
   const handleShowModal = (item) => {
@@ -93,7 +100,48 @@ const Tasks = () => {
     setIdTask(item?.id);
     setIdMerchant(item?.merchantId);
   };
+  const changePage = (page) => {
+    setCurrentPageUser(page);
+    getTaskStatus(searchTaskUser, page);
+  };
 
+  const changePageTask = (page) => {
+    setCurrentPage(page);
+    getTask(search, page);
+  };
+
+  const getPaginationNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPagesUser; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPageUser === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
+  const getPaginationNumbersTask = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => changePageTask(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return pageNumbers;
+  };
   return (
     <div>
       <Navbaruser konten="List Task" />
@@ -139,8 +187,8 @@ const Tasks = () => {
               <div className="d-flex ">
                 <InputGroup className="mb-3 ">
                   <Form.Control
-                    placeholder="Ketikkan Kode Task.."
-                    aria-label="Ketikkan Kode Task.."
+                    placeholder="Ketikkan Nama Task.."
+                    aria-label="Ketikkan Nama Task.."
                     aria-describedby="basic-addon2"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -153,7 +201,10 @@ const Tasks = () => {
                       border: "1px solid #C4f601",
                     }}
                     id="button-addon2"
-                    onClick={() => getTask(merchantId, search)}
+                    onClick={() => {
+                      setCurrentPage(1);
+                      getTask(merchantId, search);
+                    }}
                   >
                     Cari
                   </Button>
@@ -231,14 +282,72 @@ const Tasks = () => {
                 ))}
               </Table>
             </div>
+            <div>
+              <nav>
+                <ul className="pagination">
+                  <li
+                    className={`page-item ${
+                      currentPage === 1 ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => changePageTask(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      Prev
+                    </button>
+                  </li>
+                  {getPaginationNumbersTask()}
+                  <li
+                    className={`page-item ${
+                      currentPage === totalPages ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => changePageTask(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
             <div className="mt-5">
               <h4 className="text-dark fw-bold">Pengerjaan Task</h4>
               <h5 className="text-muted fw-bold">
                 Berikut adalah list customer yang mengerjakan task
               </h5>
             </div>
-
-            <Table className="mt-5" borderless={true}>
+            <div className="d-flex mt-5">
+              <InputGroup className="mb-3 ">
+                <Form.Control
+                  placeholder="Ketikkan Nama Customer.."
+                  aria-label="Ketikkan Nama Customer.."
+                  aria-describedby="basic-addon2"
+                  value={searchTaskUser}
+                  onChange={(e) => setSearchTaskUser(e.target.value)}
+                />
+                <Button
+                  className="fw-bold"
+                  style={{
+                    background: "#C4f601",
+                    color: "#000000",
+                    border: "1px solid #C4f601",
+                  }}
+                  onClick={() => {
+                    setCurrentPageUser(1);
+                    getTaskStatus(merchantId, searchTaskUser, 1);
+                  }}
+                  id="button-addon2"
+                >
+                  Cari
+                </Button>
+              </InputGroup>
+            </div>
+            <Table className="mt-2" borderless={true}>
               <thead>
                 <tr
                   className="fw-bold"
@@ -291,6 +400,37 @@ const Tasks = () => {
               ))}
             </Table>
           </div>
+          <nav>
+            <ul className="pagination">
+              <li
+                className={`page-item ${
+                  currentPageUser === 1 ? "disabled" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => changePage(currentPageUser - 1)}
+                  disabled={currentPageUser === 1}
+                >
+                  Prev
+                </button>
+              </li>
+              {getPaginationNumbers()}
+              <li
+                className={`page-item ${
+                  currentPageUser === totalPagesUser ? "disabled" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => changePage(currentPageUser + 1)}
+                  disabled={currentPageUser === totalPagesUser}
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <Modal

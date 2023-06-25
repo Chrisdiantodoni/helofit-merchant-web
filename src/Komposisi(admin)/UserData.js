@@ -86,7 +86,7 @@ const UserData = () => {
 
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="List User" />
       <div className="row">
         <div className="col-12 col-md-2 sidebar-wrapper">
           <Sidebaradmin />

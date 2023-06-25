@@ -60,7 +60,7 @@ const Reserve = () => {
 
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="List Booking" />
       <div className="row">
         <div className="col-12 col-md-2 sidebar-wrapper">
           <Sidebaradmin />

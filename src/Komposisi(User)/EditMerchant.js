@@ -66,6 +66,11 @@ const EditMerchant = () => {
   };
 
   const getDAsyinWeek = () => {
+    if (!merchantTime || typeof merchantTime !== "object") {
+      // Handle the case when merchantTime is undefined or not an object
+      return [];
+    }
+
     const hari = Object.keys(merchantTime).filter((key) =>
       [
         "sunday",
@@ -84,10 +89,17 @@ const EditMerchant = () => {
         time: merchantTime[key],
       };
     });
+
     return hariDanNilai;
   };
 
   const getTimeOpenAndClose = () => {
+    if (!merchantTime || typeof merchantTime !== "object") {
+      return {
+        open: "",
+        close: "",
+      };
+    }
     const openTimes = [];
     const closeTimes = [];
 

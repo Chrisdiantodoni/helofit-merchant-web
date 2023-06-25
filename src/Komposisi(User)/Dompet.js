@@ -100,26 +100,7 @@ const Dompet = () => {
                 Berikut adalah list penarikan anda
               </h5>
             </div>
-            <div>
-              <InputGroup className="mb-3 mt-5">
-                <Form.Control
-                  placeholder="Ketikkan Kode Reservasi.."
-                  aria-label="Ketikkan Kode Reservasi.."
-                  aria-describedby="basic-addon2"
-                />
-                <Button
-                  className="fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    color: "#000000",
-                    border: "1px solid #C4f601",
-                  }}
-                  id="button-addon2"
-                >
-                  Cari
-                </Button>
-              </InputGroup>
-            </div>
+
             <Table className="mt-5" borderless={true}>
               <thead>
                 <tr
@@ -137,7 +118,7 @@ const Dompet = () => {
               {historyData?.map((item, idx) => (
                 <tbody className="fw-bold">
                   <tr>
-                    <td>{moment(item.booking_date).format("DD/MM/YYYY")}</td>
+                    <td>{moment(item.createdAt).format("DD/MM/YYYY")}</td>
                     <td>Rp. {currency(item.nominal)}</td>
                   </tr>
                 </tbody>
@@ -150,26 +131,7 @@ const Dompet = () => {
                 Berikut adalah list transaksi dari reservasi fasilitas
               </h5>
             </div>
-            <div>
-              <InputGroup className="mb-3 mt-5">
-                <Form.Control
-                  placeholder="Ketikkan Kode Reservasi.."
-                  aria-label="Ketikkan Kode Reservasi.."
-                  aria-describedby="basic-addon2"
-                />
-                <Button
-                  className="fw-bold"
-                  style={{
-                    background: "#C4f601",
-                    color: "#000000",
-                    border: "1px solid #C4f601",
-                  }}
-                  id="button-addon2"
-                >
-                  Cari
-                </Button>
-              </InputGroup>
-            </div>
+
             <Table className="mt-5" borderless={true}>
               <thead>
                 <tr
@@ -194,9 +156,15 @@ const Dompet = () => {
                   <tr>
                     <td>{item.id}</td>
                     <td>{moment(item.booking_date).format("DD/MM/YYYY")}</td>
-                    <td>{JSON.parse(item.time)}</td>
+                    <td>{`${JSON.parse(item.time)[0]} - ${
+                      JSON.parse(item.time)[JSON.parse(item.time).length - 1]
+                    }`}</td>
                     <td>{item.facility?.facility_name}</td>
-                    <td>{item.user?.username}</td>
+                    <td>
+                      {item.user?.username
+                        ? item.user?.username
+                        : "di luar Aplikasi"}
+                    </td>
                     <td>{item.user?.phone_number}</td>
                     <td>Rp. {currency(item.total)}</td>
                   </tr>

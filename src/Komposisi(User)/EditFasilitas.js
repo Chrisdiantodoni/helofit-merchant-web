@@ -224,7 +224,7 @@ const EditFasilitas = (props) => {
                               }}
                             >
                               <Form.Check
-                                label="Terisi"
+                                label="Main Langsung/panjar diluar aplikasi"
                                 key={item.time}
                                 type="checkbox"
                                 checked={
@@ -238,20 +238,22 @@ const EditFasilitas = (props) => {
                               />
                             </Form>
                           ) : (
-                            "Terisi"
+                            "Telah Terisi "
                           )}
                         </td>
                         <td style={{ verticalAlign: "middle" }}>
                           {item.available ? (
                             <input
-                              value="Masih Kosong"
+                              value="-"
                               disabled
                               style={{ textAlign: "center" }}
                             />
                           ) : (
                             <input
                               value={
-                                item.username ? item.username : "Main Langsung"
+                                item.username
+                                  ? item.username
+                                  : "Main Langsung/Panjar di luar aplikasi"
                               }
                               disabled
                               style={{ textAlign: "center" }}

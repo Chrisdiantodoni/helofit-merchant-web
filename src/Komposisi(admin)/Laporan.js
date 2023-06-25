@@ -210,7 +210,7 @@ const Laporan = () => {
   const downloadGetPromo = () => {};
   return (
     <div>
-      <Navbaradmin konten="Laporan" />
+      <Navbaradmin konten="Laporan Admin" />
       <div className="row">
         <div className="col-2 sidebar-wrapper">
           <Sidebaradmin />
