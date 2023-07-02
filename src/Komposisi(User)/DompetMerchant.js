@@ -34,8 +34,8 @@ const DompetMerchant = () => {
     const body = {
       nominal,
     };
-    if (parseInt(nominal) >= 500000) {
-      if (nominal < parseInt(merchant?.balance)) {
+    if (parseInt(nominal) < 500000) {
+      if (nominal <= parseInt(merchant?.balance)) {
         await Axios.put(`/wallet/withdraw/${merchantId}`, body).then((res) => {
           if (res) {
             window.alert("Uang berhasil ditarik");

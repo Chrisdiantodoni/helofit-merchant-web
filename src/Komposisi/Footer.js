@@ -55,8 +55,26 @@ export class Footer extends Component {
             </div>
             <div className="col-md-2 text-light mt-4 text-start">
               <h3>Ikuti Kami</h3>
-              <BsFacebook className="icon fb me-3" size={24} />
-              <BsInstagram className="icon ig" size={24} />
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none"
+              >
+                <BsFacebook
+                  className="icon fb me-3"
+                  size={24}
+                  color="#FFFFFF"
+                />
+              </a>
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none"
+              >
+                <BsInstagram className="icon ig" size={24} color="#FFFFFF" />
+              </a>
             </div>
           </div>
         </div>

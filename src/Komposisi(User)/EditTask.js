@@ -27,11 +27,15 @@ const EditTask = (props) => {
   console.log(idTask);
   const history = useHistory();
   const fileInputRef = useRef(null);
+  const [currentImage, setCurrentImage] = useState(dataTask.banner_img);
 
   function handleImageChange(event) {
     const image = event.target.files[0];
+    console.log(image);
+    setPreviewImage(URL.createObjectURL(image));
     setSelectedBanner(image);
   }
+
   function handleRemoveClick() {
     setSelectedBanner(null);
     setPreviewImage(null);
@@ -48,7 +52,7 @@ const EditTask = (props) => {
     setExpiredDate(moment(data?.expiredIn).format("YYYY-MM-DD"));
     setListTask(data.list_task);
     setPoint(data.poin);
-    setPreviewImage(data.banner_img);
+    setPreviewImage(data?.banner_img);
     setPrice(parseInt(data.poin) * 1000);
     console.log({ data });
   };
@@ -184,7 +188,7 @@ const EditTask = (props) => {
               >
                 <Form.Label column sm="4"></Form.Label>
                 <Col sm="8">
-                  {previewImage && (
+                  {!currentImage && previewImage && (
                     <div>
                       <img
                         src={previewImage}

@@ -6,6 +6,7 @@ import { Container, Nav, Button, Dropdown } from "react-bootstrap";
 import React, { Component } from "react";
 import Beranda_2 from "./Beranda (part 2)";
 import ilustrasi from "../Assets/ilustrasi.png";
+import { Link, NavLink } from "react-router-dom";
 export default class Beranda extends Component {
   render() {
     return (
@@ -43,19 +44,21 @@ export default class Beranda extends Component {
             >
               Download Aplikasi
             </Button>
-            <Button
-              style={{
-                marginRight: 15,
-                border: "3px solid #FFFFFF",
-                borderRadius: "16px",
-                width: 240,
-                height: 56,
-              }}
-              variant="dark"
-              size="lg"
-            >
-              Gabung jadi Mitra
-            </Button>
+            <NavLink to={"/daftar"}>
+              <Button
+                style={{
+                  marginRight: 15,
+                  border: "3px solid #FFFFFF",
+                  borderRadius: "16px",
+                  width: 240,
+                  height: 56,
+                }}
+                variant="dark"
+                size="lg"
+              >
+                Gabung Mitra
+              </Button>
+            </NavLink>
           </Container>
 
           <img

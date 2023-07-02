@@ -2,6 +2,7 @@
   color: #ffffff;
   text-decoration: none;
 }
+
 .icon {
   transition: all 0.35s ease;
   opacity: 1;
@@ -16,10 +17,11 @@
 .icon:hover {
   color: black;
 }
+
 .fb:hover {
-  color: #4267b2;
+  color: #4267b2 !important;
 }
 
 .ig:hover {
-  color: #8a3ab9;
+  color: #8a3ab9 !important;
 }

@@ -136,11 +136,11 @@ const Promo = () => {
         </div>
         <div className="col-10 mt-5">
           <div class="container">
-            <h5 className="text-dark fw-bold">Daftar Promo</h5>
+            <h4 className="text-dark fw-bold">Daftar Promo</h4>
             <div className="d-flex justify-content-between">
-              <h6 className="text-muted fw-bold">
+              <h5 className="text-muted fw-bold">
                 Berikut adalah list promo yang Anda tawarkan ke customer
-              </h6>
+              </h5>
 
               <Link
                 to="/welcome/AddPromo"

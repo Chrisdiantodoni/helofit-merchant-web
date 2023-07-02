@@ -151,11 +151,11 @@ const Tasks = () => {
         </div>
         <div className="col-10 mt-5">
           <div class="container">
-            <h5 className="text-dark fw-bold">Daftar Task</h5>
+            <h4 className="text-dark fw-bold">Daftar Task</h4>
             <div className="d-flex justify-content-between">
-              <h6 className="text-muted fw-bold">
+              <h5 className="text-muted fw-bold">
                 Berikut adalah list task yang dapat customer kerjakan
-              </h6>
+              </h5>
 
               <Link
                 to="/welcome/AddTask"
@@ -399,38 +399,38 @@ const Tasks = () => {
                 </tbody>
               ))}
             </Table>
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${
+                    currentPageUser === 1 ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPageUser - 1)}
+                    disabled={currentPageUser === 1}
+                  >
+                    Prev
+                  </button>
+                </li>
+                {getPaginationNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPageUser === totalPagesUser ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => changePage(currentPageUser + 1)}
+                    disabled={currentPageUser === totalPagesUser}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
-          <nav>
-            <ul className="pagination">
-              <li
-                className={`page-item ${
-                  currentPageUser === 1 ? "disabled" : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => changePage(currentPageUser - 1)}
-                  disabled={currentPageUser === 1}
-                >
-                  Prev
-                </button>
-              </li>
-              {getPaginationNumbers()}
-              <li
-                className={`page-item ${
-                  currentPageUser === totalPagesUser ? "disabled" : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => changePage(currentPageUser + 1)}
-                  disabled={currentPageUser === totalPagesUser}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
       <Modal

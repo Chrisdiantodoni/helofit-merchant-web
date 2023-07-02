@@ -5,7 +5,8 @@ import Input from "react-validation/build/input";
 import Navbarbefore from "../Komponen/Navbar(before login)";
 import { Axios } from "../utils";
 import { useHistory } from "react-router-dom";
-
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 const Daftar = () => {
   const history = useHistory();
   const [nama, setNama] = useState("");
@@ -15,7 +16,8 @@ const Daftar = () => {
   const [pin, setPin] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPin, setShowPin] = useState(false);
   const handleRegister = async (e) => {
     e.preventDefault();
     await Axios.post("/authentication/register", {
@@ -124,24 +126,69 @@ const Daftar = () => {
                 >
                   Kata Sandi
                 </label>
-                <Input
-                  name="password"
-                  type="password"
-                  value={password}
-                  className="text-light form-control"
-                  onChange={(e) => setPassword(e.target.value)}
-                  // validations={[required, vfield]}
-                  placeholder="Masukkan Password"
+                <div
                   style={{
-                    height: "56px",
-                    borderRadius: 16,
-                    backgroundColor: "#7c7c7c",
-                    border: "1px solid #7c7c7c",
-                    fontSize: 20,
-                    color: "#ffffff",
-                    paddingLeft: 5,
+                    position: "relative",
+                    alignContent: "center",
+                    justifyContent: "center",
                   }}
-                ></Input>
+                >
+                  <Input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    className="text-light form-control"
+                    onChange={(e) => setPassword(e.target.value)}
+                    // validations={[required, vfield]}
+                    placeholder="Masukkan Password"
+                    style={{
+                      height: "56px",
+                      borderRadius: 16,
+                      backgroundColor: "#7c7c7c",
+                      border: "1px solid #7c7c7c",
+                      fontSize: 20,
+                      color: "#ffffff",
+                      paddingLeft: 5,
+                    }}
+                  ></Input>
+                  {showPassword ? (
+                    <button
+                      type="button"
+                      className="btn btn-link eye-button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "1rem",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        zIndex: 1,
+                      }}
+                    >
+                      <FaRegEye />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-link eye-button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "1rem",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        zIndex: 1,
+                      }}
+                    >
+                      <FaRegEyeSlash />
+                    </button>
+                  )}
+                </div>
               </div>
               <div class="form-group mb-3">
                 <label
@@ -150,24 +197,77 @@ const Daftar = () => {
                 >
                   PIN (untuk pemulihan sandi)
                 </label>
-                <Input
-                  name="password"
-                  type="password"
-                  value={pin}
-                  className="text-light form-control"
-                  onChange={(e) => setPin(e.target.value)}
-                  // validations={[required, vfield]}
-                  placeholder="Masukkan Password"
+                <div
                   style={{
-                    height: "56px",
-                    borderRadius: 16,
-                    backgroundColor: "#7c7c7c",
-                    border: "1px solid #7c7c7c",
-                    fontSize: 20,
-                    color: "#ffffff",
-                    paddingLeft: 5,
+                    position: "relative",
+                    alignContent: "center",
+                    justifyContent: "center",
                   }}
-                ></Input>
+                >
+                  <Input
+                    name="password"
+                    type={showPin ? "text" : "password"}
+                    value={pin}
+                    className="text-light form-control"
+                    onChange={(e) => setPin(e.target.value)}
+                    // validations={[required, vfield]}
+                    maxLength={6} // Set maximum length to 6
+                    onKeyPress={(e) => {
+                      // Allow only numbers (key codes 48 to 57)
+                      const charCode = e.which ? e.which : e.keyCode;
+                      if (charCode < 48 || charCode > 57) {
+                        e.preventDefault();
+                      }
+                    }}
+                    placeholder="Masukkan Password"
+                    style={{
+                      height: "56px",
+                      borderRadius: 16,
+                      backgroundColor: "#7c7c7c",
+                      border: "1px solid #7c7c7c",
+                      fontSize: 20,
+                      color: "#ffffff",
+                      paddingLeft: 5,
+                    }}
+                  ></Input>
+                  {showPin ? (
+                    <button
+                      type="button"
+                      className="btn btn-link eye-button"
+                      onClick={() => setShowPin(!showPin)}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "1rem",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        zIndex: 1,
+                      }}
+                    >
+                      <FaRegEye />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-link eye-button"
+                      onClick={() => setShowPin(!showPin)}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "1rem",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        zIndex: 1,
+                      }}
+                    >
+                      <FaRegEyeSlash />
+                    </button>
+                  )}
+                </div>
               </div>
               <div class="mb-3 text-light text-center">
                 Dengan mengklik daftar, Anda telah <br /> membaca dan paham akan{" "}

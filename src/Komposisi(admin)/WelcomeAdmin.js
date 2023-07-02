@@ -236,7 +236,7 @@ const WelcomeAdmin = () => {
     calculateDataMerchant();
     calculateTransaction();
     calculateDataUser();
-  }, []);
+  }, [merchantData, reserveData, dataUser]);
   return (
     <div>
       <Navbaradmin konten="Dashboard Admin" />

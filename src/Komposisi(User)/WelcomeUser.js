@@ -56,7 +56,9 @@ const WelcomeUser = () => {
     if (response.data.message === "OK") {
       const data = response.data?.data?.merchant_info;
       console.log(response);
-      const emptyColumns = Object.keys(data).filter((key) => !data[key]);
+      const emptyColumns = Object.keys(data).filter(
+        (key) => !data[key] && key !== "balance"
+      );
       console.log("Kolom yang kosong:", emptyColumns);
       setProfil(emptyColumns);
       setMerchant(data);
@@ -265,7 +267,7 @@ const WelcomeUser = () => {
                             Promo saat ini
                           </h6>
                           <p className="card-text text-dark fw-bold">
-                            {dataPromo.length} Promo
+                            {dataPromo.length == 0 ? 0 : dataPromo.length} Promo
                           </p>
                         </div>
                         <div>

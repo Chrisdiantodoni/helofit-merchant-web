@@ -97,12 +97,13 @@ const Login = () => {
                     <h4 className="text-light">Alamat Email</h4>
                   </label>
                   <Input
-                    className="text-dark form-control"
+                    className="text form-control"
                     style={{
                       height: "56px",
                       borderRadius: 16,
                       background: "#7C7C7C",
                       border: "1px solid #7c7c7c",
+                      color: "#FFFFFF",
                     }}
                     name="email"
                     type="email"
@@ -118,13 +119,14 @@ const Login = () => {
                   </label>
                   <div style={{ position: "relative" }}>
                     <Input
-                      className="text-dark form-control"
+                      className="text form-control"
                       style={{
                         height: "56px",
                         borderRadius: 16,
                         background: "#7C7C7C",
                         border: "1px solid #7c7c7c",
                         paddingRight: "2.5rem",
+                        color: "#FFFFFF",
                       }}
                       name="password"
                       type={showPassword ? "text" : "password"}

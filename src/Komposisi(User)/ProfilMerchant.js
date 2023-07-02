@@ -106,11 +106,11 @@ const ProfilMerchant = () => {
         ) : (
           <div className="col-10 mt-5 main-content">
             <div class="container">
-              <h5 className="text-dark fw-bold">Merchant</h5>
+              <h4 className="text-dark fw-bold">Merchant</h4>
               <div className="d-flex justify-content-between">
-                <h6 className="text-muted fw-bold">
+                <h5 className="text-muted fw-bold">
                   Tampilkan informasi tempat olahraga Anda secara akurat
-                </h6>
+                </h5>
 
                 <Link
                   to="/welcome/EditMerchant"
@@ -317,11 +317,11 @@ const ProfilMerchant = () => {
               </Table> */}
             </div>
             <div class="container">
-              <h5 className="text-dark fw-bold">Detail Fasilitas</h5>
+              <h4 className="text-dark fw-bold">Detail Fasilitas</h4>
               <div className="d-flex justify-content-between">
-                <h6 className="text-muted fw-bold">
+                <h5 className="text-muted fw-bold">
                   Tampilkan informasi fasilitas olahraga Anda
-                </h6>
+                </h5>
 
                 <Link
                   to={{

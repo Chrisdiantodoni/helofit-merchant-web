@@ -130,7 +130,7 @@ const Kontak = () => {
                       Nama Kamu<span className="text-danger">*</span>
                     </label>
                     <Input
-                      className="text-dark form-control w-100"
+                      className="text form-control w-100"
                       name="nama"
                       type="text"
                       placeholder="Masukkan Nama Anda"
@@ -156,7 +156,7 @@ const Kontak = () => {
                       Email Kamu<span className="text-danger">*</span>
                     </label>
                     <Input
-                      className="text-dark form-control w-100"
+                      className="text form-control w-100"
                       name="email"
                       type="email"
                       placeholder="Masukkan Email Anda"
@@ -182,7 +182,7 @@ const Kontak = () => {
                       Pesan<span className="text-danger">*</span>
                     </label>
                     <Input
-                      className="text-dark form-control w-100"
+                      className="text form-control w-100"
                       name="pesan"
                       type="text"
                       placeholder="Masukkan Pesan Anda"
